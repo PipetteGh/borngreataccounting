@@ -7,6 +7,7 @@ export interface AuthMetaBootState {
   isAuthMetaLoading: boolean;
   signupDisabled?: boolean;
   googleEnabled?: boolean;
+  needsSetup?: boolean;
 }
 
 export interface AuthMetaBootProviderProps {
@@ -34,6 +35,8 @@ function AuthMetaBootProvider({
         signup_disabled?: boolean;
         googleEnabled?: boolean;
         google_enabled?: boolean;
+        needsSetup?: boolean;
+        needs_setup?: boolean;
       }
     | undefined;
 
@@ -43,6 +46,8 @@ function AuthMetaBootProvider({
       authMetaValue?.signup_disabled ?? authMetaValue?.signupDisabled,
     googleEnabled:
       authMetaValue?.google_enabled ?? authMetaValue?.googleEnabled ?? false,
+    needsSetup:
+      authMetaValue?.needs_setup ?? authMetaValue?.needsSetup ?? false,
   };
 
   if (isAuthMetaLoading) {

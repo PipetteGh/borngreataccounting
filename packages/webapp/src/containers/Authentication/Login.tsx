@@ -14,6 +14,7 @@ import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 import type { ApiError } from 'openapi-typescript-fetch';
 import { AppToaster as Toaster } from '@/components';
 import { AuthInsider } from '@/containers/Authentication/AuthInsider';
+import { useAuthMetaBoot } from '@/containers/Authentication/AuthMetaBoot';
 import { useApplyAuthLogin, useAuthLogin } from '@/hooks/query';
 
 /**
@@ -22,10 +23,19 @@ import { useApplyAuthLogin, useAuthLogin } from '@/hooks/query';
 export function Login() {
   const { mutateAsync: loginMutate } = useAuthLogin();
   const applyAuthLogin = useApplyAuthLogin();
+  const { needsSetup, signupDisabled } = useAuthMetaBoot();
   const [state, dispatch] = useReducer(loginReducer, initialLoginState);
 
   const history = useHistory();
   const location = useLocation();
+
+  // On a brand-new installation with no users yet, send the admin straight
+  // to first-time account registration instead of an empty login screen.
+  useEffect(() => {
+    if (needsSetup && !signupDisabled) {
+      history.replace('/auth/register');
+    }
+  }, [history, needsSetup, signupDisabled]);
 
   // Surface errors coming back from the Google OAuth redirect.
   useEffect(() => {

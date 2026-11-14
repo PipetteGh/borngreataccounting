@@ -1,4 +1,4 @@
-import { Intent } from '@blueprintjs/core';
+import { Callout, Intent } from '@blueprintjs/core';
 import { Formik, FormikHelpers } from 'formik';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
@@ -34,7 +34,7 @@ const initialValues: RegisterValues = {
 export function RegisterUserForm() {
   const { mutateAsync: authLoginMutate } = useAuthLogin();
   const { mutateAsync: authRegisterMutate } = useAuthRegister();
-  const { googleEnabled } = useAuthMetaBoot();
+  const { googleEnabled, needsSetup } = useAuthMetaBoot();
 
   const handleSubmit = (
     values: RegisterValues,
@@ -75,6 +75,18 @@ export function RegisterUserForm() {
   return (
     <AuthInsider>
       <AuthInsiderCard>
+        {needsSetup && (
+          <Callout
+            intent={Intent.PRIMARY}
+            title="First-Time Setup: Create Administrator Account"
+            style={{ marginBottom: 16 }}
+          >
+            Welcome to BorngreatAccounting! Enter your name, email (username),
+            and password below to create your admin login. Next, you&apos;ll set
+            up your organization.
+          </Callout>
+        )}
+
         {googleEnabled && <GoogleAuthSection />}
 
         <Formik
