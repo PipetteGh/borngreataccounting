@@ -21,7 +21,40 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, rootDir, '');
   const clientEnv = pickClientEnv(env);
   const port = Number(env.PORT) || 4000;
+  const browserExternalShimPlugin: PluginOption = {
+    name: 'borngreat-browser-external-shim',
+    enforce: 'pre',
+    resolveId(source) {
+      if (source === 'chalk' || source === 'supports-color' || source === 'fs') {
+        return '\0borngreat-browser-shim';
+      }
+      return null;
+    },
+    load(id) {
+      if (
+        id === '\0borngreat-browser-shim' ||
+        id.startsWith('\0__vite-browser-external')
+      ) {
+        return 'const noop = (s) => (s === undefined ? "" : String(s)); const shim = new Proxy(noop, { get: (_t, p) => (p === "__esModule" ? false : p === "default" ? shim : shim), apply: (_t, _this, args) => (args[0] === undefined ? "" : String(args[0])) }); export default shim;';
+      }
+      return null;
+    },
+    renderChunk(code) {
+      if (!code.includes('has been externalized for browser compatibility')) {
+        return null;
+      }
+      return {
+        code: code.replace(
+          /new Proxy\(\{\},\s*\{[\s\S]*?has been externalized for browser compatibility[\s\S]*?\}\s*\}\)/g,
+          'new Proxy(function(s){return s===void 0?"":String(s)},{get(_t,p){return p==="__esModule"?!1:this},apply(_t,_this,a){return a[0]===void 0?"":String(a[0])}})',
+        ),
+        map: null,
+      };
+    },
+  };
+
   const plugins: PluginOption[] = [
+    browserExternalShimPlugin,
     react(),
     legacy({
       targets: ['defaults', 'not IE 11'],
