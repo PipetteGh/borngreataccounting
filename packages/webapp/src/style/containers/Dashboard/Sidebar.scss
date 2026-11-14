@@ -48,10 +48,14 @@
       visibility: hidden;
       pointer-events: none;
 
-      svg {
+      svg,
+      svg path,
+      svg rect,
+      svg circle,
+      svg polygon {
         opacity: 1;
         color: var(--color-primary);
-        fill: var(--color-primary);
+        fill: var(--color-primary) !important;
       }
     }
     &-organization {

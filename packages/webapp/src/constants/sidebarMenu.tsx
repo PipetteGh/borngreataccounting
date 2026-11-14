@@ -566,7 +566,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Expenses
   // ---------------
   {
-    icon: 'receipt',
+    icon: 'dollar',
     text: <T id={'sidebar.expenses'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Expenses,
