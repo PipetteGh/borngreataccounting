@@ -1,0 +1,77 @@
+name: BorngreatAccounting CI Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build_and_unit_test:
+    name: Build, Typecheck & Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.20.4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build shared packages
+        run: pnpm run build:shared
+
+      - name: Build backend server
+        run: pnpm --filter "@bigcapital/server" run build
+
+      - name: Run backend unit tests
+        run: pnpm --filter "@bigcapital/server" test
+
+      - name: Build frontend webapp
+        run: pnpm --filter "@bigcapital/webapp" run build
+
+      - name: Verify documentation and licensing files
+        run: |
+          for f in LICENSE DISCLAIMER NOTICE README.md \
+            docs/INSTALLATION.md docs/DOCKER-DEPLOYMENT.md docs/WINDOWS-INSTALLATION.md \
+            docs/LINUX-DEPLOYMENT.md docs/CONFIGURATION.md docs/BACKUP-AND-RESTORE.md \
+            docs/UPGRADE-GUIDE.md docs/SECURITY.md docs/TROUBLESHOOTING.md \
+            docs/ARCHITECTURE.md docs/DEVELOPMENT.md docs/LICENSING-AND-ATTRIBUTION.md \
+            docs/RELEASE-PROCESS.md; do
+            if [ ! -f "$f" ]; then
+              echo "Missing required file: $f"
+              exit 1
+            fi
+          done
+          echo "All documentation and licensing files verified."

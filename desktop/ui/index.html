@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BorngreatAccounting (BtAccounting) — Desktop Control Center</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --primary: #1e5eff;
+      --primary-hover: #1d4ed8;
+      --accent: #f59e0b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --success: #10b981;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 28px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0f2d5e, #1e5eff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 24px;
+      color: #fff;
+      border-bottom: 3px solid var(--accent);
+    }
+    h1 { margin: 0; font-size: 22px; }
+    .tagline { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 15px; }
+    .card p { margin: 0 0 16px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 15px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: var(--primary-hover); }
+    button.secondary { background: #334155; }
+    button.secondary:hover { background: #475569; }
+    pre {
+      background: #020617;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 12px;
+      color: #cbd5e1;
+      height: 220px;
+      overflow: auto;
+      margin: 0;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-badge">B</div>
+      <div>
+        <h1>BorngreatAccounting <span style="color: var(--muted); font-weight: 500; font-size: 15px;">(BtAccounting v1.0.0)</span></h1>
+        <p class="tagline">Your Accounting. Your Servers. Your Control. — Desktop Runtime Manager</p>
+      </div>
+    </div>
+    <div>
+      <button onclick="openDashboard()">Open Accounting Dashboard</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Service Lifecycle Control</h3>
+      <p>Start, stop, or restart the local BorngreatAccounting multi-tenant server, MariaDB, Redis, and PDF services.</p>
+      <div class="btn-row">
+        <button onclick="runAction('start')">Start Stack</button>
+        <button class="secondary" onclick="runAction('restart')">Restart</button>
+        <button class="secondary" onclick="runAction('stop')">Stop</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Data Protection &amp; Upgrades</h3>
+      <p>Create encrypted SHA-256 verified backups of all system and tenant databases or check service status.</p>
+      <div class="btn-row">
+        <button onclick="runAction('status')">Check Health</button>
+        <button class="secondary" onclick="runAction('backup')">Backup Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Runtime Console Output</h3>
+    <pre id="console-output">[BorngreatAccounting Desktop] Ready. Select an action above to manage your local accounting stack.</pre>
+  </div>
+
+  <div class="footer">
+    <span>Developer &amp; Publisher: Peter Borngreat-Mensah (Borngreat) | License: GNU AGPL-3.0</span>
+    <span>Based on open-source Bigcapital</span>
+  </div>
+
+  <script>
+    const out = document.getElementById('console-output');
+    function log(msg) {
+      out.textContent += '\n[' + new Date().toLocaleTimeString() + '] ' + msg;
+      out.scrollTop = out.scrollHeight;
+    }
+    async function runAction(action) {
+      log('Executing action: ' + action + '...');
+      if (window.__TAURI__ && window.__TAURI__.tauri) {
+        try {
+          const res = await window.__TAURI__.tauri.invoke('manage_stack', { action });
+          log(res);
+        } catch (err) {
+          log('Error: ' + err);
+        }
+      } else {
+        log('Running in standalone preview mode. Use docker compose -f docker-compose.production.yml ' + action);
+      }
+    }
+    function openDashboard() {
+      window.open('http://localhost:80', '_blank');
+    }
+  </script>
+</body>
+</html>

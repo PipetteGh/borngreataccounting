@@ -1,0 +1,92 @@
+# ==============================================================================
+# BorngreatAccounting (BtAccounting) — Development Infrastructure Docker Compose
+# Starts MariaDB (3306), Redis (6379), Gotenberg (9000), Garage/S3 (3900), and ClickHouse (8123)
+# ==============================================================================
+version: '3.8'
+
+services:
+  mariadb:
+    container_name: borngreataccounting-dev-mariadb
+    build:
+      context: ./docker/mariadb
+    environment:
+      - MYSQL_DATABASE=${SYSTEM_DB_NAME:-borngreat_system}
+      - MYSQL_USER=${DB_USER:-borngreat}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-borngreat}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-root}
+    volumes:
+      - mysql:/var/lib/mysql
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    restart: unless-stopped
+
+  redis:
+    container_name: borngreataccounting-dev-redis
+    build:
+      context: ./docker/redis
+    expose:
+      - '6379'
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+    restart: unless-stopped
+
+  gotenberg:
+    container_name: borngreataccounting-dev-gotenberg
+    image: gotenberg/gotenberg:7
+    ports:
+      - '9000:3000'
+    restart: unless-stopped
+
+  clickhouse:
+    container_name: borngreataccounting-dev-clickhouse
+    image: clickhouse/clickhouse-server:24.8
+    environment:
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-}
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=${CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT:-1}
+      - CLICKHOUSE_DB=${CLICKHOUSE_DATABASE:-borngreat_analytics}
+    expose:
+      - '8123'
+      - '9000'
+    ports:
+      - '8123:8123'
+    volumes:
+      - clickhouse:/var/lib/clickhouse
+    restart: unless-stopped
+
+  garage:
+    container_name: borngreataccounting-dev-garage
+    image: dxflrs/garage:v1.3.1
+    environment:
+      - GARAGE_CONFIG_FILE=/etc/garage.toml
+      - GARAGE_RPC_SECRET=${GARAGE_RPC_SECRET}
+      - GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+    volumes:
+      - ./docker/garage/garage.toml:/etc/garage.toml
+      - ./docker/garage/setup.sh:/garage-setup/setup.sh
+      - garage:/var/lib/garage
+    ports:
+      - '3900:3900'
+      - '3903:3903'
+    expose:
+      - '3900'
+      - '3903'
+    restart: unless-stopped
+
+volumes:
+  mysql:
+    name: borngreat_dev_mysql
+    driver: local
+  redis:
+    name: borngreat_dev_redis
+    driver: local
+  garage:
+    name: borngreat_dev_garage
+    driver: local
+  clickhouse:
+    name: borngreat_dev_clickhouse
+    driver: local

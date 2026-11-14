@@ -1,0 +1,44 @@
+name: Release BorngreatAccounting
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  prepare-windows-exe:
+    name: Package Windows EXE & Checksums
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile Windows Installer & Generate SHA256SUMS
+        shell: pwsh
+        run: |
+          $version = "${GITHUB_REF_NAME}".TrimStart('v')
+          if ([string]::IsNullOrWhiteSpace($version)) { $version = "1.0.0" }
+          New-Item -ItemType Directory -Force -Path "dist\installers" | Out-Null
+          $csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
+          & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-$version.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"
+          Copy-Item "dist\installers\BorngreatAccounting-Setup-$version.exe" "dist\installers\BorngreatAccounting-Setup.exe" -Force
+          Compress-Archive -Path "docker", "docker-compose.production.yml", ".env.production.example", "install.sh", "install.ps1", "backup.sh", "restore.sh", "backup.ps1", "restore.ps1", "upgrade.sh", "upgrade.ps1", "LICENSE", "DISCLAIMER", "NOTICE", "README.md" -DestinationPath "dist\installers\BorngreatAccounting-Docker-Deploy-$version.zip" -Force
+          Get-ChildItem "dist\installers\*" -Exclude "SHA256SUMS.txt" | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+            "$hash  $($_.Name)"
+          } | Set-Content -Path "dist\installers\SHA256SUMS.txt" -Encoding ASCII
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            dist/installers/BorngreatAccounting-Setup*.exe
+            dist/installers/BorngreatAccounting-Docker-Deploy*.zip
+            dist/installers/SHA256SUMS.txt

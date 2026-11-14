@@ -1,0 +1,66 @@
+{
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devPath": "../ui",
+    "distDir": "../ui"
+  },
+  "package": {
+    "productName": "BorngreatAccounting",
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "Finance",
+      "copyright": "Copyright (c) Peter Borngreat-Mensah (Borngreat). Licensed under GNU AGPL-3.0.",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "../../assets/branding/borngreataccounting-icon-512.png",
+        "../../assets/branding/borngreataccounting.ico"
+      ],
+      "identifier": "com.borngreat.accounting",
+      "longDescription": "BorngreatAccounting (BtAccounting) — Self-Hosted Double-Entry Accounting and Financial Management Software.",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "Your Accounting. Your Servers. Your Control.",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 680,
+        "resizable": true,
+        "title": "BorngreatAccounting (BtAccounting) — Control Center",
+        "width": 980
+      }
+    ]
+  }
+}

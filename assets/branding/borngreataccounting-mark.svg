@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 44" width="64" height="44" class="borngreataccounting-mark">
+  <defs>
+    <linearGradient id="bgm-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#004dd0" />
+      <stop offset="100%" stop-color="#1968f0" />
+    </linearGradient>
+    <linearGradient id="bgm-accent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1968f0" />
+      <stop offset="100%" stop-color="#2d95fd" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#bgm-primary)" d="M6 4 L22 4 C28.6 4 33 7.8 33 13.2 C33 16.8 30.8 19.6 27.4 20.8 C31.6 22 34 25.2 34 29.5 C34 35.6 29.2 40 22 40 L6 40 Z M14 10.5 L14 18.5 L20.8 18.5 C23.6 18.5 25.4 16.9 25.4 14.5 C25.4 12.1 23.6 10.5 20.8 10.5 Z M14 24.5 L14 33.5 L21.5 33.5 C24.6 33.5 26.5 31.8 26.5 29 C26.5 26.2 24.6 24.5 21.5 24.5 Z" />
+  <path fill="url(#bgm-accent)" d="M36 6 L56 6 L56 26 L49 26 L49 17.9 L35.9 31 L31 26.1 L44.1 13 L36 13 Z" />
+</svg>
