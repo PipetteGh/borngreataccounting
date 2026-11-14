@@ -5,6 +5,18 @@ import { Features } from '@/constants/features';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 
 export const getDashboardRoutes = () => [
+  // Point of Sale (POS).
+  {
+    path: '/pos',
+    component: lazy(() =>
+      import('@/containers/POS/POSPage').then((m) => ({
+        default: m.POSPage,
+      })),
+    ),
+    breadcrumb: 'Point of Sale (POS)',
+    pageTitle: 'Point of Sale (POS)',
+    sidebarExpand: false,
+  },
   // Accounts.
   {
     path: '/accounts/import',

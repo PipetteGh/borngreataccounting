@@ -6,6 +6,8 @@ import { GetPaymentServicesSpecificInvoice } from './queries/GetPaymentServicesS
 import { GetPaymentMethodsStateService } from './queries/GetPaymentMethodsState';
 import { PaymentServicesApplication } from './PaymentServicesApplication';
 import { PaymentServicesController } from './PaymentServices.controller';
+import { PaymentGatewaysService } from './PaymentGateways.service';
+import { PaymentGatewaysController } from './PaymentGateways.controller';
 import { RegisterTenancyModel } from '../Tenancy/TenancyModels/Tenancy.module';
 import { PaymentIntegration } from './models/PaymentIntegration.model';
 import { TransactionPaymentServiceEntry } from './models/TransactionPaymentServiceEntry.model';
@@ -26,7 +28,8 @@ const models = [
     GetPaymentMethodsStateService,
     GetPaymentServicesSpecificInvoice,
     PaymentServicesApplication,
+    PaymentGatewaysService,
   ],
-  controllers: [PaymentServicesController],
+  controllers: [PaymentGatewaysController, PaymentServicesController],
 })
 export class PaymentServicesModule {}

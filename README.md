@@ -19,12 +19,34 @@
 ## Key Capabilities
 
 - **True Double-Entry Accounting Engine**: Full Chart of Accounts, manual & recurring Journal Entries, General Ledger, Trial Balance, Balance Sheet, Profit & Loss (Income Statement), and Cash Flow Statement.
-- **Receivables & Sales**: Customer management, Estimates/Quotes, Sale Invoices, Recurring Invoices, Sale Receipts, Credit Notes, Payment Received, Stripe Online Payment Portal, and PDF/Email invoicing.
+- **Receivables & Sales**: Customer management, Estimates/Quotes, Sale Invoices, Recurring Invoices, Sale Receipts, Credit Notes, Payment Received, Online Payment Portals, and PDF/Email invoicing.
+- **Point of Sale (POS) & Inventory Register**: Dedicated touch-friendly POS register (`/pos`) with barcode/SKU search, category filtering, live inventory stock validation, automatic stock deduction & double-entry receipt posting, cash change calculation, receipt printing, and distraction-free **Full-Screen Mode**.
+- **Payment Gateways & Mobile Money**: Built-in per-tenant integrations for **Stripe**, **Paystack** (Cards, MTN/Telecel/AT Mobile Money, Bank Transfers across GHS, NGN, USD, ZAR, KES), **Flutterwave** (Cards, Mobile Money, USSD across Africa, UK, EU & US), and **Hubtel** (Ghana Mobile Money, GhQR & Visa/Mastercard) with webhook signature verification.
+- **Themes & White-Label Branding**: Choose from **12 built-in Light & Dark themes** with live preview, plus custom company logo upload and primary brand color configuration for PDFs and emails.
 - **Payables & Purchases**: Vendor management, Purchase Bills, Expenses, Vendor Credit Notes, Payment Made, and AP Aging reports.
 - **Inventory & Warehouses**: Multi-warehouse inventory tracking, inventory adjustments, warehouse transfers, low-stock reorder point alerts, and inventory valuation reports.
 - **Banking & Cash Flow**: Bank & cash accounts, Plaid bank feeds, uncategorized transaction rules, and account reconciliation.
 - **Global Multi-Currency & Tax Presets**: Supports 150+ ISO currencies (`USD`, `EUR`, `GBP`, `GHS`, `TRY`, `CAD`, `AUD`, `NGN`, `KES`, `ZAR`, etc.) with live exchange rate syncing and optional country tax localization presets (including Ghana GRA VAT/NHIL/GETFund/CHRL, UK HMRC VAT, EU VAT, Türkiye KDV, and US Sales Tax).
 - **Enterprise Multi-Tenancy & Security**: Per-organization isolated MariaDB tenant databases, Role-Based Access Control (RBAC), TOTP Two-Factor Authentication (2FA) with recovery codes, API Keys, and Audit Trails.
+
+---
+
+## Screenshots
+
+### Workspace Dashboard
+![BorngreatAccounting Dashboard](assets/screenshots/dashboard.png)
+
+### Point of Sale (POS) & Full-Screen Register
+![BorngreatAccounting POS](assets/screenshots/pos.png)
+
+### Themes & Appearance (12 Light & Dark Themes)
+![BorngreatAccounting Themes Gallery](assets/screenshots/themes.png)
+
+### Payment Gateways (Stripe, Paystack, Flutterwave & Hubtel)
+![BorngreatAccounting Payment Gateways](assets/screenshots/payment-methods.png)
+
+### Company Branding & Logo Upload
+![BorngreatAccounting Branding](assets/screenshots/branding.png)
 
 ---
 

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { StripePreSetupDialog } from './dialogs/StripePreSetupDialog/StripePreSetupDialog';
 import { StripeIntegrationEditDrawer } from './drawers/StripeIntegrationEditDrawer';
 import { PaymentMethodsBoot } from './PreferencesPaymentMethodsBoot';
+import { RegionalPaymentGateways } from './RegionalPaymentGateways';
 import { StripePaymentMethod } from './StripePaymentMethod';
 import { Box, Stack } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
@@ -30,6 +31,7 @@ export function PreferencesPaymentMethodsPage() {
 
         <Stack>
           <StripePaymentMethod />
+          <RegionalPaymentGateways />
         </Stack>
 
         <StripePreSetupDialog dialogName={DialogsName.StripeSetup} />

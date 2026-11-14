@@ -59,6 +59,14 @@ export const accountsReceivable: HomepageSectionOption[] = [
         subject: AbilitySubject.PaymentReceive,
         ability: PaymentReceiveAction.View,
       },
+      {
+        title: 'Launch Point of Sale (POS)',
+        description:
+          'Sell directly from your inventory with barcode search, cash, card, Mobile Money, and full-screen register mode.',
+        link: '/pos',
+        subject: AbilitySubject.Receipt,
+        ability: SaleReceiptAction.Create,
+      },
     ],
   },
 ];

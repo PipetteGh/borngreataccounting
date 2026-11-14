@@ -61,6 +61,13 @@ export const SidebarMenu: SidebarMenuItem[] = [
     href: '/',
     matchExact: true,
   },
+  {
+    icon: 'shop',
+    text: 'Point of Sale (POS)',
+    type: ISidebarMenuItemType.Link,
+    disabled: false,
+    href: '/pos',
+  },
   // ---------------
   // # Sales & Inventory
   // ---------------
