@@ -28,6 +28,18 @@
 
 ---
 
+## System & Platform Requirements
+
+| Platform | OS / Environment | Required Software & Runtime | Hardware Minimum |
+|---|---|---|---|
+| **Windows** | Windows 10 / 11 (64-bit), Windows Server 2019/2022 | **Desktop EXE / Native**: PowerShell 5.1+, `curl.exe`, .NET Framework 4.x+ (built into Windows). The self-healing runtime auto-installs **Node.js**, **MariaDB 10.11**, and **Redis** if missing.<br>**Container Mode**: Docker Desktop `4.25+` (WSL2 backend) | 2 vCPU, 4 GB RAM (8 GB recommended), 20 GB SSD |
+| **Linux** | Ubuntu 22.04 / 24.04 LTS, Debian 12+, RHEL / Rocky / AlmaLinux 9+ | `bash`, `curl`, `openssl`, `git`, `tar`, Docker Engine `24.0+`, Docker Compose `v2.20+` (`install.sh` auto-installs missing Docker/CLI prerequisites) | 2+ vCPU, 4 GB RAM (8–16 GB recommended), 20–60+ GB SSD |
+| **macOS** | macOS 13 (Ventura) or newer (Apple Silicon & Intel) | Docker Desktop `4.25+` (for containers), or **Node.js 18.x+**, `pnpm 9.x`, **MariaDB 10.11**, **Redis** (for source dev) | 2+ vCPU, 8 GB RAM, 20 GB SSD |
+| **Web Browser** | Desktop & Tablet | Google Chrome `100+`, Microsoft Edge `100+`, Mozilla Firefox `100+`, or Apple Safari `16+` with JavaScript & `localStorage` enabled | 1280×720+ display recommended |
+| **Source / Dev** | Windows, Linux, or macOS | **Node.js `18.x LTS+`**, **`pnpm 9.0.5`**, **MariaDB `10.11`**, **Redis**, **Gotenberg** (optional, for PDF rendering), **S3 / Garage** (optional; falls back to local disk storage) | 4 GB RAM, 20 GB free disk |
+
+---
+
 ## Quick Start (One-Command Self-Hosted Deployment)
 
 ### Linux / macOS
