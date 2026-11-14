@@ -32,10 +32,10 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'light',
     name: 'Borngreat Classic Light',
-    description: 'Crisp white workspace with royal blue sidebar & accents.',
+    description: 'Crisp white workspace & light sidebar with royal blue accents.',
     isDark: false,
     preview: {
-      sidebar: '#0c234d',
+      sidebar: '#ffffff',
       canvas: '#f6f8fb',
       surface: '#ffffff',
       primary: '#004dd0',
@@ -68,10 +68,10 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'emerald',
     name: 'Emerald Ledger',
-    description: 'Clean mint-white canvas paired with a deep forest sidebar.',
+    description: 'Light mint-white workspace & sidebar with emerald accents.',
     isDark: false,
     preview: {
-      sidebar: '#064e3b',
+      sidebar: '#f5fbf8',
       canvas: '#f2f9f6',
       surface: '#ffffff',
       primary: '#059669',
@@ -140,10 +140,10 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'ocean',
     name: 'Oceanic Teal',
-    description: 'Breezy coastal light theme with deep cyan-teal sidebar.',
+    description: 'Breezy coastal light theme & sidebar with teal highlights.',
     isDark: false,
     preview: {
-      sidebar: '#083344',
+      sidebar: '#f4fbfc',
       canvas: '#f2f9fa',
       surface: '#ffffff',
       primary: '#0d9488',
@@ -164,10 +164,10 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'slate',
     name: 'Monochrome Slate',
-    description: 'Minimalist neutral light theme with graphite navigation.',
+    description: 'Minimalist neutral light theme & sidebar with graphite accents.',
     isDark: false,
     preview: {
-      sidebar: '#18181b',
+      sidebar: '#fafafa',
       canvas: '#f4f4f5',
       surface: '#ffffff',
       primary: '#27272a',

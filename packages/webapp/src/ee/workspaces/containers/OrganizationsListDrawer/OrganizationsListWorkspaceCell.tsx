@@ -81,7 +81,7 @@ export function OrganizationsListWorkspaceCell({
           <x.span
             fontWeight={500}
             fontSize="14px"
-            color="rgba(255, 255, 255, 0.88)"
+            color="var(--color-surface-text, #1c2127)"
             overflow="hidden"
             textOverflow="ellipsis"
             whiteSpace="nowrap"

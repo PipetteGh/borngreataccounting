@@ -14,6 +14,7 @@ interface SidebarMenuItemComponentProps {
   text?: React.ReactNode;
   disabled?: boolean;
   dropdownType?: string;
+  hasSubmenu?: boolean;
   onClick?: (event: React.MouseEvent) => void;
   active?: boolean;
   intent?: Intent;
@@ -32,6 +33,8 @@ const SidebarMenuItemComponent =
 function SidebarMenuItem({ item, index }: SidebarMenuItemProps) {
   // Detarmine whether the item is active.
   const isActive = useIsSidebarMenuItemActive(item);
+  const hasSubmenu =
+    item.type === ISidebarMenuItemType.Overlay || Boolean(item.children?.length);
 
   return (
     <SidebarMenuItemComponent
@@ -39,6 +42,7 @@ function SidebarMenuItem({ item, index }: SidebarMenuItemProps) {
       text={item.text}
       disabled={item.disabled}
       dropdownType={item.dropdownType || 'collapse'}
+      hasSubmenu={hasSubmenu}
       onClick={item.onClick}
       active={isActive}
       intent={Intent.NONE}

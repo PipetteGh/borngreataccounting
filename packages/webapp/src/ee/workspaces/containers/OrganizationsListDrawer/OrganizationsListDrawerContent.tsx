@@ -29,18 +29,18 @@ const organizationsDrawerSearchFormGroupCss = css`
 
 const organizationsDrawerInputSearchCss = css`
   width: 100%;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-surface-subtle-bg, rgba(15, 23, 42, 0.04));
+  border: 1px solid var(--color-surface-border, rgba(15, 23, 42, 0.14));
   border-radius: 6px;
-  color: #fff;
+  color: var(--color-surface-text, #1c2127);
   box-shadow: none;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-surface-muted, #5c7080);
   }
 
   .bp4-icon {
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-surface-muted, #5c7080);
   }
 
   &:focus,
@@ -52,12 +52,12 @@ const organizationsDrawerInputSearchCss = css`
 
 const organizationsDrawerCreateBtnCss = css`
   flex-shrink: 0 !important;
-  color: rgba(255, 255, 255, 0.7) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--color-surface-text, #1c2127) !important;
+  border-color: var(--color-surface-border, rgba(15, 23, 42, 0.14)) !important;
 
   &:hover {
-    color: #fff !important;
-    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--color-surface-text, #1c2127) !important;
+    background: var(--color-surface-hover-bg, rgba(15, 23, 42, 0.06)) !important;
   }
 `;
 
@@ -141,7 +141,7 @@ function OrganizationsListDrawerContentRoot({
               m={0}
               fontSize="20px"
               fontWeight={400}
-              color="#fff"
+              color="var(--color-surface-text, #1c2127)"
               letterSpacing="-0.02em"
             >
               {intl.get('workspaces.organizations_list_count_title', {

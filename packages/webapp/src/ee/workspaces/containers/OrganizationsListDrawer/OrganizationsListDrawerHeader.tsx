@@ -46,7 +46,7 @@ export function OrganizationsListDrawerHeader({
       justifyContent="space-between"
       px="10px"
       py="10px"
-      borderBottom="1px solid rgba(255, 255, 255, 0.08)"
+      borderBottom="1px solid var(--color-surface-border, rgba(15, 23, 42, 0.12))"
     >
       <x.label
         className={organizationsSwitchLabelBpCss}
@@ -58,7 +58,7 @@ export function OrganizationsListDrawerHeader({
         userSelect="none"
       >
         <Switch checked={isCurrentOrgDefault} onChange={handleChange} />
-        <x.span fontSize="14px" color="rgb(255, 255, 255)">
+        <x.span fontSize="14px" color="var(--color-surface-text, #1c2127)">
           {intl.get('workspaces.set_default_workspace', {
             fallback: 'Set default workspace',
           })}

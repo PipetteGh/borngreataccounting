@@ -42,16 +42,17 @@ const DashboardOrganizationMenu = styled(Menu)`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  color: var(--color-surface-text, #1c2127);
 
   .org-workspace-item {
     padding: 8px 10px;
 
     &.is-active {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--color-surface-hover-bg, rgba(15, 23, 42, 0.08));
     }
 
     &:hover:not(.is-active):not(.bp4-disabled) {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--color-surface-subtle-bg, rgba(15, 23, 42, 0.04));
     }
 
     &.bp4-disabled {
@@ -62,42 +63,42 @@ const DashboardOrganizationMenu = styled(Menu)`
 
   .bp4-menu-divider {
     margin: 8px 0;
-    border-top-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-surface-border, rgba(15, 23, 42, 0.1));
   }
 
   .bp4-menu-item {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-surface-text, #1c2127);
     border-radius: 4px;
     line-height: 20px;
 
     &:hover:not(.bp4-disabled) {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
+      background: var(--color-surface-hover-bg, rgba(15, 23, 42, 0.08));
+      color: var(--color-surface-text, #1c2127);
     }
 
     .bp4-icon {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--color-surface-muted, #5c7080);
     }
   }
 `;
 
 const DashboardSearchInput = styled(InputGroup)`
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface-subtle-bg, rgba(15, 23, 42, 0.04));
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-surface-border, rgba(15, 23, 42, 0.12));
   box-shadow: none;
 
   .bp4-input {
     background: transparent;
-    color: #fff;
+    color: var(--color-surface-text, #1c2127);
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.35);
+      color: var(--color-surface-muted, #5c7080);
     }
   }
 
   .bp4-icon {
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-surface-muted, #5c7080);
   }
 
   &:focus-within,
@@ -166,7 +167,7 @@ function SidebarHeadJSX({
                 gap={3}
                 py={'8px'}
                 px={'10px'}
-                backgroundColor="rgba(255, 255, 255, 0.05)"
+                backgroundColor="var(--color-surface-subtle-bg, rgba(15, 23, 42, 0.04))"
                 borderRadius={4}
               >
                 {metadata?.logoUri ? (
@@ -193,7 +194,7 @@ function SidebarHeadJSX({
                     {firstLettersArgs(...(metadata?.name || '').split(' '))}
                   </x.div>
                 )}
-                <x.div fontWeight={600} color="#fff">
+                <x.div fontWeight={600} color="var(--color-surface-text, #1c2127)">
                   {metadata?.name}
                 </x.div>
               </x.div>
@@ -299,7 +300,7 @@ function SidebarHeadJSX({
                     py={'12px'}
                     px={'10px'}
                     fontSize={13}
-                    color="rgba(255, 255, 255, 0.5)"
+                    color="var(--color-surface-muted, #5c7080)"
                   >
                     {intl.get('workspaces.no_workspaces_found', {
                       fallback: 'No workspaces found.',

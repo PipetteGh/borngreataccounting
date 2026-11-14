@@ -7,9 +7,15 @@ import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers, WithDrawersProps } from '@/containers/Drawer/withDrawers';
 
 const OrganizationsDrawer = styled(Drawer)`
+  &.bp4-drawer {
+    background-color: var(--color-dashboard-insider-background, #ffffff);
+    color: var(--color-surface-text, #1c2127);
+  }
+
   &.bp4-drawer.bp4-dark,
   .bp4-dark &.bp4-drawer {
     background-color: var(--color-dark-gray1);
+    color: var(--color-surface-text, rgba(255, 255, 255, 0.92));
   }
 `;
 
