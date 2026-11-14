@@ -33,4 +33,4 @@ Substantial modifications made in this distribution include:
 7. Automated GitHub Actions CI/CD and release workflows (`.github/workflows/`).
 
 In accordance with **Section 5** and **Section 13** of the GNU AGPL-3.0, the complete corresponding source code of BorngreatAccounting is publicly available at:
-[https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative](https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative)
+[https://github.com/PipetteGh/borngreataccounting](https://github.com/PipetteGh/borngreataccounting)

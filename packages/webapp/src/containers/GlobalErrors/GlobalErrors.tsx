@@ -14,7 +14,7 @@ let toastKeyAccessDenied: string | undefined;
 
 interface GlobalErrorsInnerProps
   extends WithGlobalErrorsProps,
-    WithGlobalErrorsActionsProps {}
+  WithGlobalErrorsActionsProps { }
 
 function GlobalErrorsInner({
   // #withGlobalErrors

@@ -25,8 +25,8 @@ BorngreatAccounting provides a turnkey, multi-container Docker architecture in [
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git
-cd Borngreat-Accounting---QuickBooks-Alternative
+git clone https://github.com/PipetteGh/borngreataccounting.git
+cd borngreataccounting
 ```
 
 ### 2. Run the Automated Installer

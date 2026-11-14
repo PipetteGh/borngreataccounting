@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.title="BorngreatAccounting Web" \
       org.opencontainers.image.description="BorngreatAccounting (BtAccounting) Web Frontend SPA" \
       org.opencontainers.image.vendor="Borngreat (Peter Borngreat-Mensah)" \
       org.opencontainers.image.licenses="AGPL-3.0" \
-      org.opencontainers.image.source="https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative"
+      org.opencontainers.image.source="https://github.com/PipetteGh/borngreataccounting"
 
 COPY --chown=root:root ./packages/webapp/nginx/sites/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder --chown=nginx:nginx /app/packages/webapp/dist /usr/share/nginx/html

@@ -22,22 +22,22 @@ export const BRAND = {
   githubOrg: 'soluotech',
   repositoryUrl:
     (import.meta as any).env?.VITE_REPOSITORY_URL ||
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative',
+    'https://github.com/PipetteGh/borngreataccounting',
   docsUrl:
     (import.meta as any).env?.VITE_DOCS_URL ||
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/tree/main/docs',
+    'https://github.com/PipetteGh/borngreataccounting/tree/main/docs',
   communityUrl:
     (import.meta as any).env?.VITE_COMMUNITY_URL ||
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/issues',
+    'https://github.com/PipetteGh/borngreataccounting/issues',
   supportUrl:
     (import.meta as any).env?.VITE_COMMUNITY_URL ||
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/issues',
+    'https://github.com/PipetteGh/borngreataccounting/issues',
   releasesUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/releases',
+    'https://github.com/PipetteGh/borngreataccounting/releases',
   version: (import.meta as any).env?.VITE_APP_VERSION || '1.0.0',
   license: 'GNU Affero General Public License v3.0 (AGPL-3.0)',
   licenseUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/blob/main/LICENSE',
+    'https://github.com/PipetteGh/borngreataccounting/blob/main/LICENSE',
   upstreamProjectName: 'Bigcapital',
   upstreamRepositoryUrl: 'https://github.com/bigcapitalhq/bigcapital',
   upstreamAttribution:

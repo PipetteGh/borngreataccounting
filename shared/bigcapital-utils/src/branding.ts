@@ -38,16 +38,16 @@ export const BRAND_CONFIG: BrandConfig = {
   companyLegalName: 'Borngreat (Peter Borngreat-Mensah)',
   githubAccount: 'soluotech',
   repositoryUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative',
+    'https://github.com/PipetteGh/borngreataccounting',
   docsUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/tree/main/docs',
+    'https://github.com/PipetteGh/borngreataccounting/tree/main/docs',
   communityUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/discussions',
+    'https://github.com/PipetteGh/borngreataccounting/discussions',
   supportEmail: 'support@borngreat.com',
   version: '1.0.0',
   license: 'GNU Affero General Public License v3.0 (AGPL-3.0)',
   licenseUrl:
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/blob/main/LICENSE',
+    'https://github.com/PipetteGh/borngreataccounting/blob/main/LICENSE',
   upstreamProjectName: 'Bigcapital',
   upstreamRepositoryUrl: 'https://github.com/bigcapitalhq/bigcapital',
   copyrightNotice: '© 2026 Peter Borngreat-Mensah (Borngreat). Licensed under GNU AGPL-3.0.',

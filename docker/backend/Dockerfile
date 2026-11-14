@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.title="BorngreatAccounting API & Worker" \
       org.opencontainers.image.description="BorngreatAccounting (BtAccounting) NestJS API, CLI & Queue Worker" \
       org.opencontainers.image.vendor="Borngreat (Peter Borngreat-Mensah)" \
       org.opencontainers.image.licenses="AGPL-3.0" \
-      org.opencontainers.image.source="https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative"
+      org.opencontainers.image.source="https://github.com/PipetteGh/borngreataccounting"
 
 WORKDIR /app
 

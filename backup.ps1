@@ -1,5 +1,5 @@
 # ==============================================================================
-# BorngreatAccounting (BtAccounting) — Windows PowerShell Backup Utility
+# BorngreatAccounting (BtAccounting) -- Windows PowerShell Backup Utility
 # Backs up MariaDB (system + all tenant DBs), Garage S3 storage, and .env config
 # ==============================================================================
 param(
@@ -16,7 +16,7 @@ $ArchiveFile = Join-Path $BackupRoot "borngreataccounting_backup_$Timestamp.zip"
 New-Item -ItemType Directory -Force -Path "$BackupDir\databases", "$BackupDir\storage" | Out-Null
 
 Write-Host "======================================================================" -ForegroundColor Cyan
-Write-Host "  BorngreatAccounting Windows Backup Utility — $Timestamp" -ForegroundColor Cyan
+Write-Host "  BorngreatAccounting Windows Backup Utility -- $Timestamp" -ForegroundColor Cyan
 Write-Host "======================================================================" -ForegroundColor Cyan
 
 $DbRootPassword = "root"

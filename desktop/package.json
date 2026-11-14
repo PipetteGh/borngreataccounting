@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "BorngreatAccounting (BtAccounting) Windows & Cross-Platform Desktop Runtime Manager",
-  "author": "Peter Borngreat-Mensah <https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative>",
+  "author": "Peter Borngreat-Mensah <https://github.com/PipetteGh/borngreataccounting>",
   "license": "AGPL-3.0",
   "scripts": {
     "tauri:dev": "tauri dev",

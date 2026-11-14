@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0" /></a>
-  <a href="https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative/actions"><img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-1E5EFF.svg" alt="CI/CD" /></a>
+  <a href="https://github.com/PipetteGh/borngreataccounting/actions"><img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-1E5EFF.svg" alt="CI/CD" /></a>
   <a href="docs/DOCKER-DEPLOYMENT.md"><img src="https://img.shields.io/badge/Docker-Self--Hosted%20Ready-0db7ed.svg" alt="Docker Ready" /></a>
   <a href="docs/WINDOWS-INSTALLATION.md"><img src="https://img.shields.io/badge/Windows-Desktop%20EXE-0078D6.svg" alt="Windows Desktop EXE" /></a>
 </p>
@@ -32,16 +32,16 @@
 
 ### Linux / macOS
 ```bash
-git clone https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git
-cd Borngreat-Accounting---QuickBooks-Alternative
+git clone https://github.com/PipetteGh/borngreataccounting.git
+cd borngreataccounting
 chmod +x install.sh
 ./install.sh
 ```
 
 ### Windows (PowerShell or Setup EXE)
 ```powershell
-git clone https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git
-cd Borngreat-Accounting---QuickBooks-Alternative
+git clone https://github.com/PipetteGh/borngreataccounting.git
+cd borngreataccounting
 .\install.ps1
 ```
 Or launch the prebuilt Windows Desktop Setup & Control Center executable:
@@ -83,8 +83,7 @@ Or launch the prebuilt Windows Desktop Setup & Control Center executable:
 
 - **Product Name**: BorngreatAccounting (`BtAccounting`)
 - **Product Category**: Accounting and Financial Software
-- **Developer & Publisher**: Peter Borngreat-Mensah (`Borngreat`)
+- **Developer & Publisher**: Peter Borngreat-Mensah (`Peter Borngreat-Mensah`)
 - **GitHub Organization / Account**: `soluotech`
-- **Official Source Repository**: [https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative](https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative)
+- **Official Source Repository**: [https://github.com/PipetteGh/borngreataccounting](https://github.com/PipetteGh/borngreataccounting)
 - **License**: [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)
-- **Upstream Attribution**: Derived from the open-source [Bigcapital](https://github.com/bigcapitalhq/bigcapital) project. See [NOTICE](NOTICE) and [docs/LICENSING-AND-ATTRIBUTION.md](docs/LICENSING-AND-ATTRIBUTION.md) for full details.

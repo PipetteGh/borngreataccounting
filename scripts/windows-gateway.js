@@ -1,0 +1,131 @@
+/**
+ * BorngreatAccounting (BtAccounting) — Native Windows Web & API Gateway Server
+ * Serves packages/webapp/dist SPA and proxies /api, /public, /socket.io to 127.0.0.1:3000
+ */
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const WEB_PORT = Number(process.env.WEB_PORT || 4100);
+const API_HOST = process.env.API_HOST || '127.0.0.1';
+const API_PORT = Number(process.env.PORT || 3000);
+const DIST_DIR = path.resolve(__dirname, '..', 'packages', 'webapp', 'dist');
+
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.mjs': 'application/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.eot': 'application/vnd.ms-fontobject',
+  '.map': 'application/json',
+};
+
+function proxyToBackend(req, res) {
+  const options = {
+    hostname: API_HOST,
+    port: API_PORT,
+    path: req.url,
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: `${API_HOST}:${API_PORT}`,
+    },
+  };
+
+  const proxyReq = http.request(options, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode || 502, proxyRes.headers);
+    proxyRes.pipe(res, { end: true });
+  });
+
+  proxyReq.on('error', (err) => {
+    res.writeHead(502, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        error: 'Bad Gateway',
+        message: `BorngreatAccounting API server (${API_HOST}:${API_PORT}) is starting or unreachable: ${err.message}`,
+      }),
+    );
+  });
+
+  req.pipe(proxyReq, { end: true });
+}
+
+const server = http.createServer((req, res) => {
+  const urlPath = (req.url || '/').split('?')[0];
+
+  if (
+    urlPath.startsWith('/api') ||
+    urlPath.startsWith('/socket') ||
+    urlPath.startsWith('/public')
+  ) {
+    return proxyToBackend(req, res);
+  }
+
+  let filePath = path.join(DIST_DIR, decodeURIComponent(urlPath));
+  if (filePath.endsWith(path.sep)) {
+    filePath = path.join(filePath, 'index.html');
+  }
+
+  // Prevent directory traversal
+  if (!filePath.startsWith(DIST_DIR)) {
+    res.writeHead(403);
+    return res.end('Forbidden');
+  }
+
+  fs.stat(filePath, (err, stats) => {
+    if (!err && stats.isFile()) {
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': contentType });
+      fs.createReadStream(filePath).pipe(res);
+    } else {
+      // SPA fallback to index.html
+      const indexFile = path.join(DIST_DIR, 'index.html');
+      fs.readFile(indexFile, (readErr, content) => {
+        if (readErr) {
+          res.writeHead(500, { 'Content-Type': 'text/plain' });
+          return res.end('BorngreatAccounting Webapp dist/index.html not found.');
+        }
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(content);
+      });
+    }
+  });
+});
+
+server.on('upgrade', (req, socket, head) => {
+  const proxyReq = http.request({
+    hostname: API_HOST,
+    port: API_PORT,
+    path: req.url,
+    method: req.method,
+    headers: req.headers,
+  });
+  proxyReq.on('upgrade', (proxyRes, proxySocket, proxyHead) => {
+    socket.write('HTTP/1.1 101 Switching Protocols\r\n');
+    Object.keys(proxyRes.headers).forEach((k) => {
+      socket.write(`${k}: ${proxyRes.headers[k]}\r\n`);
+    });
+    socket.write('\r\n');
+    if (proxyHead && proxyHead.length) socket.write(proxyHead);
+    proxySocket.pipe(socket).pipe(proxySocket);
+  });
+  proxyReq.on('error', () => socket.destroy());
+  proxyReq.end();
+});
+
+server.listen(WEB_PORT, '0.0.0.0', () => {
+  console.log(
+    `[BorngreatAccounting Web Gateway] Listening on http://localhost:${WEB_PORT} -> proxying /api to http://${API_HOST}:${API_PORT}`,
+  );
+});

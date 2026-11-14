@@ -1,5 +1,5 @@
-﻿# ==============================================================================
-# BorngreatAccounting (BtAccounting) — Windows PowerShell Restore Utility
+# ==============================================================================
+# BorngreatAccounting (BtAccounting) -- Windows PowerShell Restore Utility
 # Restores MariaDB (system + all tenant DBs) from a backup .zip archive
 # ==============================================================================
 param(

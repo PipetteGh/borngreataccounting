@@ -16,7 +16,7 @@ describe('Centralized Branding Configuration (BorngreatAccounting)', () => {
     expect(SERVER_BRAND.githubOrg).toBe('soluotech');
     expect(SERVER_BRAND.license).toBe('AGPL-3.0');
     expect(SERVER_BRAND.repositoryUrl).toContain(
-      'Borngreat-Accounting---QuickBooks-Alternative',
+      'borngreataccounting',
     );
     expect(SERVER_BRAND.upstreamAttribution).toContain('Bigcapital');
   });

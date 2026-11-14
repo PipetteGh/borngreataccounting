@@ -30,7 +30,7 @@ sudo usermod -aG docker "$USER"
 ```bash
 sudo mkdir -p /opt/borngreataccounting
 sudo chown "$USER":"$USER" /opt/borngreataccounting
-git clone https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git /opt/borngreataccounting
+git clone https://github.com/PipetteGh/borngreataccounting.git /opt/borngreataccounting
 cd /opt/borngreataccounting
 chmod +x install.sh backup.sh restore.sh upgrade.sh setup.sh
 ./install.sh

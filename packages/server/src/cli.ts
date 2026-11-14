@@ -5,6 +5,7 @@ import { CLIModule } from './modules/CLI/CLI.module';
 
 async function bootstrap() {
   await CommandFactory.run(CLIModule);
+  process.exit(0);
 }
 
 bootstrap();
