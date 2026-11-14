@@ -46,12 +46,13 @@ export const PreferencesBrandingForm = ({
       transformToCamelCase(organization?.metadata),
       initialValues,
     ),
+    primaryColor: organization?.metadata?.primaryColor || '#004dd0',
   } as PreferencesBrandingFormValues;
 
   // Handle the form submitting.
   const handleSubmit = async (
     values: PreferencesBrandingFormValues,
-    { setSubmitting }: FormikHelpers<PreferencesBrandingFormValues>,
+    { setSubmitting, setFieldValue }: FormikHelpers<PreferencesBrandingFormValues>,
   ) => {
     const _values = { ...values };
 
@@ -69,13 +70,13 @@ export const PreferencesBrandingForm = ({
 
       try {
         const uploadedAttachmentRes = await uploadAttachments(formData);
-        setSubmitting(false);
 
         // Adds the attachment key to the values after finishing upload.
         _values['logoKey'] = uploadedAttachmentRes?.key;
+        setFieldValue('logoKey', uploadedAttachmentRes?.key);
+        setFieldValue('_logoFile', null);
       } catch {
         handleError('An error occurred while uploading company logo.');
-        setSubmitting(false);
         return;
       }
     }
@@ -85,17 +86,24 @@ export const PreferencesBrandingForm = ({
     const __values = transfromToSnakeCase(
       omit(excludedPrivateValues, ['logoUri']),
     );
-    // Update organization branding.
-    await updateOrganization({ ...__values });
+    try {
+      // Update organization branding.
+      await updateOrganization({ ...__values });
 
-    AppToaster.show({
-      message: 'Organization branding has been updated.',
-      intent: Intent.SUCCESS,
-    });
+      AppToaster.show({
+        message: 'Organization branding has been updated.',
+        intent: Intent.SUCCESS,
+      });
+    } catch {
+      handleError('An error occurred while saving organization branding.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <Formik
+      enableReinitialize
       initialValues={formInitialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}

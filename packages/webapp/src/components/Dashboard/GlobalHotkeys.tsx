@@ -8,6 +8,7 @@ import type { WithUniversalSearchActionsProps } from '@/containers/UniversalSear
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withUniversalSearchActions } from '@/containers/UniversalSearch/withUniversalSearchActions';
+import { cycleAppTheme } from '@/constants/themes';
 import { getDashboardRoutes } from '@/routes/dashboard';
 
 interface GlobalHotkeyRoute {
@@ -15,15 +16,9 @@ interface GlobalHotkeyRoute {
   hotkey?: string;
 }
 
-// Toggle dark/light mode by toggling 'bp4-dark' class on body
+// Cycle through available app themes on Shift+H
 const handleToggleDarkMode = () => {
-  const body = document.body;
-
-  if (body.classList.contains('bp4-dark')) {
-    body.classList.remove('bp4-dark');
-  } else {
-    body.classList.add('bp4-dark');
-  }
+  cycleAppTheme();
 };
 
 type GlobalHotkeysProps = Pick<

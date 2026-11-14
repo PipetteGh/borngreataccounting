@@ -24,6 +24,15 @@ export const getPreferenceRoutes = () => [
     exact: true,
   },
   {
+    path: `${BASE_URL}/themes`,
+    component: lazy(() =>
+      import('../containers/Preferences/Themes/PreferencesThemesPage').then(
+        (m) => ({ default: m.PreferencesThemesPage }),
+      ),
+    ),
+    exact: true,
+  },
+  {
     path: `${BASE_URL}/billing`,
     component: lazy(() =>
       import('../containers/Subscriptions/BillingPage').then((m) => ({

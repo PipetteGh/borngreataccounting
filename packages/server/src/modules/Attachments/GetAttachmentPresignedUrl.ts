@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { DocumentModel } from './models/Document.model';
 import { S3_CLIENT } from '../S3/S3.module';
+import { AttachmentStorageService } from './AttachmentStorage.service';
 
 @Injectable()
 export class GetAttachmentPresignedUrl {
@@ -16,18 +17,30 @@ export class GetAttachmentPresignedUrl {
 
     @Inject(S3_CLIENT)
     private readonly s3Client: S3Client,
+
+    private readonly storageService: AttachmentStorageService,
   ) {}
 
   /**
    * Retrieves the presigned url of the given attachment key with the original filename.
-   * @param {string} key -
-   * @returns {string}
+   * Falls back to HMAC-signed local URL when S3 is not configured.
    */
   async getPresignedUrl(key: string) {
     const foundDocument = await this.documentModel()
       .query()
       .findOne({ key })
       .throwIfNotFound();
+
+    if (
+      this.storageService.localFileExists(key) ||
+      !this.storageService.isS3Configured()
+    ) {
+      return this.storageService.createSignedLocalUrl(
+        key,
+        foundDocument?.mimeType,
+      );
+    }
+
     const config = this.configService.get('s3');
 
     let ResponseContentDisposition = 'attachment';

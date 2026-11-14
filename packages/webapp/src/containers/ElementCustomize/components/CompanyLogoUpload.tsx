@@ -1,9 +1,9 @@
 import { Button, Intent } from '@blueprintjs/core';
 import clsx from 'classnames';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './CompanyLogoUpload.module.scss';
 import type { ComponentType, PropsWithChildren, ReactNode } from 'react';
-import { Icon, Stack } from '@/components';
+import { AppToaster, Icon, Stack } from '@/components';
 import { Dropzone, DropzoneProps } from '@/components/Dropzone';
 import { MIME_TYPES } from '@/components/Dropzone/mine-types';
 import { useUncontrolled } from '@/hooks/useUncontrolled';
@@ -61,6 +61,12 @@ export function CompanyLogoUpload({
   );
   const openRef = useRef<() => void>(null);
 
+  useEffect(() => {
+    if (!localValue) {
+      setInitialLocalPreview(initialPreview || null);
+    }
+  }, [initialPreview, localValue]);
+
   const handleRemove = () => {
     handleChange(null);
     setInitialLocalPreview(null);
@@ -72,7 +78,13 @@ export function CompanyLogoUpload({
   return (
     <DropzoneWithChildren
       onDrop={(files) => handleChange(files[0])}
-      onReject={(files) => console.log('rejected files', files)}
+      onReject={() =>
+        AppToaster.show({
+          intent: Intent.WARNING,
+          message:
+            'Please upload a valid PNG or JPG/JPEG image under 5MB.',
+        })
+      }
       maxSize={5 * 1024 ** 2}
       accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
       classNames={{

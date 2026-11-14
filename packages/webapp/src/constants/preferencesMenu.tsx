@@ -15,6 +15,11 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     href: '/preferences/branding',
   },
   {
+    text: 'Themes & Appearance',
+    disabled: false,
+    href: '/preferences/themes',
+  },
+  {
     text: 'Billing',
     href: '/preferences/billing',
     cloudOnly: true,

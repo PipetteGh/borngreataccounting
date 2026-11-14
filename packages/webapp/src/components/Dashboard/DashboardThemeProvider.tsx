@@ -2,13 +2,14 @@ import {
   defaultTheme,
   ThemeProvider as XStyledEmotionThemeProvider,
 } from '@xstyled/emotion';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ThemeProvider as StyleComponentsThemeProvider,
   StyleSheetManager,
 } from 'styled-components';
 import rtlcss from 'stylis-rtlcss';
 import { useAppIntlContext } from '../AppIntlProvider';
+import { applyAppTheme, getCurrentAppThemeId } from '@/constants/themes';
 
 const theme = {
   ...defaultTheme,
@@ -23,6 +24,17 @@ export function DashboardThemeProvider({
   children,
 }: DashboardThemeProviderProps) {
   const { direction } = useAppIntlContext();
+
+  useEffect(() => {
+    applyAppTheme(getCurrentAppThemeId());
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'theme') {
+        applyAppTheme(getCurrentAppThemeId());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   return (
     <StyleSheetManager
