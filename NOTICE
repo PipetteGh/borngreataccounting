@@ -1,0 +1,17 @@
+# BorngreatAccounting — Copyright, Attribution & Third-Party Notice
+
+## Product Modification & Redistribution Notice
+
+**BorngreatAccounting** (`BtAccounting`)
+Copyright (C) 2026 Peter Borngreat-Mensah (Borngreat / soluotech)
+Official Repository: https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative
+
+
+## License
+
+BorngreatAccounting is free and open-source software distributed under the terms of the **GNU Affero General Public License v3.0 (AGPL-3.0)**, as published by the Free Software Foundation. See the [LICENSE](./LICENSE) file for the full text of the license and [DISCLAIMER](./DISCLAIMER) for warranty disclaimers.
+
+In accordance with Section 5 and Section 13 of the GNU Affero General Public License v3.0:
+1. All modified files carry prominent notices stating that they were modified for the BorngreatAccounting distribution (`Copyright (C) 2026 Peter Borngreat-Mensah`).
+2. The entire work as a whole remains licensed under the GNU Affero General Public License v3.0.
+3. Users interacting with BorngreatAccounting remotely through a computer network are provided access to the Corresponding Source via the official repository URL above and within the application's **About** section (`/preferences/about`).

@@ -1,0 +1,19 @@
+export const InitialCurrencies = [
+  'USD',
+  'CAD',
+  'EUR',
+  'GBP',
+  'GHS',
+  'TRY',
+  'LYD',
+  'CNY',
+  'AUD',
+  'INR',
+];
+
+export const ERRORS = {
+  CURRENCY_NOT_FOUND: 'CURRENCY_NOT_FOUND',
+  CURRENCY_CODE_EXISTS: 'CURRENCY_CODE_EXISTS',
+  BASE_CURRENCY_INVALID: 'BASE_CURRENCY_INVALID',
+  CANNOT_DELETE_BASE_CURRENCY: 'CANNOT_DELETE_BASE_CURRENCY',
+};

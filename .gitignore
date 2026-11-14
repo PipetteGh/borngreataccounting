@@ -1,0 +1,18 @@
+node_modules/
+
+# Docker volumes data directory
+/data
+
+# Production env file 
+.env
+
+test-results/
+.qodo
+
+# Playwright shared auth state (regenerated per run by globalSetup)
+e2e/.auth/
+
+# Local database backups
+/backups/
+
+.pnpm-store

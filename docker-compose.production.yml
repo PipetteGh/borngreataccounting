@@ -1,0 +1,311 @@
+# ==============================================================================
+# BorngreatAccounting (BtAccounting) — Production Docker Compose Orchestration
+# Your Accounting. Your Servers. Your Control.
+# ==============================================================================
+version: '3.8'
+
+services:
+  proxy:
+    container_name: borngreataccounting-proxy
+    image: envoyproxy/envoy:v1.30-latest
+    depends_on:
+      - server
+      - webapp
+    ports:
+      - '${PUBLIC_PROXY_PORT:-80}:80'
+      - '${PUBLIC_PROXY_SSL_PORT:-443}:443'
+    tty: true
+    volumes:
+      - ./docker/envoy/envoy.yaml:/etc/envoy/envoy.yaml:ro
+    restart: unless-stopped
+    networks:
+      - borngreat_network
+
+  webapp:
+    container_name: borngreataccounting-web
+    image: ghcr.io/pipettegh/borngreataccounting-web:latest
+    build:
+      context: ./
+      dockerfile: docker/frontend/Dockerfile
+    restart: unless-stopped
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:80/ >/dev/null 2>&1 || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - borngreat_network
+
+  server:
+    container_name: borngreataccounting-api
+    image: ghcr.io/pipettegh/borngreataccounting-api:latest
+    build:
+      context: ./
+      dockerfile: docker/backend/Dockerfile
+    expose:
+      - '3000'
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      garage:
+        condition: service_started
+    restart: unless-stopped
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    networks:
+      - borngreat_network
+    environment:
+      - APP_NAME=${APP_NAME:-BorngreatAccounting}
+      - APP_SHORT_NAME=${APP_SHORT_NAME:-BtAccounting}
+      - NODE_ENV=production
+      - BASE_URL=${BASE_URL:-http://localhost}
+      - RUN_MIGRATIONS_ON_BOOT=${RUN_MIGRATIONS_ON_BOOT:-true}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_SECURE=${MAIL_SECURE}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-BorngreatAccounting}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${DB_USER:-borngreat}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CHARSET=${DB_CHARSET:-utf8}
+      - SYSTEM_DB_NAME=${SYSTEM_DB_NAME:-borngreat_system}
+      - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX:-borngreat_tenant_}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_HOST=redis
+      - QUEUE_PORT=6379
+      - CLICKHOUSE_ENABLED=${CLICKHOUSE_ENABLED:-false}
+      - CLICKHOUSE_HOST=clickhouse
+      - CLICKHOUSE_PORT=8123
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-borngreat_clickhouse_secret}
+      - CLICKHOUSE_DATABASE=${CLICKHOUSE_DATABASE:-borngreat_analytics}
+      - 'APP_JWT_SECRET=${APP_JWT_SECRET:?APP_JWT_SECRET is required in .env - generate one with openssl rand -base64 48}'
+      - TWO_FACTOR_ENCRYPTION_KEY=${TWO_FACTOR_ENCRYPTION_KEY}
+      - TWO_FACTOR_ISSUER=${TWO_FACTOR_ISSUER:-BorngreatAccounting}
+      - SIGNUP_DISABLED=${SIGNUP_DISABLED:-false}
+      - SIGNUP_ALLOWED_DOMAINS=${SIGNUP_ALLOWED_DOMAINS}
+      - SIGNUP_ALLOWED_EMAILS=${SIGNUP_ALLOWED_EMAILS}
+      - SIGNUP_EMAIL_CONFIRMATION=${SIGNUP_EMAIL_CONFIRMATION:-false}
+      - GOTENBERG_URL=${GOTENBERG_URL:-http://gotenberg:3000}
+      - GOTENBERG_DOCS_URL=${GOTENBERG_DOCS_URL:-http://server:3000/public/}
+      - EXCHANGE_RATE_SERVICE=${EXCHANGE_RATE_SERVICE:-open-exchange-rate}
+      - OPEN_EXCHANGE_RATE_APP_ID=${OPEN_EXCHANGE_RATE_APP_ID}
+      - BANK_FEED_ENABLED=${BANK_FEED_ENABLED}
+      - PLAID_ENV=${PLAID_ENV}
+      - PLAID_CLIENT_ID=${PLAID_CLIENT_ID}
+      - PLAID_SECRET=${PLAID_SECRET}
+      - PLAID_LINK_WEBHOOK=${PLAID_LINK_WEBHOOK}
+      - PLAID_CLIENT_NAME=${PLAID_CLIENT_NAME:-BorngreatAccounting}
+      - PLAID_COUNTRY_CODES=${PLAID_COUNTRY_CODES:-US}
+      - FREE_TRIAL_DAYS=${FREE_TRIAL_DAYS:-15}
+      - STRIPE_BILLING_SECRET_KEY=${STRIPE_BILLING_SECRET_KEY}
+      - STRIPE_BILLING_WEBHOOK_SECRET=${STRIPE_BILLING_WEBHOOK_SECRET}
+      - STRIPE_BILLING_PORTAL_CONFIGURATION_ID=${STRIPE_BILLING_PORTAL_CONFIGURATION_ID}
+      - STRIPE_BILLING_SUCCESS_URL=${STRIPE_BILLING_SUCCESS_URL}
+      - STRIPE_BILLING_CANCEL_URL=${STRIPE_BILLING_CANCEL_URL}
+      - S3_REGION=${S3_REGION:-garage}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT=${S3_ENDPOINT:-http://garage:3900}
+      - S3_BUCKET=${S3_BUCKET:-borngreataccounting}
+      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE:-true}
+      - STRIPE_PAYMENT_SECRET_KEY=${STRIPE_PAYMENT_SECRET_KEY}
+      - STRIPE_PAYMENT_PUBLISHABLE_KEY=${STRIPE_PAYMENT_PUBLISHABLE_KEY}
+      - STRIPE_PAYMENT_CLIENT_ID=${STRIPE_PAYMENT_CLIENT_ID}
+      - STRIPE_PAYMENT_WEBHOOKS_SECRET=${STRIPE_PAYMENT_WEBHOOKS_SECRET}
+      - STRIPE_PAYMENT_REDIRECT_URL=${STRIPE_PAYMENT_REDIRECT_URL}
+      - THROTTLE_GLOBAL_TTL=${THROTTLE_GLOBAL_TTL:-60000}
+      - THROTTLE_GLOBAL_LIMIT=${THROTTLE_GLOBAL_LIMIT:-300}
+      - THROTTLE_AUTH_TTL=${THROTTLE_AUTH_TTL:-60000}
+      - THROTTLE_AUTH_LIMIT=${THROTTLE_AUTH_LIMIT:-30}
+
+  worker:
+    container_name: borngreataccounting-worker
+    image: ghcr.io/pipettegh/borngreataccounting-worker:latest
+    build:
+      context: ./
+      dockerfile: docker/backend/Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    labels:
+      - 'com.centurylinklabs.watchtower.enable=true'
+    networks:
+      - borngreat_network
+    environment:
+      - APP_NAME=${APP_NAME:-BorngreatAccounting}
+      - APP_SHORT_NAME=${APP_SHORT_NAME:-BtAccounting}
+      - NODE_ENV=production
+      - WORKER_MODE=true
+      - RUN_MIGRATIONS_ON_BOOT=false
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${DB_USER:-borngreat}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CHARSET=${DB_CHARSET:-utf8}
+      - SYSTEM_DB_NAME=${SYSTEM_DB_NAME:-borngreat_system}
+      - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX:-borngreat_tenant_}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_HOST=redis
+      - QUEUE_PORT=6379
+      - 'APP_JWT_SECRET=${APP_JWT_SECRET}'
+      - GOTENBERG_URL=${GOTENBERG_URL:-http://gotenberg:3000}
+      - GOTENBERG_DOCS_URL=${GOTENBERG_DOCS_URL:-http://server:3000/public/}
+      - S3_REGION=${S3_REGION:-garage}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT=${S3_ENDPOINT:-http://garage:3900}
+      - S3_BUCKET=${S3_BUCKET:-borngreataccounting}
+      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE:-true}
+
+  database_migration:
+    container_name: borngreataccounting-database-migration
+    image: ghcr.io/pipettegh/borngreataccounting-api:latest
+    build:
+      context: ./
+      dockerfile: docker/backend/Dockerfile
+    command:
+      - sh
+      - -c
+      - 'cd /app/packages/server && node dist/cli.js system:migrate:latest && node dist/cli.js tenants:migrate:latest'
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=${DB_USER:-borngreat}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CHARSET=${DB_CHARSET:-utf8}
+      - SYSTEM_DB_NAME=${SYSTEM_DB_NAME:-borngreat_system}
+      - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX:-borngreat_tenant_}
+      - STRIPE_BILLING_SECRET_KEY=${STRIPE_BILLING_SECRET_KEY}
+      - STRIPE_BILLING_WEBHOOK_SECRET=${STRIPE_BILLING_WEBHOOK_SECRET}
+      - FREE_TRIAL_DAYS=${FREE_TRIAL_DAYS:-15}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - borngreat_network
+
+  mysql:
+    container_name: borngreataccounting-mysql
+    restart: unless-stopped
+    build:
+      context: ./docker/mariadb
+    environment:
+      - MYSQL_DATABASE=${SYSTEM_DB_NAME:-borngreat_system}
+      - MYSQL_USER=${DB_USER:-borngreat}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    expose:
+      - '3306'
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 25s
+    networks:
+      - borngreat_network
+
+  redis:
+    container_name: borngreataccounting-redis
+    restart: unless-stopped
+    build:
+      context: ./docker/redis
+    expose:
+      - '6379'
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - borngreat_network
+
+  gotenberg:
+    container_name: borngreataccounting-gotenberg
+    image: gotenberg/gotenberg:7
+    restart: unless-stopped
+    expose:
+      - '3000'
+      - '9000'
+    networks:
+      - borngreat_network
+
+  garage:
+    container_name: borngreataccounting-garage
+    image: dxflrs/garage:v1.3.1
+    restart: unless-stopped
+    environment:
+      - GARAGE_CONFIG_FILE=/etc/garage.toml
+      - GARAGE_RPC_SECRET=${GARAGE_RPC_SECRET}
+      - GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+    volumes:
+      - ./docker/garage/garage.toml:/etc/garage.toml
+      - ./docker/garage/setup.sh:/garage-setup/setup.sh
+      - garage:/var/lib/garage
+    expose:
+      - '3900'
+      - '3903'
+    networks:
+      - borngreat_network
+
+  clickhouse:
+    container_name: borngreataccounting-clickhouse
+    image: clickhouse/clickhouse-server:24.8
+    restart: unless-stopped
+    environment:
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-borngreat_clickhouse_secret}
+      - CLICKHOUSE_DB=${CLICKHOUSE_DATABASE:-borngreat_analytics}
+    expose:
+      - '8123'
+    volumes:
+      - clickhouse:/var/lib/clickhouse
+    networks:
+      - borngreat_network
+
+  auto-update:
+    container_name: borngreataccounting-auto-update
+    image: containrrr/watchtower:1.7.1
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: --label-enable --cleanup --interval ${AUTO_UPDATE_INTERVAL:-3600}
+    networks:
+      - borngreat_network
+
+volumes:
+  mysql:
+    name: borngreat_prod_mysql
+    driver: local
+  redis:
+    name: borngreat_prod_redis
+    driver: local
+  garage:
+    name: borngreat_prod_garage
+    driver: local
+  clickhouse:
+    name: borngreat_prod_clickhouse
+    driver: local
+
+networks:
+  borngreat_network:
+    driver: bridge
