@@ -20,7 +20,7 @@ export function PdfDocumentPreview({
       Failed to load the PDF document. Please try again.
     </div>
   ) : (
-    <embed src={url} height={height} width={width} />
+    <embed src={url} type="application/pdf" height={height} width={width} />
   );
 
   return (
