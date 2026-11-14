@@ -1,4 +1,4 @@
-import { BranchesListResponse } from '@bigcapital/sdk-ts';
+import { BranchesListResponse } from '@borngreataccounting/sdk-ts';
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { ReactNode } from 'react';

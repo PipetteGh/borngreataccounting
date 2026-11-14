@@ -1,6 +1,6 @@
 import React from 'react';
 import { inactiveStatus } from './utils';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useItem } from '@/hooks/query';

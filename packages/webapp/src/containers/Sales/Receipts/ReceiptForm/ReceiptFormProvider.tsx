@@ -10,7 +10,7 @@ import type {
   Warehouse,
   Branch,
   PdfTemplateResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useReceipt,
@@ -52,7 +52,7 @@ type ReceiptFormContextValue = {
   isBranchesLoading: boolean;
   isFeatureLoading: boolean;
   isSettingLoading: boolean;
-  receiptSettings: import('@bigcapital/sdk-ts').SettingsGroup | undefined;
+  receiptSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
   isBranchesSuccess: boolean;
   isWarehousesSuccess: boolean;
 

@@ -6,7 +6,7 @@ import type {
   BranchesListResponse,
   CreateCashflowTransactionBody,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
 import {

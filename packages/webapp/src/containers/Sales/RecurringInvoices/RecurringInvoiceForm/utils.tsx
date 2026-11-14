@@ -1,6 +1,6 @@
 import { sumBy } from 'lodash';
 import moment from 'moment';
-import type { CreateRecurringInvoiceBody } from '@bigcapital/sdk-ts';
+import type { CreateRecurringInvoiceBody } from '@borngreataccounting/sdk-ts';
 import { assignEntriesTaxAmount } from '@/containers/Entries/utils';
 import { TaxType } from '@/interfaces/TaxRates';
 import { repeatValue, toSafeNumber } from '@/utils';

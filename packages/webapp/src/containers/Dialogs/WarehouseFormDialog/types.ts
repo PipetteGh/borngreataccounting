@@ -2,7 +2,7 @@ import type {
   CreateWarehouseBody,
   EditWarehouseBody,
   Warehouse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface WarehouseFormValues {
   name: string;

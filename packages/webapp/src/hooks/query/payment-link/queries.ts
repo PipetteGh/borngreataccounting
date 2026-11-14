@@ -3,7 +3,7 @@ import {
   fetchCreateStripeCheckoutSession,
   fetchGetPaymentLinkInvoicePdf,
   generateSaleInvoiceSharableLink,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseMutationOptions,
   UseMutationResult,
@@ -17,7 +17,7 @@ import { paymentLinkKeys } from './query-keys';
 import type {
   GetInvoicePaymentLinkResponse,
   CreateStripeCheckoutSessionResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 // Create Payment Link (sale-invoices generate-link via SDK)
 // ------------------------------------

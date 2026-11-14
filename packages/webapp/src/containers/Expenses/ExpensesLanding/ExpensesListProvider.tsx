@@ -6,7 +6,7 @@ import type {
   ResourceMetaResponse,
   ResourceViewResponse,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useExpenses,

@@ -2,7 +2,7 @@ import type {
   Branch,
   CreateBranchBody,
   EditBranchBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface BranchFormValues {
   name: string;

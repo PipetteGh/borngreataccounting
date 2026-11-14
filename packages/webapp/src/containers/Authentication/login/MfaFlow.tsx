@@ -5,7 +5,7 @@ import { MfaRecoveryCodesStep } from './MfaRecoveryCodesStep';
 import { MfaUnsupportedMethod } from './MfaUnsupportedMethod';
 import { SETUP_STEPS, VERIFY_STEPS } from './registry';
 import type { MfaChallenge, MfaMethodId } from './types';
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 
 interface MfaFlowProps {
   challenge: MfaChallenge;

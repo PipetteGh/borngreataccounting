@@ -3,7 +3,7 @@ import {
   fetchTransactionsByCustomersXlsx,
   fetchTransactionsByCustomersCsv,
   fetchTransactionsByCustomersPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   TransactionsByCustomersXlsxQuery,
   TransactionsByCustomersCsvQuery,
   TransactionsByCustomersPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 interface CustomersTransactionsReport {
   data: TransactionsByCustomersTableResponse['table'];

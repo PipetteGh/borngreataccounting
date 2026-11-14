@@ -3,7 +3,7 @@ import React from 'react';
 import { withBanking } from '../withBanking';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import type { WithBankingProps } from '../withBanking';
-import type { UncategorizedTransactionResponse } from '@bigcapital/sdk-ts';
+import type { UncategorizedTransactionResponse } from '@borngreataccounting/sdk-ts';
 import { IntersectionObserver } from '@/components';
 import { useAccountUncategorizedTransactionsInfinity } from '@/hooks/query';
 import { useFlattenInfinityPages } from '@/hooks/utils';

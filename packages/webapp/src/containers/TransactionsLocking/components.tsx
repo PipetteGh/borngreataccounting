@@ -12,7 +12,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useTransactionsLockingContext } from './TransactionsLockingProvider';
-import type { TransactionsLockingMeta } from '@bigcapital/sdk-ts';
+import type { TransactionsLockingMeta } from '@borngreataccounting/sdk-ts';
 import { Hint, Icon, If, FormattedMessage as T } from '@/components';
 
 export interface TransactionLockingHandlers {

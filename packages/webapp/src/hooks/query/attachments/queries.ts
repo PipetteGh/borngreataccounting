@@ -2,10 +2,10 @@ import {
   deleteAttachment,
   fetchAttachmentPresignedUrl,
   uploadAttachment,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
-import type { AttachmentPresignedUrlResponse } from '@bigcapital/sdk-ts';
+import type { AttachmentPresignedUrlResponse } from '@borngreataccounting/sdk-ts';
 
 type UploadAttachmentResponse = Awaited<ReturnType<typeof uploadAttachment>>;
 

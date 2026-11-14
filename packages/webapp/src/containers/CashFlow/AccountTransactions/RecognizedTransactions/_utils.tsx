@@ -3,7 +3,7 @@ import clsx from 'classnames';
 import React from 'react';
 import { useRecognizedTransactionsBoot } from './RecognizedTransactionsTableBoot';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { BankTransactionsListPage } from '@bigcapital/sdk-ts';
+import type { BankTransactionsListPage } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { getColumnWidth } from '@/utils';
 

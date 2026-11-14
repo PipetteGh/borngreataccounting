@@ -6,20 +6,17 @@ FROM node:18.20-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm@9.0.5 && \
-    apk add --no-cache python3 build-base chromium
-
-ENV PYTHON=/usr/bin/python3
-
 COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
-COPY --chown=node:node packages/webapp/package.json ./packages/webapp/
+COPY --chown=node:node packages/webapp ./packages/webapp
 COPY --chown=node:node shared ./shared
 
-RUN pnpm install --no-frozen-lockfile
-
-COPY --chown=node:node ./packages/webapp ./packages/webapp
-
-RUN pnpm run build:webapp
+RUN if [ ! -f "packages/webapp/dist/index.html" ]; then \
+      npm install -g pnpm@9.0.5 && \
+      pnpm install --no-frozen-lockfile && \
+      pnpm run build:webapp; \
+    else \
+      echo "Using prebuilt packages/webapp/dist bundle"; \
+    fi
 
 # Stage 2: Production Nginx runtime
 FROM nginx:1.27-alpine AS production

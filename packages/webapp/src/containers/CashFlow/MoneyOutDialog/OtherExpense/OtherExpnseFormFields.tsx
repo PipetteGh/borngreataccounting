@@ -6,7 +6,7 @@ import { useMoneyOutDialogContext } from '../MoneyOutDialogProvider';
 import { MoneyOutExchangeRateField } from '../MoneyOutExchangeRateField';
 import { useMoneyOutFieldsContext } from '../MoneyOutFieldsProvider';
 import { useSetPrimaryBranchToForm, BranchRowDivider } from '../utils';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import {
   FAccountsSuggestField,
   InputPrependText,

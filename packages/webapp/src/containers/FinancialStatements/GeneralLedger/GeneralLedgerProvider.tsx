@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';
-import type { GeneralLedgerTableQuery } from '@bigcapital/sdk-ts';
+import type { GeneralLedgerTableQuery } from '@borngreataccounting/sdk-ts';
 import { useGeneralLedgerSheet } from '@/hooks/query';
 
 type UseGeneralLedgerSheetResult = ReturnType<typeof useGeneralLedgerSheet>;

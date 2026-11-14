@@ -8,7 +8,7 @@ import {
   resumeRecurringJournal,
   generateRecurringJournalNow,
   fetchRecurringJournalJournals,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -26,7 +26,7 @@ import type {
   RecurringJournalJournalsResponse,
   GetRecurringJournalJournalsQuery,
   GenerateRecurringJournalResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { accountsKeys } from '@/hooks/query/accounts/query-keys';
 import { cashflowAccountsKeys } from '@/hooks/query/cashflow-accounts/query-keys';
 import { financialReportsKeys } from '@/hooks/query/FinancialReports/query-keys';

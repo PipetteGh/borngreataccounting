@@ -8,8 +8,8 @@ import { FinancialTableStructure } from './FinancialTableStructure';
 import { tableClassNames } from '../utils';
 import { Injectable } from '@nestjs/common';
 import { ChromiumlyTenancy } from '../../ChromiumlyTenancy/ChromiumlyTenancy.service';
-import { renderFinancialSheetTemplateHtml } from '@bigcapital/pdf-templates';
-import { isNegativeAmount } from '@bigcapital/utils';
+import { renderFinancialSheetTemplateHtml } from '@borngreataccounting/pdf-templates';
+import { isNegativeAmount } from '@borngreataccounting/utils';
 
 /**
  * Colours the cells marked as negative amounts when a report is printed with

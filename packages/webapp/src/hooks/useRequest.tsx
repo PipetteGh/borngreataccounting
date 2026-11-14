@@ -1,4 +1,4 @@
-import { createApiFetcher } from '@bigcapital/sdk-ts';
+import { createApiFetcher } from '@borngreataccounting/sdk-ts';
 import axios from 'axios';
 import React from 'react';
 import { getCookie, normalizeApiPath } from '../utils';

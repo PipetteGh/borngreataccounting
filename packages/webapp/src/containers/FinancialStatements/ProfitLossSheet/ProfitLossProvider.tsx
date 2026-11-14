@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';
-import type { ProfitLossTableQuery } from '@bigcapital/sdk-ts';
+import type { ProfitLossTableQuery } from '@borngreataccounting/sdk-ts';
 import { useProfitLossSheet } from '@/hooks/query';
 
 type UseProfitLossSheetResult = ReturnType<typeof useProfitLossSheet>;

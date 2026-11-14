@@ -4,7 +4,7 @@ import {
   fetchSalesByItemsXlsx,
   fetchSalesByItemsCsv,
   fetchSalesByItemsPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -23,7 +23,7 @@ import type {
   SalesByItemsXlsxQuery,
   SalesByItemsCsvQuery,
   SalesByItemsPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useSalesByItems(
   query: SalesByItemsJsonQuery,

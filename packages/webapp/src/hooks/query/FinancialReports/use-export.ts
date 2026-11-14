@@ -1,4 +1,4 @@
-import { fetchExportResource } from '@bigcapital/sdk-ts';
+import { fetchExportResource } from '@borngreataccounting/sdk-ts';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { downloadFile } from '@/hooks/useDownloadFile';

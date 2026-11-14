@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { ReactNode } from 'react';
-import type { TrackingCategoriesList } from '@bigcapital/sdk-ts';
+import type { TrackingCategoriesList } from '@borngreataccounting/sdk-ts';
 import { CLASSES } from '@/constants/classes';
 import { useTrackingCategories } from '@/hooks/query';
 

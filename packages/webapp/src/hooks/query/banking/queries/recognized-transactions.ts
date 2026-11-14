@@ -2,7 +2,7 @@ import {
   fetchExcludedBankTransactions,
   fetchRecognizedTransaction,
   fetchRecognizedTransactions,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useInfiniteQuery,
   useQuery,
@@ -23,7 +23,7 @@ import type {
   ExcludedBankTransactionsListPage,
   GetExcludedBankTransactionsQuery,
   RecognizedTransactionResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useGetRecognizedBankTransaction(
   uncategorizedTransactionId: number,

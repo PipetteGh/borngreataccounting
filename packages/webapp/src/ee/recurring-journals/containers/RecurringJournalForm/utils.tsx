@@ -5,7 +5,7 @@ import type { AccountingBasis } from '@/hooks/query';
 import type {
   CreateRecurringJournalBody,
   RecurringJournal,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   defaultEntry,
   type MakeJournalEntry,

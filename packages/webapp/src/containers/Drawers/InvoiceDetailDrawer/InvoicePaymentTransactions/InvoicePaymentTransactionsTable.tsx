@@ -5,7 +5,7 @@ import {
   useInvoicePaymentTransactionsColumns,
   ActionsMenu,
 } from './components';
-import type { InvoicePaymentTransactionsResponse } from '@bigcapital/sdk-ts';
+import type { InvoicePaymentTransactionsResponse } from '@borngreataccounting/sdk-ts';
 import { DataTable, Card, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

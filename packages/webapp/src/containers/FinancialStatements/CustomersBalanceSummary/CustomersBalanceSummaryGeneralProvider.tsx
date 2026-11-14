@@ -1,4 +1,4 @@
-import { CustomersListResponse } from '@bigcapital/sdk-ts';
+import { CustomersListResponse } from '@borngreataccounting/sdk-ts';
 import React, { createContext, useContext } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { useCustomers } from '@/hooks/query';

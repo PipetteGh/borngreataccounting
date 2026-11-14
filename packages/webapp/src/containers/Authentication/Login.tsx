@@ -10,7 +10,7 @@ import { loginReducer, initialLoginState } from './login/loginReducer';
 import { MfaFlow } from './login/MfaFlow';
 import { normalizeSigninResponse } from './login/normalize';
 import { transformLoginErrorsToToasts, LoginValues } from './utils';
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 import type { ApiError } from 'openapi-typescript-fetch';
 import { AppToaster as Toaster } from '@/components';
 import { AuthInsider } from '@/containers/Authentication/AuthInsider';

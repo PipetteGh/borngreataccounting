@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import React, { createContext } from 'react';
 import type { InvoiceTableRow } from './components';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { IResourceField } from '@/components/AdvancedFilter/interfaces';
 import { DashboardInsider } from '@/components/Dashboard';
 import {

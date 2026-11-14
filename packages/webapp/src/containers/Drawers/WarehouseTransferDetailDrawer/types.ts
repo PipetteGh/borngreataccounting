@@ -1,4 +1,4 @@
-import type { WarehouseTransfer } from '@bigcapital/sdk-ts';
+import type { WarehouseTransfer } from '@borngreataccounting/sdk-ts';
 
 export type WarehouseTransferDetailDrawerContextValue = {
   warehouseTransfer: WarehouseTransfer | undefined;

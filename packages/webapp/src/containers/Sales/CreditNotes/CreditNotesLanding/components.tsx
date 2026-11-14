@@ -3,7 +3,7 @@ import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { CreditNotesListResponse } from '@bigcapital/sdk-ts';
+import type { CreditNotesListResponse } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T, Choose, If, Icon, Can } from '@/components';
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
 import { CLASSES } from '@/constants/classes';

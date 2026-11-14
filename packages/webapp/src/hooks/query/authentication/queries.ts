@@ -33,7 +33,7 @@ import {
   type AuthSendResetPasswordBody,
   type AuthResetPasswordBody,
   type AuthMetaResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,

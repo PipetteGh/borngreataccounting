@@ -6,7 +6,7 @@ import {
   deleteWarehouse,
   activateWarehouses,
   markWarehousePrimary,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -23,7 +23,7 @@ import type {
   WarehousesListResponse,
   CreateWarehouseBody,
   EditWarehouseBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

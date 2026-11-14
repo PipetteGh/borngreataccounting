@@ -1,5 +1,5 @@
 import { useMemo, ComponentType } from 'react';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import type { SelectOptionProps } from '@blueprintjs-formik/select';
 import { BPSelect, FSelect } from '@/components/Forms';
 

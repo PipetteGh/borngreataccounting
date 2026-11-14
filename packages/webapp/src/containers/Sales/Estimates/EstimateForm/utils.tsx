@@ -5,7 +5,7 @@ import moment from 'moment';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import { useEstimateFormContext } from './EstimateFormProvider';
-import type { SaleEstimate, CreateSaleEstimateBody } from '@bigcapital/sdk-ts';
+import type { SaleEstimate, CreateSaleEstimateBody } from '@borngreataccounting/sdk-ts';
 import {
   transformAttachmentsToForm,
   transformAttachmentsToRequest,

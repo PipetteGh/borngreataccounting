@@ -1,5 +1,5 @@
 import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import { Can, Icon } from '@/components';
 import { AbilitySubject, TaxRateAction } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';

@@ -2,7 +2,7 @@ import { Intent, Menu, MenuDivider, MenuItem, Tag } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { RecurringInvoicesListResponse } from '@bigcapital/sdk-ts';
+import type { RecurringInvoicesListResponse } from '@borngreataccounting/sdk-ts';
 import { Can, Icon } from '@/components';
 import {
   AbilitySubject,

@@ -7,7 +7,7 @@ import {
   validateBulkDeleteVendors,
   bulkDeleteVendors,
   editVendorOpeningBalance,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -23,8 +23,8 @@ import type {
   EditVendorBody,
   EditVendorOpeningBalanceBody,
   ValidateBulkDeleteVendorsResponse,
-} from '@bigcapital/sdk-ts';
-import type { VendorsListResponse } from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
+import type { VendorsListResponse } from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

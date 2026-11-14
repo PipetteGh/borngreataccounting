@@ -5,7 +5,7 @@ import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
 import type {
   ManualJournalsListQuery,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import {
   useResourceViews,

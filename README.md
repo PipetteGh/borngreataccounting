@@ -51,11 +51,17 @@ Or launch the prebuilt Windows Desktop Setup & Control Center executable:
 
 ## Prebuilt Container Images (GHCR)
 
-| Service | Image |
-|---|---|
-| Web Frontend (SPA + Nginx) | `ghcr.io/pipettegh/borngreataccounting-web:latest` |
-| Backend API & Migrator | `ghcr.io/pipettegh/borngreataccounting-api:latest` |
-| Background Queue Worker | `ghcr.io/pipettegh/borngreataccounting-worker:latest` |
+| Service | Image | Package Page |
+|---|---|---|
+| Web Frontend (SPA + Nginx) | `ghcr.io/pipettegh/borngreataccounting-web:latest` | [View Package](https://github.com/PipetteGh/borngreataccounting/pkgs/container/borngreataccounting-web) |
+| Backend API & Migrator | `ghcr.io/pipettegh/borngreataccounting-api:latest` | [View Package](https://github.com/PipetteGh/borngreataccounting/pkgs/container/borngreataccounting-api) |
+| Background Queue Worker | `ghcr.io/pipettegh/borngreataccounting-worker:latest` | [View Package](https://github.com/PipetteGh/borngreataccounting/pkgs/container/borngreataccounting-worker) |
+
+```bash
+docker pull ghcr.io/pipettegh/borngreataccounting-web:latest
+docker pull ghcr.io/pipettegh/borngreataccounting-api:latest
+docker pull ghcr.io/pipettegh/borngreataccounting-worker:latest
+```
 
 ---
 

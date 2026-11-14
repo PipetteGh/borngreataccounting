@@ -10,7 +10,7 @@ import {
 import clsx from 'classnames';
 import { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import type { Customer } from '@bigcapital/sdk-ts';
+import type { Customer } from '@borngreataccounting/sdk-ts';
 import { Can, Icon, Money, If, AvatarCell } from '@/components';
 import { CLASSES } from '@/constants';
 import { CustomerAction, AbilitySubject } from '@/constants/abilityOption';

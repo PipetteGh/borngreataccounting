@@ -25,7 +25,7 @@ import {
   editSettingSMSNotification,
   editSettings,
   snakeToCamelCase,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -44,7 +44,7 @@ import type {
   SettingsGroup,
   SmsNotificationSetting,
   SmsNotificationSettingsListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 interface SettingOption {
   group: string;

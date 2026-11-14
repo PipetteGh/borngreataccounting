@@ -1,7 +1,7 @@
 import { toNumber } from 'lodash';
 import { useCategorizeTransactionBoot } from './CategorizeTransactionBoot';
 import type { GetAutofillCategorizeTransaction } from '@/hooks/query/banking';
-import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
+import type { CategorizeTransactionBody } from '@borngreataccounting/sdk-ts';
 import { transformToForm } from '@/utils';
 
 export interface CategorizeTransactionFormValues {

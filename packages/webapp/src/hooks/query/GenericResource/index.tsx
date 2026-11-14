@@ -12,12 +12,12 @@ import {
   fetchAccounts,
   fetchCreditNotes,
   fetchVendorCredits,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useQuery } from '@tanstack/react-query';
 import { defaultTo } from 'lodash';
 import { useRef } from 'react';
 import { useApiFetcher } from '../../useRequest';
-import type { ApiFetcher } from '@bigcapital/sdk-ts';
+import type { ApiFetcher } from '@borngreataccounting/sdk-ts';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 

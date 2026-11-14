@@ -7,7 +7,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useVendorsBalanceSummaryContext } from './VendorsBalanceSummaryProvider';
-import type { VendorsBalanceColumnKey } from '@bigcapital/sdk-ts';
+import type { VendorsBalanceColumnKey } from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import { Align, CLASSES } from '@/constants';
 import {

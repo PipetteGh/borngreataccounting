@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import React, { createContext } from 'react';
 import { transformItemsTableState } from './utils';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import {
   useResourceViews,

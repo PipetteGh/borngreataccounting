@@ -37,8 +37,8 @@ All user data MUST be encrypted in transit and at rest. Authentication tokens MU
 
 ### Code Organization
 - Monorepo structure with clear package boundaries
-- Shared utilities in `@bigcapital/utils` package
-- Component library in `@bigcapital/email-components` and `@bigcapital/pdf-templates`
+- Shared utilities in `@borngreataccounting/utils` package
+- Component library in `@borngreataccounting/email-components` and `@borngreataccounting/pdf-templates`
 - Clear separation between frontend (`webapp`) and backend (`server`) concerns
 
 ### Documentation Requirements

@@ -1,7 +1,7 @@
 import { MenuItem, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { SaleInvoice } from '@bigcapital/sdk-ts';
+import type { SaleInvoice } from '@borngreataccounting/sdk-ts';
 import { T, Choose, Icon, TextStatus } from '@/components';
 import { AbilitySubject, SaleInvoiceAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';

@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 import type { ItemCategoryTableRow } from './components';
 import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import {
   useItemsCategories,

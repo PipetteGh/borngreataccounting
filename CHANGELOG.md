@@ -472,26 +472,26 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.9.7] - 14-06-2023
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 * fix: change the footer links of onboarding pages by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/139
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 * fix: expense transaction journal entries by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/155
 
 ## [0.9.6] - 12-06-2023
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 * fix: remove duplicated form submitting by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/138
 * feat: add monorepo version on the application sidebar by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/136
 
 ## [0.9.5] - 11-06-2023
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 * fix: filter ledger entries that effect contact balance to AR/AP accounts only by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/132
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 * fix: catch journal error when create a journal with accounts have different currency by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/135
 * fix: add duplicate icon to context menu of customers and vendors table by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/133
@@ -499,40 +499,40 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.9.4] - 08-06-2023
 
-`@bigcapital/monorepo`
+`@borngreataccounting/monorepo`
 - fixed: docker-compose line-ending issue on Windows by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/130
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 - fixed: Disable Webpack minification for JS class name reading.
 
 ## [0.9.3] -04-06-2023
 
-`@bigcapital/monorepo`
+`@borngreataccounting/monorepo`
 * Added: Add env variable to customize the proxy public ports by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/125
 * Added: Migrate the server database to MariaDB by @abouolia in https://github.com/bigcapitalhq/bigcapital/pull/128
 
 ## [0.9.2] - 31-05-2023
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 - fixed: move `packaeg-lock.json` inside docker container.
 - fixed: remove Sentry from the web client.
 
 ## [0.9.1] - 28-05-2023
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 - fix: deleting ledger entries of manual journal.
 - fix: base currency should be enabled.
 - fix: delete invoice transaction issue.
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 - fix: general, accountant and items preferences.
 - fix: auto-increment sale invoices, estiamtes, credit notes, payments and manual journals.
 - refactor: the setup organization form to use binded Formik components.
 
 ## [0.9.0] - 06-05-2023
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 - [Sign-up restrictions](https://docs.bigcapital.ly/docs/deployment/signup_restriction) for self-hosting instances to disable signup or control the allowed email addresses and domains that can sign-up.
 
@@ -542,7 +542,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 - Switch to AGPL license to protect application's networks. by @abouolia
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
 
@@ -555,7 +555,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 - Fix intent type of reset password success toast.
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 ### Added
 
@@ -569,7 +569,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 ### Added 
 * add docker compose for development env. by @abouolia
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixes
 * fix: hide the project name entry if the feature was not enabled. by @abouolia
@@ -582,7 +582,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 ### Added
 * Optimize the design of setup organization page. by @abouolia 
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 ### Added
 * bigcapital CLI commands by @abouolia
@@ -593,7 +593,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.7.6] - 23-04-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixed
 
@@ -607,7 +607,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.7.3] - 15-04-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixed
 
@@ -617,7 +617,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.7.2] - 04-04-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixed
 
@@ -626,7 +626,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.7.1] - 30-03-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
   - `BIG-141` Add inactive status to item drawer details.
@@ -647,7 +647,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
   - `BIG-352` Fix terms and notes fields on footer of all services.
   - `BIG-354` Validate the warehouse transfer quantity should be above zero.
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 ### Fixed
   - `BIG-354` Validate the warehouse transfer quantity should be above zero.
@@ -657,7 +657,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.7.0] - 24-03-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added 
  - Multiply currencies with foreign currencies.
@@ -677,7 +677,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
  - Optimize style of manual journal form.
  - Optimize style of expense form.
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 ### Added
  - Multiply currencies with foreign currencies.
@@ -689,7 +689,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.6.3] - 21-02-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixed
 
@@ -703,7 +703,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.6.0] - 18-02-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
 
@@ -716,7 +716,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.5.8] - 13-01-2022
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
 
@@ -731,7 +731,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 - Customer and vendor balance summary percentage of column option.
 - Remove duplicated details in sales and purchases details drawers.
 
-`@bigcapital/server`
+`@borngreataccounting/server`
 
 ### Fixed
 - Balance sheet comparison of previous period (PP).
@@ -743,7 +743,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.5.3] - 03-01-2020
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Fixed
 
@@ -752,7 +752,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.5.0] - 20-12-2021
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
 
@@ -774,7 +774,7 @@ https://github.com/bigcapitalhq/bigcapital/pull/225
 
 ## [0.4.0] - 11-09-2021
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 ### Added
 
@@ -795,7 +795,7 @@ fix: BIG-132 AR/AP aging summary report filter by none transactions/zero contact
 
 ## [0.2.0] - 03-09-2021
 
-`@bigcapital/webapp`
+`@borngreataccounting/webapp`
 
 Here we write upgrading notes for brands. It's a team effort to make them as
 straightforward as possible.

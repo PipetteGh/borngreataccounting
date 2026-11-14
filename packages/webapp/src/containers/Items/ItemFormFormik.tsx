@@ -12,7 +12,7 @@ import {
   useItemFormInitialValues,
 } from './utils';
 import type { ItemFormValues, ItemFormSubmitPayload } from './types';
-import type { CreateItemBody, EditItemBody } from '@bigcapital/sdk-ts';
+import type { CreateItemBody, EditItemBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { safeInvoke } from '@/utils';

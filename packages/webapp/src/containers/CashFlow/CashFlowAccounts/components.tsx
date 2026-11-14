@@ -2,7 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { BankingAccountsListResponse } from '@bigcapital/sdk-ts';
+import type { BankingAccountsListResponse } from '@borngreataccounting/sdk-ts';
 
 export type CashflowAccountRow = BankingAccountsListResponse[number];
 

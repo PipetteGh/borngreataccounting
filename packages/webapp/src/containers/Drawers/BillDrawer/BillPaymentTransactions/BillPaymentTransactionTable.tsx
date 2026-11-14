@@ -2,7 +2,7 @@ import * as FF from 'fp-ts/function';
 import { useHistory } from 'react-router-dom';
 import { useBillDrawerContext } from '../BillDrawerProvider';
 import { useBillPaymentTransactionsColumns, ActionsMenu } from './components';
-import type { BillPaymentTransactionsResponse } from '@bigcapital/sdk-ts';
+import type { BillPaymentTransactionsResponse } from '@borngreataccounting/sdk-ts';
 import { DataTable, Card, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

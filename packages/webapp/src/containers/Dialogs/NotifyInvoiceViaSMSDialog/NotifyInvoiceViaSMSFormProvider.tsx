@@ -1,6 +1,6 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import React, { createContext } from 'react';
-import type { SaleInvoiceSmsDetailsResponse } from '@bigcapital/sdk-ts';
+import type { SaleInvoiceSmsDetailsResponse } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import {
   useCreateNotifyInvoiceBySMS,

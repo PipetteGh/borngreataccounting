@@ -10,7 +10,7 @@ import type { WithInventoryAdjustmentsProps } from './withInventoryAdjustments';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
+import type { InventoryAdjustment } from '@borngreataccounting/sdk-ts';
 import { DataTable } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
 import { DRAWERS } from '@/constants/drawers';

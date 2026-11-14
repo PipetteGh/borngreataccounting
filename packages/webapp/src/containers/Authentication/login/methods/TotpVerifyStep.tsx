@@ -8,7 +8,7 @@ import { MfaStepLinks, MfaStepText, MfaStepTitle } from '../MfaStepLayout';
 import { useHandleMfaError } from '../useHandleMfaError';
 import { useMfaVerify } from '../useMfa';
 import type { MfaVerifyStepProps } from '../types';
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 
 interface TotpValues {
   code: string;

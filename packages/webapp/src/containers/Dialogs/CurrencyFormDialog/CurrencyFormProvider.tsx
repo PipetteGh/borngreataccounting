@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
 import type { CurrencyFormContextValue } from './types';
-import type { Currency } from '@bigcapital/sdk-ts';
+import type { Currency } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { useCreateCurrency, useEditCurrency } from '@/hooks/query';
 

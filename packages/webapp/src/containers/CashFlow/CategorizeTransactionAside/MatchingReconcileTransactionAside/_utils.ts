@@ -1,5 +1,5 @@
 import { MatchingReconcileTransactionValues } from './_types';
-import type { CreateCashflowTransactionBody } from '@bigcapital/sdk-ts';
+import type { CreateCashflowTransactionBody } from '@borngreataccounting/sdk-ts';
 
 const toNumber = (value: string | number): number =>
   typeof value === 'number' ? value : Number(value) || 0;

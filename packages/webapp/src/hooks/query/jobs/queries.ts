@@ -1,8 +1,8 @@
-import { fetchOrganizationBuildJob } from '@bigcapital/sdk-ts';
+import { fetchOrganizationBuildJob } from '@borngreataccounting/sdk-ts';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { jobsKeys } from './query-keys';
-import type { OrganizationBuildJob } from '@bigcapital/sdk-ts';
+import type { OrganizationBuildJob } from '@borngreataccounting/sdk-ts';
 
 /**
  * Retrieve the job metadata.

@@ -12,7 +12,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import styles from './AccountTransactionsUncategorizedTable.module.scss';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { UncategorizedTransactionResponse } from '@bigcapital/sdk-ts';
+import type { UncategorizedTransactionResponse } from '@borngreataccounting/sdk-ts';
 import { Box, Icon } from '@/components';
 import {
   useAddTransactionsToCategorizeSelected,

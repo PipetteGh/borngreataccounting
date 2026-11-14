@@ -8,7 +8,7 @@ import {
   transferredWarehouseTransfer,
   bulkDeleteWarehouseTransfers,
   validateBulkDeleteWarehouseTransfers,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -26,7 +26,7 @@ import type {
   ValidateBulkDeleteWarehouseTransfersResponse,
   WarehouseTransfer,
   WarehouseTransfersListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /** Query params for listing warehouse transfers (pagination, filter, etc.). */
 type GetWarehouseTransfersQuery = Record<

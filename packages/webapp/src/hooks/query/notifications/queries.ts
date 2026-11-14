@@ -4,7 +4,7 @@ import {
   fetchUnreadNotificationsCount,
   markAllNotificationsAsRead,
   markNotificationAsRead,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -21,9 +21,9 @@ import type {
   MarkNotificationAsReadResponse,
   NotificationsListResponse,
   UnreadNotificationsCountResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
-export type { Notification } from '@bigcapital/sdk-ts';
+export type { Notification } from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

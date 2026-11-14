@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { ItemCategory } from '@bigcapital/sdk-ts';
+import type { ItemCategory } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
 

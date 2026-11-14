@@ -3,7 +3,7 @@ import { sumBy, isEmpty, last, keyBy, groupBy } from 'lodash';
 import React, { useCallback } from 'react';
 import { useItemEntriesTableContext } from './ItemEntriesTableProvider';
 import type { ItemEntry } from '@/interfaces/ItemEntries';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import { useItem } from '@/hooks/query';
 import {
   toSafeNumber,

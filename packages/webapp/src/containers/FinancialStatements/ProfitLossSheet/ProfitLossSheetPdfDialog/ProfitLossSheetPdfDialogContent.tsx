@@ -1,6 +1,6 @@
 import { AnchorButton } from '@blueprintjs/core';
 import { useProfitLossSheetContext } from '../ProfitLossProvider';
-import type { ProfitLossPdfQuery } from '@bigcapital/sdk-ts';
+import type { ProfitLossPdfQuery } from '@borngreataccounting/sdk-ts';
 import {
   DialogContent,
   PdfDocumentPreview,

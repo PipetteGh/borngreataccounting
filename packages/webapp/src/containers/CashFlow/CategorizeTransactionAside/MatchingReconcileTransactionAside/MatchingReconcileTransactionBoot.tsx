@@ -1,6 +1,6 @@
 import { Spinner } from '@blueprintjs/core';
 import React from 'react';
-import type { AccountsList, BranchesListResponse } from '@bigcapital/sdk-ts';
+import type { AccountsList, BranchesListResponse } from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import { useAccounts, useBranches } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';

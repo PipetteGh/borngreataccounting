@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import React, { createContext } from 'react';
 import type { ExpenseFormContext } from './types';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import { Features } from '@/constants';
 import {

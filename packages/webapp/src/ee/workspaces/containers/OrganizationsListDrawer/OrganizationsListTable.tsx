@@ -15,7 +15,7 @@ import * as FF from 'fp-ts/function';
 import React, { useState, useMemo, useCallback } from 'react';
 import intl from 'react-intl-universal';
 import { OrganizationsListWorkspaceCell } from './OrganizationsListWorkspaceCell';
-import type { Workspace } from '@bigcapital/sdk-ts';
+import type { Workspace } from '@borngreataccounting/sdk-ts';
 import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

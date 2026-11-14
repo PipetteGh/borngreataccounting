@@ -2,16 +2,16 @@
 
 ## Repo overview
 
-Bigcapital is a multi-tenant accounting SaaS. pnpm + Lerna monorepo (independent versioning).
+BorngreatAccounting is a multi-tenant accounting SaaS. pnpm + Lerna monorepo (independent versioning).
 
 | Package | Path | Role |
 |---|---|---|
-| `@bigcapital/server` | `packages/server` | NestJS API + CLI. Multi-tenant with system DB + per-tenant DBs (MariaDB). Knex migrations, Objection.js ORM. |
-| `@bigcapital/webapp` | `packages/webapp` | React SPA. Vite, BlueprintJS, Redux, React Router v5. |
-| `@bigcapital/utils` | `shared/bigcapital-utils` | Shared utilities. tsup (CJS + ESM). |
-| `@bigcapital/pdf-templates` | `shared/pdf-templates` | PDF invoice/estimate templates. Webpack, Storybook. |
-| `@bigcapital/email-components` | `shared/email-components` | Email templates (react-email). Vite, Storybook. |
-| `@bigcapital/sdk-ts` | `shared/sdk-ts` | TypeScript client generated from OpenAPI spec. |
+| `@borngreataccounting/server` | `packages/server` | NestJS API + CLI. Multi-tenant with system DB + per-tenant DBs (MariaDB). Knex migrations, Objection.js ORM. |
+| `@borngreataccounting/webapp` | `packages/webapp` | React SPA. Vite, BlueprintJS, Redux, React Router v5. |
+| `@borngreataccounting/utils` | `shared/borngreataccounting-utils` | Shared utilities. tsup (CJS + ESM). |
+| `@borngreataccounting/pdf-templates` | `shared/pdf-templates` | PDF invoice/estimate templates. Webpack, Storybook. |
+| `@borngreataccounting/email-components` | `shared/email-components` | Email templates (react-email). Vite, Storybook. |
+| `@borngreataccounting/sdk-ts` | `shared/sdk-ts` | TypeScript client generated from OpenAPI spec. |
 
 ## Dev setup
 
@@ -86,7 +86,7 @@ Webapp (camelCase)  ←  SDK response middleware  ←  API wire (snake_case)  �
 
 ### Practical impact
 
-- **When writing new query hooks**: use `useApiFetcher({ enableCamelCaseTransform: true })` and work with camelCase. Types from `@bigcapital/sdk-ts` are camelCase.
+- **When writing new query hooks**: use `useApiFetcher({ enableCamelCaseTransform: true })` and work with camelCase. Types from `@borngreataccounting/sdk-ts` are camelCase.
 - **When using legacy `apiRequest`**: responses are snake_case — call `transformToCamelCase(res.data)` before using.
 - **Database columns** are always snake_case. When adding migrations, use snake_case. When writing Objection.js models, map to camelCase properties.
 - **New API endpoints**: define DTOs with camelCase `@ApiProperty` names. The `SerializeInterceptor` handles the rest.

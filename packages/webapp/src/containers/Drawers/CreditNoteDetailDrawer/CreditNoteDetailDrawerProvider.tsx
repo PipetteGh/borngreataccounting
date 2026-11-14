@@ -5,7 +5,7 @@ import type {
   CreditNoteRefundsResponse,
   AppliedCreditNoteInvoicesResponse,
   CreditNoteInvoicesToApplyResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { Features } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

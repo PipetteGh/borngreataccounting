@@ -3,7 +3,7 @@ import React from 'react';
 import { useMoneyInFieldsContext } from './MoneyInFieldsProvider';
 import { useForeignAccount } from './utils';
 import type { MoneyInFormValues } from './types';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import { ExchangeRateMutedField } from '@/components';
 
 export function MoneyInExchangeRateField() {

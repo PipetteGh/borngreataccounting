@@ -2,7 +2,7 @@ import type {
   CreateItemCategoryBody,
   EditItemCategoryBody,
   ItemCategory,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface ItemCategoryFormValues {
   name: string;

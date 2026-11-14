@@ -14,7 +14,7 @@ import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActio
 import type {
   CreateItemCategoryBody,
   EditItemCategoryBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { transformToForm } from '@/utils';

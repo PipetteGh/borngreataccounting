@@ -1,7 +1,7 @@
 import React from 'react';
 import { transfromCustomertoForm } from './utils';
 import type { CustomerOpeningBalanceSeed } from './utils';
-import type { Branch } from '@bigcapital/sdk-ts';
+import type { Branch } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
 import {

@@ -3,7 +3,7 @@ import {
   fetchSalesTaxLiabilityXlsx,
   fetchSalesTaxLiabilityCsv,
   fetchSalesTaxLiabilityPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   SalesTaxLiabilityXlsxQuery,
   SalesTaxLiabilityCsvQuery,
   SalesTaxLiabilityPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useSalesTaxLiabilitySummary(
   query: SalesTaxLiabilityTableQuery,

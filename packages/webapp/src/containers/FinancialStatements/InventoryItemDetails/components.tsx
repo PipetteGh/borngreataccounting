@@ -17,7 +17,7 @@ import { useInventoryValuationHttpQuery } from './utils2';
 import type {
   InventoryItemDetailsXlsxQuery,
   InventoryItemDetailsCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   AppToaster,
   Icon,

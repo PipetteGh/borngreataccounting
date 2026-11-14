@@ -6,7 +6,7 @@ import type {
   BankingAccountSummaryResponse,
   BankingAccountsListResponse,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import { useAppQueryString } from '@/hooks';
 import {

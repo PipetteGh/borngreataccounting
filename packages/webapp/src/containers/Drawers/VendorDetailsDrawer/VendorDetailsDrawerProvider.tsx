@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Vendor } from '@bigcapital/sdk-ts';
+import type { Vendor } from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useVendor } from '@/hooks/query';

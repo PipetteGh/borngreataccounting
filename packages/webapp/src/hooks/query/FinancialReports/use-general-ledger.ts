@@ -3,7 +3,7 @@ import {
   fetchGeneralLedgerXlsx,
   fetchGeneralLedgerCsv,
   fetchGeneralLedgerPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   GeneralLedgerXlsxQuery,
   GeneralLedgerCsvQuery,
   GeneralLedgerPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useGeneralLedgerSheet(
   query: GeneralLedgerTableQuery,

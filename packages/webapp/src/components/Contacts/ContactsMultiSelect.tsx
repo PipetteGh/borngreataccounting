@@ -4,7 +4,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { FMultiSelect } from '../Forms';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { Customer, Vendor } from '@bigcapital/sdk-ts';
+import type { Customer, Vendor } from '@borngreataccounting/sdk-ts';
 import type { SelectOptionProps } from '@blueprintjs-formik/select';
 import { DRAWERS } from '@/constants/drawers';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';

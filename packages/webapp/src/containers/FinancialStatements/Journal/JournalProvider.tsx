@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';
-import type { JournalTableQuery } from '@bigcapital/sdk-ts';
+import type { JournalTableQuery } from '@borngreataccounting/sdk-ts';
 import { useJournalSheet } from '@/hooks/query';
 
 type UseJournalSheetResult = ReturnType<typeof useJournalSheet>;

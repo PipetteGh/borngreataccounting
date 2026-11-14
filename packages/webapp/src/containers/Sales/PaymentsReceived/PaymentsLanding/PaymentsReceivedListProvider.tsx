@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import React, { createContext, useContext } from 'react';
 import type { PaymentReceiveTableRow } from './components';
 import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,

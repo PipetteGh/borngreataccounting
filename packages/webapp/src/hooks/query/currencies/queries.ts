@@ -3,7 +3,7 @@ import {
   createCurrency,
   editCurrency,
   deleteCurrency,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -17,7 +17,7 @@ import type {
   CurrenciesListResponse,
   CreateCurrencyBody,
   EditCurrencyBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useCreateCurrency(
   props?: UseMutationOptions<void, Error, CreateCurrencyBody>,

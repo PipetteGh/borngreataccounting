@@ -84,7 +84,7 @@ export class TwoFactorSetupResponseDto {
   @ApiProperty({
     description: 'otpauth:// URI to show as a QR code.',
     example:
-      'otpauth://totp/Bigcapital:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Bigcapital&algorithm=SHA1&digits=6&period=30',
+      'otpauth://totp/BorngreatAccounting:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=BorngreatAccounting&algorithm=SHA1&digits=6&period=30',
   })
   otpauthUrl: string;
 }

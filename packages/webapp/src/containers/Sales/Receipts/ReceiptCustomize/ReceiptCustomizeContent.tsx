@@ -1,7 +1,7 @@
 import {
   ReceiptPaperTemplate,
   ReceiptPaperTemplateProps,
-} from '@bigcapital/pdf-templates';
+} from '@borngreataccounting/pdf-templates';
 import { useFormikContext } from 'formik';
 import { initialValues } from './constants';
 import { ReceiptCustomizeFieldsContent } from './ReceiptCustomizeFieldsContent';

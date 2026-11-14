@@ -8,7 +8,7 @@ import { useMakeJournalFormContext } from './MakeJournalProvider';
 import type {
   ManualJournal,
   CreateManualJournalBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import {
   transformAttachmentsToForm,

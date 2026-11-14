@@ -8,7 +8,7 @@ import type {
   CreateCustomerBody,
   Customer,
   EditCustomerBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,

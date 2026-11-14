@@ -1,7 +1,7 @@
 import { MenuItem } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { BillPayment } from '@bigcapital/sdk-ts';
+import type { BillPayment } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { AbilitySubject, PaymentMadeAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';

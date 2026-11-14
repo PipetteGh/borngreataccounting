@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { PreferencesPageLoader } from '../PreferencesPageLoader';
-import type { AllSettings } from '@bigcapital/sdk-ts';
+import type { AllSettings } from '@borngreataccounting/sdk-ts';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useSaveSettings, useSettings } from '@/hooks/query';

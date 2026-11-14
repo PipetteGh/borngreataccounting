@@ -1,7 +1,7 @@
 import { Intent, MenuItem, Menu } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { VendorCreditAppliedBill } from '@bigcapital/sdk-ts';
+import type { VendorCreditAppliedBill } from '@borngreataccounting/sdk-ts';
 import { Can, FormatDateCell, Icon } from '@/components';
 import { VendorCreditAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';

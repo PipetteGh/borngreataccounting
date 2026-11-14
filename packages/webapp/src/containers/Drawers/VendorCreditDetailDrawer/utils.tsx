@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
-import type { VendorCredit } from '@bigcapital/sdk-ts';
+import type { VendorCredit } from '@borngreataccounting/sdk-ts';
 import {
   Icon,
   FormattedMessage as T,

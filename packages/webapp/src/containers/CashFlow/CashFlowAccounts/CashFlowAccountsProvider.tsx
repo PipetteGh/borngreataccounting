@@ -2,7 +2,7 @@ import { keepPreviousData } from '@tanstack/react-query';
 import React from 'react';
 import { transformAccountsStateToQuery } from './utils';
 import type { WithCashflowAccountsProps } from '@/containers/CashFlow/AccountTransactions/withCashflowAccounts';
-import type { BankingAccountsListResponse } from '@bigcapital/sdk-ts';
+import type { BankingAccountsListResponse } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import { useCashflowAccounts } from '@/hooks/query';
 

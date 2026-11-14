@@ -4,7 +4,7 @@ import {
   editBankRule,
   fetchBankRule,
   fetchBankRules,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseMutationOptions,
   UseMutationResult,
@@ -22,7 +22,7 @@ import type {
   CreateBankRuleBody,
   CreateBankRuleResponse,
   EditBankRuleBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type { QueryClient } from '@tanstack/react-query';
 
 const commonInvalidateQueries = (queryClient: QueryClient) => {

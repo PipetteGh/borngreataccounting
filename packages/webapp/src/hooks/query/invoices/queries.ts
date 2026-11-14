@@ -18,7 +18,7 @@ import {
   fetchSaleInvoicePdf,
   notifySaleInvoiceBySms,
   fetchSaleInvoiceSmsDetails,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -50,7 +50,7 @@ import type {
   InvoicePaymentTransactionsResponse,
   SaleInvoiceHtmlContentResponse,
   SaleInvoiceSmsDetailsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 function commonInvalidateQueries(
   queryClient: ReturnType<typeof useQueryClient>,

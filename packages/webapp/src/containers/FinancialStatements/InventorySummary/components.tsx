@@ -12,7 +12,7 @@ import { useInventorySummaryContext } from './InventorySummaryProvider';
 import type {
   InventorySummaryXlsxQuery,
   InventorySummaryCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import {
   useInventorySummaryCsvExport,

@@ -13,7 +13,7 @@ import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T, Icon, Money, If, Can } from '@/components';
 import {
   AbilitySubject,

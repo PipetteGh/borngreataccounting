@@ -4,7 +4,7 @@ import type {
   MfaSetupConfirmResult,
   MfaVerifyInput,
 } from './types';
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 import {
   useAuthMfaSetupConfirm,
   useAuthMfaSetupStart,

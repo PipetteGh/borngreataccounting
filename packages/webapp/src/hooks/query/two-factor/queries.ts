@@ -6,7 +6,7 @@ import {
   regenerateTwoFactorRecoveryCodes,
   startTwoFactorSetup,
   updateOrganizationTwoFactor,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -25,7 +25,7 @@ import type {
   TwoFactorSetupResponse,
   TwoFactorStatus,
   TwoFactorVerifyBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /**
  * Two-factor status of the signed-in user (camelCase).

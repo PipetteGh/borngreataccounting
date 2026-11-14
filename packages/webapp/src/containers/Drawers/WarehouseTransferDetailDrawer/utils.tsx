@@ -2,7 +2,7 @@ import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useWarehouseDetailDrawerContext } from './WarehouseTransferDetailDrawerProvider';
-import type { WarehouseTransfer } from '@bigcapital/sdk-ts';
+import type { WarehouseTransfer } from '@borngreataccounting/sdk-ts';
 import {
   Choose,
   FormatNumberCell,

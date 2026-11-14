@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
-import type { CreditNote } from '@bigcapital/sdk-ts';
+import type { CreditNote } from '@borngreataccounting/sdk-ts';
 import {
   Icon,
   FormattedMessage as T,

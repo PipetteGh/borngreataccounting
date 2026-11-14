@@ -7,7 +7,7 @@ import {
   unexcludeBankTransaction,
   unexcludeBankTransactionsBulk,
   unmatchMatchedTransaction,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseMutationOptions,
   UseMutationResult,
@@ -24,7 +24,7 @@ import type {
   MatchTransactionBody,
   MatchedTransactionsResponse,
   UnmatchMatchedTransactionParams,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type { QueryClient } from '@tanstack/react-query';
 
 export function useGetBankTransactionsMatches(

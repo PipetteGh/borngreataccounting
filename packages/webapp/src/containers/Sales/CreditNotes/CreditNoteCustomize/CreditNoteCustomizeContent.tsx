@@ -1,7 +1,7 @@
 import {
   CreditNotePaperTemplate,
   CreditNotePaperTemplateProps,
-} from '@bigcapital/pdf-templates';
+} from '@borngreataccounting/pdf-templates';
 import { useFormikContext } from 'formik';
 import {
   ElementCustomize,

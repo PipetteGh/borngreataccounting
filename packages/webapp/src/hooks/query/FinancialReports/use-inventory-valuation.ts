@@ -4,7 +4,7 @@ import {
   fetchInventoryValuationXlsx,
   fetchInventoryValuationCsv,
   fetchInventoryValuationPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -23,7 +23,7 @@ import type {
   InventoryValuationXlsxQuery,
   InventoryValuationCsvQuery,
   InventoryValuationPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useInventoryValuation(
   query: InventoryValuationJsonQuery,

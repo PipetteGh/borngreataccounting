@@ -6,7 +6,7 @@ import {
   deleteBranch,
   activateBranches,
   markBranchAsPrimary,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -22,7 +22,7 @@ import type {
   BranchesListResponse,
   CreateBranchBody,
   EditBranchBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

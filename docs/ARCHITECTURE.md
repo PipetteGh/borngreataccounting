@@ -8,12 +8,12 @@
 
 | Package | Path | Technology | Responsibility |
 |---|---|---|---|
-| `@bigcapital/server` | `packages/server` | NestJS, Knex.js, Objection.js, Bull, Passport JWT | Multi-tenant REST API, double-entry ledger engine, financial report generators, CLI migrations, background workers |
-| `@bigcapital/webapp` | `packages/webapp` | React 18, Vite 5, BlueprintJS, Redux, React Query | Single-Page Application (SPA) accounting workspace |
-| `@bigcapital/utils` | `shared/bigcapital-utils` | TypeScript (`tsup` CJS + ESM) | Centralized branding (`BRAND_CONFIG`), financial formatting, shared utilities |
-| `@bigcapital/pdf-templates` | `shared/pdf-templates` | React, Webpack | Printable PDF templates for invoices, estimates, credit notes, and receipts |
-| `@bigcapital/email-components` | `shared/email-components` | React Email, Vite | Transactional HTML email templates |
-| `@bigcapital/sdk-ts` | `shared/sdk-ts` | `openapi-typescript` | Strongly typed TypeScript API client with snake_case/camelCase middleware |
+| `@borngreataccounting/server` | `packages/server` | NestJS, Knex.js, Objection.js, Bull, Passport JWT | Multi-tenant REST API, double-entry ledger engine, financial report generators, CLI migrations, background workers |
+| `@borngreataccounting/webapp` | `packages/webapp` | React 18, Vite 5, BlueprintJS, Redux, React Query | Single-Page Application (SPA) accounting workspace |
+| `@borngreataccounting/utils` | `shared/borngreataccounting-utils` | TypeScript (`tsup` CJS + ESM) | Centralized branding (`BRAND_CONFIG`), financial formatting, shared utilities |
+| `@borngreataccounting/pdf-templates` | `shared/pdf-templates` | React, Webpack | Printable PDF templates for invoices, estimates, credit notes, and receipts |
+| `@borngreataccounting/email-components` | `shared/email-components` | React Email, Vite | Transactional HTML email templates |
+| `@borngreataccounting/sdk-ts` | `shared/sdk-ts` | `openapi-typescript` | Strongly typed TypeScript API client with snake_case/camelCase middleware |
 | `@borngreataccounting/desktop` | `desktop` | C# WinForms & Tauri (Rust) | Windows Desktop Setup & Local Runtime Control Center |
 
 ---

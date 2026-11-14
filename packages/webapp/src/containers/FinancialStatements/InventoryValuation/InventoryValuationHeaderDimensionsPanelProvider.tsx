@@ -1,7 +1,7 @@
 import {
   BranchesListResponse,
   WarehousesListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import React, { createContext, useContext } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
 import { Features } from '@/constants';

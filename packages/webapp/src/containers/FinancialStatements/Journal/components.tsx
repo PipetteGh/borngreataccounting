@@ -12,7 +12,7 @@ import React from 'react';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { FinancialComputeAlert } from '../FinancialReportPage';
 import { useJournalSheetContext } from './JournalProvider';
-import type { JournalXlsxQuery, JournalCsvQuery } from '@bigcapital/sdk-ts';
+import type { JournalXlsxQuery, JournalCsvQuery } from '@borngreataccounting/sdk-ts';
 import {
   AppToaster,
   Icon,

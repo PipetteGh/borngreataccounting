@@ -3,7 +3,7 @@ import {
   buildOrganization,
   updateOrganization,
   fetchOrgBaseCurrencyMutateAbilities,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -18,7 +18,7 @@ import type {
   UpdateOrganizationBody,
   BuildOrganizationBody,
   OrgBaseCurrencyMutateAbilitiesResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /**
  * Retrieve the current organization. Response keys are transformed to camelCase

@@ -1,4 +1,4 @@
-import { categorizeTransactionsBulk } from '@bigcapital/sdk-ts';
+import { categorizeTransactionsBulk } from '@borngreataccounting/sdk-ts';
 import { Intent } from '@blueprintjs/core';
 import { useMutation } from '@tanstack/react-query';
 import { Formik, Form, FormikHelpers } from 'formik';
@@ -14,7 +14,7 @@ import { CategorizeTransactionFormContent } from './CategorizeTransactionFormCon
 import { CategorizeTransactionFormFooter } from './CategorizeTransactionFormFooter';
 import type { CategorizeTransactionFormValues } from './_utils';
 import type { WithBankingActionsProps } from '@/containers/CashFlow/withBankingActions';
-import type { CategorizeTransactionBody } from '@bigcapital/sdk-ts';
+import type { CategorizeTransactionBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { useCategorizeTransactionTabsBoot } from '@/containers/CashFlow/CategorizeTransactionAside/CategorizeTransactionTabsBoot';
 import { withBankingActions } from '@/containers/CashFlow/withBankingActions';

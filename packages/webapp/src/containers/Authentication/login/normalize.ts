@@ -4,7 +4,7 @@ import type {
   MfaMethodKind,
   SigninOutcome,
 } from './types';
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 
 const METHOD_KINDS: Record<MfaMethodId, MfaMethodKind> = {
   totp: 'otp',

@@ -17,7 +17,7 @@ import { useRuleFormDialogBoot } from './RuleFormBoot';
 import { CreateRuleFormSchema } from './RuleFormContentForm.schema';
 import type { AccountSelectModel } from '@/components';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { BankRuleResponse } from '@bigcapital/sdk-ts';
+import type { BankRuleResponse } from '@borngreataccounting/sdk-ts';
 import {
   AccountsSelect,
   AppToaster,

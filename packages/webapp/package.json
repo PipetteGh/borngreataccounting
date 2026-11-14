@@ -1,12 +1,12 @@
 {
-  "name": "@bigcapital/webapp",
+  "name": "@borngreataccounting/webapp",
   "version": "0.10.2",
   "private": true,
   "dependencies": {
-    "@bigcapital/email-components": "workspace:*",
-    "@bigcapital/pdf-templates": "workspace:*",
-    "@bigcapital/sdk-ts": "workspace:*",
-    "@bigcapital/utils": "workspace:*",
+    "@borngreataccounting/email-components": "workspace:*",
+    "@borngreataccounting/pdf-templates": "workspace:*",
+    "@borngreataccounting/sdk-ts": "workspace:*",
+    "@borngreataccounting/utils": "workspace:*",
     "@blueprintjs-formik/core": "^0.3.8",
     "@blueprintjs-formik/datetime": "^0.4.1",
     "@blueprintjs-formik/select": "^0.4.9",

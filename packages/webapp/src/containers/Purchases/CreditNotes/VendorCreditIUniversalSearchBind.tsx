@@ -1,7 +1,7 @@
 import { MenuItem, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { VendorCredit } from '@bigcapital/sdk-ts';
+import type { VendorCredit } from '@borngreataccounting/sdk-ts';
 import { TextStatus, Icon, Choose, T } from '@/components';
 import { AbilitySubject, VendorCreditAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';

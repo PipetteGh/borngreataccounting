@@ -1,7 +1,7 @@
 import {
   fetchPlaidExchangeToken,
   fetchPlaidLinkToken,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseMutationOptions,
   useMutation,
@@ -12,7 +12,7 @@ import { cashflowAccountsKeys } from '../../cashflow-accounts/query-keys';
 import type {
   PlaidExchangeTokenBody,
   PlaidLinkTokenResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /**
  * Retrieves the Plaid link token.

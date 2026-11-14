@@ -4,7 +4,7 @@ import {
   activateContact,
   inactivateContact,
   ContactResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,

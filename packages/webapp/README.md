@@ -1,1 +1,1 @@
-# @bigcapital/webapp
+# @borngreataccounting/webapp

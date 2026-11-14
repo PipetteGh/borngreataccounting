@@ -10,7 +10,7 @@ import { useInviteUserFormContext } from './InviteUserFormProvider';
 import { transformApiErrors } from './utils';
 import type { InviteUserFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { InviteUserBody } from '@bigcapital/sdk-ts';
+import type { InviteUserBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 

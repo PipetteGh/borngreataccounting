@@ -14,7 +14,7 @@ import { useInventoryValuationContext } from './InventoryValuationProvider';
 import type {
   InventoryValuationXlsxQuery,
   InventoryValuationCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import { CellTextSpan } from '@/components/Datatable/Cells';
 import { Align } from '@/constants';

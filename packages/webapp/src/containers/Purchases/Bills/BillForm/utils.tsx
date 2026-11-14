@@ -8,7 +8,7 @@ import intl from 'react-intl-universal';
 import { useBillFormContext } from './BillFormProvider';
 import type { Batch } from '@/ee/batches/hooks/query/queries';
 import type { ItemEntryBatchAllocation } from '@/interfaces/ItemEntries';
-import type { Bill, CreateBillBody } from '@bigcapital/sdk-ts';
+import type { Bill, CreateBillBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import {
   transformAttachmentsToForm,

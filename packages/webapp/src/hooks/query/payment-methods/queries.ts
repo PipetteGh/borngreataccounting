@@ -2,7 +2,7 @@ import {
   fetchUpdatePaymentMethod,
   type UpdatePaymentMethodBody,
   type UpdatePaymentMethodResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   UseMutationOptions,

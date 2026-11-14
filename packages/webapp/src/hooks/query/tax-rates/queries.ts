@@ -6,7 +6,7 @@ import {
   deleteTaxRate,
   activateTaxRate,
   inactivateTaxRate,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -21,7 +21,7 @@ import type {
   TaxRate,
   CreateTaxRateBody,
   EditTaxRateBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

@@ -7,7 +7,7 @@ import {
   publishManualJournal,
   bulkDeleteManualJournals,
   validateBulkDeleteManualJournals,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -31,7 +31,7 @@ import type {
   ManualJournalsListResponse,
   BulkDeleteManualJournalsBody,
   ValidateBulkDeleteManualJournalsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

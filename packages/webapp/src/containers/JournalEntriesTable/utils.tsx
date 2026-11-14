@@ -1,7 +1,7 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { TransactionsByReferenceJsonResponse } from '@bigcapital/sdk-ts';
+import type { TransactionsByReferenceJsonResponse } from '@borngreataccounting/sdk-ts';
 
 export type GLTransactionRow =
   TransactionsByReferenceJsonResponse['transactions'][number];

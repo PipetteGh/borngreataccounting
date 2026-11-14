@@ -1,5 +1,5 @@
 import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
-import type { PdfTemplateResponse } from '@bigcapital/sdk-ts';
+import type { PdfTemplateResponse } from '@borngreataccounting/sdk-ts';
 import { safeCallback } from '@/utils';
 
 /** PDF template row as returned by the templates list endpoint. */

@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import React, { createContext } from 'react';
 import { transformVendorsStateToQuery } from './utils';
 import type { TableQuery } from '@/store/store.types';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import {
   useResourceMeta,

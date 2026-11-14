@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import type { CurrenciesListResponse } from '@bigcapital/sdk-ts';
+import type { CurrenciesListResponse } from '@borngreataccounting/sdk-ts';
 import { useCurrencies } from '@/hooks/query';
 
 export interface CurrenciesContextValue {

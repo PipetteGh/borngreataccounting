@@ -1,5 +1,5 @@
 import type { useCreateBadDebt } from '@/hooks/query';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 
 /** Loose invoice shape: form code reads `currencyCode` / `dueAmount`. */
 export interface BadDebtInvoice {

@@ -14,7 +14,7 @@ import { useVendorsTransactionsContext } from './VendorsTransactionsProvider';
 import type {
   TransactionsByVendorsXlsxQuery,
   TransactionsByVendorsCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import { Align } from '@/constants';
 import {

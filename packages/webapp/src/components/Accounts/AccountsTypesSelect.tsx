@@ -1,6 +1,6 @@
 import { MenuItem } from '@blueprintjs/core';
 import React from 'react';
-import type { AccountTypesList } from '@bigcapital/sdk-ts';
+import type { AccountTypesList } from '@borngreataccounting/sdk-ts';
 import type { ItemRendererProps } from '@blueprintjs/select';
 import { FSelect } from '@/components/Forms';
 

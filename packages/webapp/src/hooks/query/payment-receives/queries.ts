@@ -14,7 +14,7 @@ import {
   notifyPaymentReceiveBySms,
   fetchPaymentReceiveSmsDetails,
   fetchPaymentReceivedPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQueryClient,
@@ -48,7 +48,7 @@ import type {
   SendPaymentReceiveMailBody,
   SendPaymentReceiveMailResponse,
   PaymentReceiveSmsDetailsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { saveInvoke } from '@/utils';
 
 const commonInvalidateQueries = (client: ReturnType<typeof useQueryClient>) => {

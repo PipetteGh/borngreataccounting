@@ -3,7 +3,7 @@ import {
   fetchTrialBalanceXlsx,
   fetchTrialBalanceCsv,
   fetchTrialBalancePdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   TrialBalanceXlsxQuery,
   TrialBalanceCsvQuery,
   TrialBalancePdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useTrialBalanceSheet(
   query: TrialBalanceTableQuery,

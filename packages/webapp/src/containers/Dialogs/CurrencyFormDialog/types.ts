@@ -2,7 +2,7 @@ import type {
   CreateCurrencyBody,
   Currency,
   EditCurrencyBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface CurrencyFormValues {
   currencyName: string;

@@ -3,7 +3,7 @@ import type {
   EditExpenseBody,
   Expense,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type React from 'react';
 
 export type ExpenseEntry = {

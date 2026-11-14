@@ -15,7 +15,7 @@ import { useTrialBalanceSheetHttpQuery } from './utils';
 import type {
   TrialBalanceXlsxQuery,
   TrialBalanceCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   If,
   Icon,

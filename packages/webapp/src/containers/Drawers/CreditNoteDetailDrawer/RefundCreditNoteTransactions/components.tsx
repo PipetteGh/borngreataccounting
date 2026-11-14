@@ -1,7 +1,7 @@
 import { Intent, MenuItem, Menu } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { RefundCreditNoteTransaction } from '@bigcapital/sdk-ts';
+import type { RefundCreditNoteTransaction } from '@borngreataccounting/sdk-ts';
 import { Can, FormatDateCell, Icon } from '@/components';
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';

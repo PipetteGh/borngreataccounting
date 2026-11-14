@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { SaleInvoice } from '@bigcapital/sdk-ts';
+import type { SaleInvoice } from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { Features } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

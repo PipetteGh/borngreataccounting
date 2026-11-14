@@ -3,7 +3,7 @@ import {
   fetchCustomerBalanceXlsx,
   fetchCustomerBalanceCsv,
   fetchCustomerBalancePdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   CustomerBalanceXlsxQuery,
   CustomerBalanceCsvQuery,
   CustomerBalancePdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useCustomerBalanceSummaryReport(
   query: CustomerBalanceTableQuery,

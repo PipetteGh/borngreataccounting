@@ -7,7 +7,7 @@ import {
   publishExpense,
   bulkDeleteExpenses,
   validateBulkDeleteExpenses,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -32,7 +32,7 @@ import type {
   ExpensesListResponse,
   BulkDeleteExpensesBody,
   ValidateBulkDeleteExpensesResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

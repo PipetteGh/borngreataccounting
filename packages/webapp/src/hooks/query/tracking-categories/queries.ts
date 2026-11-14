@@ -4,7 +4,7 @@ import {
   editTrackingCategory,
   fetchTrackingCategories,
   fetchTrackingCategory,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -19,7 +19,7 @@ import type {
   EditTrackingCategoryBody,
   TrackingCategory,
   TrackingCategoriesList,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

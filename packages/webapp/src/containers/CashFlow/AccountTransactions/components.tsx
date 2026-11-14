@@ -3,7 +3,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { BankingTransactionResponse } from '@bigcapital/sdk-ts';
+import type { BankingTransactionResponse } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { FinancialLoadingBar } from '@/containers/FinancialStatements/FinancialLoadingBar';
 import { safeCallback } from '@/utils';

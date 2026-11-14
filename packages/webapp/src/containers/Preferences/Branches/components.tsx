@@ -1,7 +1,7 @@
 import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { Branch } from '@bigcapital/sdk-ts';
+import type { Branch } from '@borngreataccounting/sdk-ts';
 import { Icon, If } from '@/components';
 import { safeCallback } from '@/utils';
 

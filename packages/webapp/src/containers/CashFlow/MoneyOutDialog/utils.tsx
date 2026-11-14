@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
 import { useMoneyOutFieldsContext } from './MoneyOutFieldsProvider';
 import type { MoneyOutFormValues } from './types';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 
 interface Branch {
   id: number;

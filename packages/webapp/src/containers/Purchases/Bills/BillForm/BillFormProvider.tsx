@@ -9,7 +9,7 @@ import type {
   WarehousesListResponse,
   BranchesListResponse,
   TaxRatesListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import { Features } from '@/constants';
 import {

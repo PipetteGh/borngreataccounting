@@ -12,7 +12,7 @@ import {
 } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { ManualJournal } from '@bigcapital/sdk-ts';
+import type { ManualJournal } from '@borngreataccounting/sdk-ts';
 import {
   Can,
   FormattedMessage as T,

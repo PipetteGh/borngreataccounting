@@ -13,7 +13,7 @@ import { useAPAgingSummaryContext } from './APAgingSummaryProvider';
 import type {
   PayableAgingXlsxQuery,
   PayableAgingCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import {
   useAPAgingSheetCsvExport,

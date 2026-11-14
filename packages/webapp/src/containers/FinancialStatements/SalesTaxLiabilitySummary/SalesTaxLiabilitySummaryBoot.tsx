@@ -1,7 +1,7 @@
 import {
   SalesTaxLiabilityPdfQuery,
   SalesTaxLiabilityTableQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';

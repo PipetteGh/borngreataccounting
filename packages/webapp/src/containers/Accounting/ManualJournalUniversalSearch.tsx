@@ -1,5 +1,5 @@
 import intl from 'react-intl-universal';
-import type { ManualJournal } from '@bigcapital/sdk-ts';
+import type { ManualJournal } from '@borngreataccounting/sdk-ts';
 import { AbilitySubject, ManualJournalAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';

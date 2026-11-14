@@ -3,7 +3,7 @@ import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import type { BillLandedCostTransaction } from '@bigcapital/sdk-ts';
+import type { BillLandedCostTransaction } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { safeCallback } from '@/utils';

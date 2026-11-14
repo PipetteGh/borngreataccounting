@@ -1,4 +1,4 @@
-import { fetchPendingTransactions } from '@bigcapital/sdk-ts';
+import { fetchPendingTransactions } from '@borngreataccounting/sdk-ts';
 import {
   useInfiniteQuery,
   UseQueryOptions,
@@ -17,7 +17,7 @@ import { bankingKeys } from '../query-keys';
 import type {
   GetPendingTransactionsQuery,
   PendingBankTransactionsListPage,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export type PendingBankAccountTransactionsResponse = Awaited<
   ReturnType<typeof fetchPendingTransactions>

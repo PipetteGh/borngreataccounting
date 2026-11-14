@@ -3,7 +3,7 @@ import {
   defaultOrganizationAddressFormat,
   organizationAddressTextFormat,
 } from '@/utils/address-text-format';
-import { findByIsoCountryCode } from '@bigcapital/utils';
+import { findByIsoCountryCode } from '@borngreataccounting/utils';
 
 export class TenantMetadata extends BaseModel {
   public baseCurrency!: string;

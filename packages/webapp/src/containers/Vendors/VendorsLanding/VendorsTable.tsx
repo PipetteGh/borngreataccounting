@@ -11,7 +11,7 @@ import type { WithVendorsActionsProps } from './withVendorsActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { Vendor } from '@bigcapital/sdk-ts';
+import type { Vendor } from '@borngreataccounting/sdk-ts';
 import {
   DataTable,
   TableSkeletonRows,

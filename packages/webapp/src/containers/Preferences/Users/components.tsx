@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { User } from '@bigcapital/sdk-ts';
+import type { User } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T, Icon, If } from '@/components';
 import { safeCallback, firstLettersArgs } from '@/utils';
 

@@ -253,7 +253,7 @@ export const ARAgingSummaryResponseExample = {
     },
   },
   meta: {
-    organization_name: 'BIGCAPITAL, INC',
+    organization_name: 'BORNGREAT ACCOUNTING, INC',
     base_currency: 'USD',
     date_format: 'DD MMM yyyy',
     is_cost_compute_running: false,

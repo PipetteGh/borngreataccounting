@@ -2,7 +2,7 @@ import {
   fetchAuditLogs,
   fetchAuditLogFilterOptions,
   AuditLogsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useInfiniteQuery,

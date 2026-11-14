@@ -11,7 +11,7 @@ import type {
   ExpenseErrorResponse,
   ExpenseFormValues,
 } from './types';
-import type { Expense } from '@bigcapital/sdk-ts';
+import type { Expense } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import {
   transformAttachmentsToForm,

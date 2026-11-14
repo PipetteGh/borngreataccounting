@@ -12,7 +12,7 @@ import {
 import clsx from 'classnames';
 import { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import type { Vendor } from '@bigcapital/sdk-ts';
+import type { Vendor } from '@borngreataccounting/sdk-ts';
 import { Can, Icon, Money, If, AvatarCell } from '@/components';
 import { VendorAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback, firstLettersArgs } from '@/utils';

@@ -9,7 +9,7 @@ import {
   generateRecurringInvoiceNow,
   fetchRecurringInvoiceInvoices,
   fetchRecurringInvoiceState,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -30,7 +30,7 @@ import type {
   GetRecurringInvoiceInvoicesQuery,
   RecurringInvoiceStateResponse,
   GenerateRecurringInvoiceResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 function commonInvalidateQueries(
   queryClient: ReturnType<typeof useQueryClient>,

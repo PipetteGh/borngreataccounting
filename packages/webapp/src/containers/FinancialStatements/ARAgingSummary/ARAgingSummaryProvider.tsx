@@ -1,4 +1,4 @@
-import { ReceivableAgingTableQuery } from '@bigcapital/sdk-ts';
+import { ReceivableAgingTableQuery } from '@borngreataccounting/sdk-ts';
 import { useMemo, createContext, useContext } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';

@@ -14,8 +14,8 @@ import type {
   TaxRate,
   PdfTemplateResponse,
   GetPaymentServicesResponse,
-} from '@bigcapital/sdk-ts';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useInvoice,

@@ -2,7 +2,7 @@ import * as FA from 'fp-ts/Array';
 import * as FF from 'fp-ts/function';
 import * as FO from 'fp-ts/Option';
 import { isEmpty } from 'lodash';
-import type { ProfitLossColumnKey } from '@bigcapital/sdk-ts';
+import type { ProfitLossColumnKey } from '@borngreataccounting/sdk-ts';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { firstMatch, when } from '@/utils/fp';

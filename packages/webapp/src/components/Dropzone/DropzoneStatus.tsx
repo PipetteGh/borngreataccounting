@@ -22,7 +22,7 @@ function createDropzoneStatus(status: keyof DropzoneContextValue) {
 
     return null;
   };
-  Component.displayName = `@bigcapital/core/dropzone/${upperFirst(status)}`;
+  Component.displayName = `@borngreataccounting/core/dropzone/${upperFirst(status)}`;
 
   return Component;
 }

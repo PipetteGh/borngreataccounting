@@ -1,7 +1,7 @@
 import React from 'react';
 import { useExcludedTransactionsBoot } from './ExcludedTransactionsTableBoot';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { ExcludedBankTransactionsListPage } from '@bigcapital/sdk-ts';
+import type { ExcludedBankTransactionsListPage } from '@borngreataccounting/sdk-ts';
 import { CLASSES } from '@/constants';
 import { getColumnWidth } from '@/utils';
 

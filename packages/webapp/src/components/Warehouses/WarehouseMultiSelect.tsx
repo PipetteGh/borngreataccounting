@@ -3,7 +3,7 @@ import { ItemPredicate } from '@blueprintjs/select';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FMultiSelect } from '../Forms';
-import type { Warehouse } from '@bigcapital/sdk-ts';
+import type { Warehouse } from '@borngreataccounting/sdk-ts';
 import type {
   FormikItemRenderer,
   SelectOptionProps,

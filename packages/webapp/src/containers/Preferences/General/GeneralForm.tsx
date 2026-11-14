@@ -1,4 +1,4 @@
-import { getAllCountries } from '@bigcapital/utils';
+import { getAllCountries } from '@borngreataccounting/utils';
 import { Button, FormGroup, Intent } from '@blueprintjs/core';
 import { TimezonePicker, getTimezoneMetadata } from '@blueprintjs/timezone';
 import classNames from 'classnames';

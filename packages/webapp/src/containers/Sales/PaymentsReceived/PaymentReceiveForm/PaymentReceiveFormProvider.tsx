@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import type {
   PaymentReceiveEditPageResponse,
   SettingsGroup,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useSettingsPaymentReceives,
