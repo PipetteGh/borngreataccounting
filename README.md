@@ -32,20 +32,33 @@
 
 ### Linux / macOS
 ```bash
+# Option A: Clone repository
 git clone https://github.com/PipetteGh/borngreataccounting.git
 cd borngreataccounting
 chmod +x install.sh
 ./install.sh
+
+# Option B: Download release archive via curl (v1.0.1)
+curl -fsSL -L https://github.com/PipetteGh/borngreataccounting/archive/refs/tags/v1.0.1.tar.gz -o borngreataccounting-1.0.1.tar.gz
+tar -xzf borngreataccounting-1.0.1.tar.gz
+cd borngreataccounting-1.0.1
+chmod +x install.sh
+./install.sh
 ```
 
-### Windows (PowerShell or Setup EXE)
+### Windows (PowerShell, curl, or Setup EXE)
 ```powershell
+# Option A: Clone repository
 git clone https://github.com/PipetteGh/borngreataccounting.git
 cd borngreataccounting
 .\install.ps1
+
+# Option B: Download Windows Setup EXE (v1.0.1) via curl
+curl.exe -fsSL -L https://github.com/PipetteGh/borngreataccounting/releases/download/v1.0.1/BorngreatAccounting-Setup-1.0.1.exe -o BorngreatAccounting-Setup-1.0.1.exe
+.\BorngreatAccounting-Setup-1.0.1.exe
 ```
 Or launch the prebuilt Windows Desktop Setup & Control Center executable:
-- `dist/installers/BorngreatAccounting-Setup.exe` (`BorngreatAccounting-Setup-1.0.0.exe`)
+- `dist/installers/BorngreatAccounting-Setup.exe` (`BorngreatAccounting-Setup-1.0.1.exe`)
 
 ---
 

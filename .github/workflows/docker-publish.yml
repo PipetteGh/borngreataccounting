@@ -88,7 +88,7 @@ jobs:
           push: true
           tags: |
             ${{ env.WEB_IMAGE }}:latest
-            ${{ env.WEB_IMAGE }}:1.0.0
+            ${{ env.WEB_IMAGE }}:1.0.1
             ${{ env.WEB_IMAGE }}:${{ steps.vars.outputs.VERSION }}
 
       - name: Build and push BorngreatAccounting API & Worker images
@@ -100,10 +100,10 @@ jobs:
           push: true
           tags: |
             ${{ env.API_IMAGE }}:latest
-            ${{ env.API_IMAGE }}:1.0.0
+            ${{ env.API_IMAGE }}:1.0.1
             ${{ env.API_IMAGE }}:${{ steps.vars.outputs.VERSION }}
             ${{ env.WORKER_IMAGE }}:latest
-            ${{ env.WORKER_IMAGE }}:1.0.0
+            ${{ env.WORKER_IMAGE }}:1.0.1
             ${{ env.WORKER_IMAGE }}:${{ steps.vars.outputs.VERSION }}
 
       - name: Generate CycloneDX SBOM

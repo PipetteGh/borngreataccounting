@@ -22,7 +22,7 @@ jobs:
         shell: pwsh
         run: |
           $version = "${GITHUB_REF_NAME}".TrimStart('v')
-          if ([string]::IsNullOrWhiteSpace($version)) { $version = "1.0.0" }
+          if ([string]::IsNullOrWhiteSpace($version)) { $version = "1.0.1" }
           New-Item -ItemType Directory -Force -Path "dist\installers" | Out-Null
           $csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
           & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-$version.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"

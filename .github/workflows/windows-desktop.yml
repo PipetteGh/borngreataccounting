@@ -21,12 +21,12 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "dist\installers" | Out-Null
           $csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-          & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-1.0.0.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"
-          Copy-Item "dist\installers\BorngreatAccounting-Setup-1.0.0.exe" "dist\installers\BorngreatAccounting-Setup.exe" -Force
-          $h1 = (Get-FileHash "dist\installers\BorngreatAccounting-Setup-1.0.0.exe" -Algorithm SHA256).Hash
+          & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-1.0.1.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"
+          Copy-Item "dist\installers\BorngreatAccounting-Setup-1.0.1.exe" "dist\installers\BorngreatAccounting-Setup.exe" -Force
+          $h1 = (Get-FileHash "dist\installers\BorngreatAccounting-Setup-1.0.1.exe" -Algorithm SHA256).Hash
           $h2 = (Get-FileHash "dist\installers\BorngreatAccounting-Setup.exe" -Algorithm SHA256).Hash
-          Set-Content -Path "dist\installers\SHA256SUMS.txt" -Value "$h1  BorngreatAccounting-Setup-1.0.0.exe`r`n$h2  BorngreatAccounting-Setup.exe" -Encoding ASCII
-          & ".\dist\installers\BorngreatAccounting-Setup-1.0.0.exe" --verify
+          Set-Content -Path "dist\installers\SHA256SUMS.txt" -Value "$h1  BorngreatAccounting-Setup-1.0.1.exe`r`n$h2  BorngreatAccounting-Setup.exe" -Encoding ASCII
+          & ".\dist\installers\BorngreatAccounting-Setup-1.0.1.exe" --verify
 
       - name: Upload Windows Installer Artifacts
         uses: actions/upload-artifact@v4
@@ -34,5 +34,5 @@ jobs:
           name: BorngreatAccounting-Windows-Installer
           path: |
             dist/installers/BorngreatAccounting-Setup.exe
-            dist/installers/BorngreatAccounting-Setup-1.0.0.exe
+            dist/installers/BorngreatAccounting-Setup-1.0.1.exe
             dist/installers/SHA256SUMS.txt
