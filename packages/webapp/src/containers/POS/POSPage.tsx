@@ -243,6 +243,36 @@ export function POSPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const playPosBeep = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new AudioCtx();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1850, ctx.currentTime);
+      gain.gain.setValueAtTime(0.14, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.085);
+    } catch {
+      // Ignore audio errors if blocked by browser policy
+    }
+  }, [soundEnabled]);
 
   const [items, setItems] = useState<PosItem[]>([]);
   const [customers, setCustomers] = useState<PosCustomer[]>([]);
@@ -493,14 +523,21 @@ export function POSPage() {
       return;
     }
 
+    const existing = cart.find((line) => line.item.id === item.id);
+    if (existing && item.type === 'inventory' && existing.quantity + 1 > stock) {
+      AppToaster.show({
+        intent: Intent.WARNING,
+        message: `Only ${stock} unit(s) of ${item.name} available in inventory.`,
+      });
+      return;
+    }
+
+    playPosBeep();
+
     setCart((prev) => {
-      const existing = prev.find((line) => line.item.id === item.id);
-      if (existing) {
-        if (item.type === 'inventory' && existing.quantity + 1 > stock) {
-          AppToaster.show({
-            intent: Intent.WARNING,
-            message: `Only ${stock} unit(s) of ${item.name} available in inventory.`,
-          });
+      const found = prev.find((line) => line.item.id === item.id);
+      if (found) {
+        if (item.type === 'inventory' && found.quantity + 1 > stock) {
           return prev;
         }
         return prev.map((line) =>
@@ -803,6 +840,14 @@ export function POSPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Button
+            small
+            icon={soundEnabled ? 'volume-up' : 'volume-off'}
+            text={soundEnabled ? 'Sound On' : 'Muted'}
+            intent={soundEnabled ? Intent.NONE : Intent.WARNING}
+            onClick={() => setSoundEnabled((v) => !v)}
+            data-testid="pos-sound-btn"
+          />
           <Button
             small
             icon="refresh"
