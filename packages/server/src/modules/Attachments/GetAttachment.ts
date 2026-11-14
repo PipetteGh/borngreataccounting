@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3_CLIENT } from '../S3/S3.module';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { DocumentModel } from './models/Document.model';
+import { AttachmentStorageService } from './AttachmentStorage.service';
 
 @Injectable()
 export class GetAttachment {
@@ -15,6 +16,8 @@ export class GetAttachment {
 
     @Inject(DocumentModel.name)
     private readonly documentModel: TenantModelProxy<typeof DocumentModel>,
+
+    private readonly storageService: AttachmentStorageService,
   ) {}
 
   /**
@@ -22,10 +25,23 @@ export class GetAttachment {
    * @param {string} filekey
    */
   async getAttachment(filekey: string) {
-    await this.documentModel()
+    const doc = await this.documentModel()
       .query()
       .findOne('key', filekey)
       .throwIfNotFound();
+
+    if (
+      this.storageService.localFileExists(filekey) ||
+      !this.storageService.isS3Configured()
+    ) {
+      const buffer = await this.storageService.readLocalFile(filekey);
+      return {
+        ContentType: doc.mimeType || 'application/octet-stream',
+        Body: {
+          transformToByteArray: async () => new Uint8Array(buffer),
+        },
+      };
+    }
 
     const params = {
       Bucket: this.configService.get('s3.bucket'),

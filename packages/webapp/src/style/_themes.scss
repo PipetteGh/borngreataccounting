@@ -1,0 +1,195 @@
+// BorngreatAccounting (BtAccounting) — Multi-Theme System (12 Themes)
+
+html[data-theme='light'] {
+  --color-primary: #004dd0;
+  --color-app-body: #f6f8fb;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #f6f8fb;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #dbe3ee;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #0c234d;
+  --color-sidebar-menu-item-color: rgba(255, 255, 255, 0.85);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(255, 255, 255, 0.55);
+  --sidebar-text-color: #ffffff;
+}
+
+html[data-theme='midnight'] {
+  --color-primary: #3b82f6;
+  --color-app-body: #121a2a;
+  --color-splash-screen-background: #0b162c;
+  --color-dashboard-insider-background: #121a2a;
+  --color-dashboard-topbar-background: #162033;
+  --color-dashboard-topbar-border-color: #25344f;
+  --color-dashboard-datatable-background: #1a2438;
+  --color-sidebar-background: #0b162c;
+  --color-sidebar-menu-item-color: rgba(226, 232, 240, 0.85);
+  --color-sidebar-menu-item-active-color: #60a5fa;
+  --color-sidebar-menu-label-color: rgba(148, 163, 184, 0.8);
+  --sidebar-text-color: #f8fafc;
+}
+
+html[data-theme='dark'] {
+  --color-primary: #4c90f0;
+  --color-app-body: #1c2127;
+  --color-splash-screen-background: #181c22;
+  --color-dashboard-insider-background: #1c2127;
+  --color-dashboard-topbar-background: #252a31;
+  --color-dashboard-topbar-border-color: #383e47;
+  --color-dashboard-datatable-background: #252a31;
+  --color-sidebar-background: #181c22;
+  --color-sidebar-menu-item-color: rgba(245, 248, 250, 0.85);
+  --color-sidebar-menu-item-active-color: #8abbff;
+  --color-sidebar-menu-label-color: rgba(167, 182, 194, 0.75);
+  --sidebar-text-color: #f5f8fa;
+}
+
+html[data-theme='emerald'] {
+  --color-primary: #059669;
+  --color-app-body: #f2f9f6;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #f2f9f6;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #cde5da;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #064e3b;
+  --color-sidebar-menu-item-color: rgba(236, 253, 245, 0.88);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(167, 243, 208, 0.7);
+  --sidebar-text-color: #ffffff;
+}
+
+html[data-theme='emerald-dark'] {
+  --color-primary: #10b981;
+  --color-app-body: #091915;
+  --color-splash-screen-background: #04241b;
+  --color-dashboard-insider-background: #091915;
+  --color-dashboard-topbar-background: #0e241e;
+  --color-dashboard-topbar-border-color: #193b31;
+  --color-dashboard-datatable-background: #112922;
+  --color-sidebar-background: #04241b;
+  --color-sidebar-menu-item-color: rgba(209, 250, 229, 0.85);
+  --color-sidebar-menu-item-active-color: #34d399;
+  --color-sidebar-menu-label-color: rgba(110, 231, 183, 0.65);
+  --sidebar-text-color: #ecfdf5;
+}
+
+html[data-theme='indigo'] {
+  --color-primary: #4f46e5;
+  --color-app-body: #f5f6fc;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #f5f6fc;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #d9dcf2;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #1e1b4b;
+  --color-sidebar-menu-item-color: rgba(238, 242, 255, 0.88);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(199, 210, 254, 0.68);
+  --sidebar-text-color: #ffffff;
+}
+
+html[data-theme='amethyst'] {
+  --color-primary: #a855f7;
+  --color-app-body: #120d21;
+  --color-splash-screen-background: #1a1130;
+  --color-dashboard-insider-background: #120d21;
+  --color-dashboard-topbar-background: #1a1330;
+  --color-dashboard-topbar-border-color: #2f2352;
+  --color-dashboard-datatable-background: #1d1633;
+  --color-sidebar-background: #1a1130;
+  --color-sidebar-menu-item-color: rgba(243, 232, 255, 0.85);
+  --color-sidebar-menu-item-active-color: #c084fc;
+  --color-sidebar-menu-label-color: rgba(216, 180, 254, 0.65);
+  --sidebar-text-color: #faf5ff;
+}
+
+html[data-theme='crimson'] {
+  --color-primary: #be123c;
+  --color-app-body: #fbf7f8;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #fbf7f8;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #ebd5db;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #450a18;
+  --color-sidebar-menu-item-color: rgba(255, 241, 242, 0.88);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(254, 205, 211, 0.68);
+  --sidebar-text-color: #ffffff;
+}
+
+html[data-theme='amber'] {
+  --color-primary: #f59e0b;
+  --color-app-body: #14100a;
+  --color-splash-screen-background: #1c150c;
+  --color-dashboard-insider-background: #14100a;
+  --color-dashboard-topbar-background: #1d170e;
+  --color-dashboard-topbar-border-color: #362b1a;
+  --color-dashboard-datatable-background: #221b12;
+  --color-sidebar-background: #1c150c;
+  --color-sidebar-menu-item-color: rgba(254, 243, 199, 0.85);
+  --color-sidebar-menu-item-active-color: #fbbf24;
+  --color-sidebar-menu-label-color: rgba(252, 211, 77, 0.65);
+  --sidebar-text-color: #fffbeb;
+}
+
+html[data-theme='ocean'] {
+  --color-primary: #0d9488;
+  --color-app-body: #f2f9fa;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #f2f9fa;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #cce5e8;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #083344;
+  --color-sidebar-menu-item-color: rgba(236, 254, 255, 0.88);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(165, 243, 252, 0.68);
+  --sidebar-text-color: #ffffff;
+}
+
+html[data-theme='nord'] {
+  --color-primary: #38bdf8;
+  --color-app-body: #1e2430;
+  --color-splash-screen-background: #19202b;
+  --color-dashboard-insider-background: #1e2430;
+  --color-dashboard-topbar-background: #232b3a;
+  --color-dashboard-topbar-border-color: #354157;
+  --color-dashboard-datatable-background: #273040;
+  --color-sidebar-background: #19202b;
+  --color-sidebar-menu-item-color: rgba(226, 232, 240, 0.88);
+  --color-sidebar-menu-item-active-color: #7dd3fc;
+  --color-sidebar-menu-label-color: rgba(148, 163, 184, 0.72);
+  --sidebar-text-color: #f1f5f9;
+}
+
+html[data-theme='slate'] {
+  --color-primary: #27272a;
+  --color-app-body: #f4f4f5;
+  --color-splash-screen-background: #ffffff;
+  --color-dashboard-insider-background: #f4f4f5;
+  --color-dashboard-topbar-background: #ffffff;
+  --color-dashboard-topbar-border-color: #dcdce0;
+  --color-dashboard-datatable-background: #ffffff;
+  --color-sidebar-background: #18181b;
+  --color-sidebar-menu-item-color: rgba(244, 244, 245, 0.88);
+  --color-sidebar-menu-item-active-color: #ffffff;
+  --color-sidebar-menu-label-color: rgba(161, 161, 170, 0.78);
+  --sidebar-text-color: #ffffff;
+}
+
+// Apply theme primary accent consistently to Blueprint primary buttons & active tabs
+.bp4-button.bp4-intent-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.bp4-button.bp4-intent-primary:hover {
+  filter: brightness(0.92);
+}
+
+.bp4-tab[aria-selected='true'] {
+  color: var(--color-primary) !important;
+  box-shadow: inset 0 -2px 0 var(--color-primary) !important;
+}

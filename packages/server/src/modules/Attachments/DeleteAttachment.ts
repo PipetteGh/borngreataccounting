@@ -7,6 +7,7 @@ import { S3_CLIENT } from '../S3/S3.module';
 import { DocumentModel } from './models/Document.model';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { DocumentLinkModel } from './models/DocumentLink.model';
+import { AttachmentStorageService } from './AttachmentStorage.service';
 
 @Injectable()
 export class DeleteAttachment {
@@ -24,6 +25,8 @@ export class DeleteAttachment {
     private readonly documentLinkModel: TenantModelProxy<
       typeof DocumentLinkModel
     >,
+
+    private readonly storageService: AttachmentStorageService,
   ) {}
 
   /**
@@ -36,11 +39,17 @@ export class DeleteAttachment {
       .findOne('key', filekey)
       .throwIfNotFound();
 
-    const params = {
-      Bucket: this.configService.get('s3.bucket'),
-      Key: filekey,
-    };
-    await this.s3Client.send(new DeleteObjectCommand(params));
+    if (this.storageService.localFileExists(filekey)) {
+      await this.storageService.deleteLocalFile(filekey);
+    } else if (this.storageService.isS3Configured()) {
+      const params = {
+        Bucket: this.configService.get('s3.bucket'),
+        Key: filekey,
+      };
+      await this.s3Client.send(new DeleteObjectCommand(params));
+    } else {
+      await this.storageService.deleteLocalFile(filekey);
+    }
 
     await this.uow.withTransaction(async (trx: Knex.Transaction) => {
       // Delete all document links

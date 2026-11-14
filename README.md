@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">BorngreatAccounting (BtAccounting)</h1>
-<p align="center"><strong>Your Accounting. Your Servers. Your Control.</strong></p>
+<p align="center"><strong>Your Accounting. Your Servers. Your Control. (Quickbooks Alternative)</strong></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0" /></a>
