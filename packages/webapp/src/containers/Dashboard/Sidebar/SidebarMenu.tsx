@@ -35,7 +35,8 @@ function SidebarMenuItem({ item, index }: SidebarMenuItemProps) {
   // Detarmine whether the item is active.
   const isActive = useIsSidebarMenuItemActive(item);
   const hasSubmenu =
-    item.type === ISidebarMenuItemType.Overlay || Boolean(item.children?.length);
+    item.type === ISidebarMenuItemType.Overlay ||
+    Boolean(item.children?.length);
 
   return (
     <SidebarMenuItemComponent

@@ -59,7 +59,8 @@ export class PaymentGatewaysController {
   @Post('/:provider/checkout')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Initialize a hosted checkout session for Paystack, Flutterwave, or Hubtel.',
+    summary:
+      'Initialize a hosted checkout session for Paystack, Flutterwave, or Hubtel.',
   })
   async initiateCheckout(
     @Param('provider') provider: string,

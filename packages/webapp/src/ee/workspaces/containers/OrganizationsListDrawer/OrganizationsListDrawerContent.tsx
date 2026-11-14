@@ -57,7 +57,10 @@ const organizationsDrawerCreateBtnCss = css`
 
   &:hover {
     color: var(--color-surface-text, #1c2127) !important;
-    background: var(--color-surface-hover-bg, rgba(15, 23, 42, 0.06)) !important;
+    background: var(
+      --color-surface-hover-bg,
+      rgba(15, 23, 42, 0.06)
+    ) !important;
   }
 `;
 

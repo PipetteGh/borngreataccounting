@@ -194,7 +194,10 @@ function SidebarHeadJSX({
                     {firstLettersArgs(...(metadata?.name || '').split(' '))}
                   </x.div>
                 )}
-                <x.div fontWeight={600} color="var(--color-surface-text, #1c2127)">
+                <x.div
+                  fontWeight={600}
+                  color="var(--color-surface-text, #1c2127)"
+                >
                   {metadata?.name}
                 </x.div>
               </x.div>

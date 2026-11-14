@@ -14,7 +14,13 @@ import {
   Tag,
 } from '@blueprintjs/core';
 import axios from 'axios';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppToaster } from '@/components';
 import { useAuthOrganizationId, useAuthToken } from '@/hooks/state';
@@ -295,7 +301,9 @@ export function POSPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | ''>('');
   const [depositAccountId, setDepositAccountId] = useState<number | ''>('');
   const [selectedBranchId, setSelectedBranchId] = useState<number | ''>('');
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | ''>('');
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | ''>(
+    '',
+  );
   const [paymentMethod, setPaymentMethod] = useState<
     'cash' | 'card' | 'mobile_money' | 'paystack' | 'flutterwave' | 'hubtel'
   >('cash');
@@ -405,7 +413,10 @@ export function POSPage() {
           .sort((a, b) => {
             const rank = (t?: string) =>
               t === 'cash' ? 0 : t === 'bank' ? 1 : 2;
-            return rank(a.accountType?.toLowerCase()) - rank(b.accountType?.toLowerCase());
+            return (
+              rank(a.accountType?.toLowerCase()) -
+              rank(b.accountType?.toLowerCase())
+            );
           });
         const usable = depositCandidates.length > 0 ? depositCandidates : list;
         setAccounts(usable);
@@ -496,7 +507,11 @@ export function POSPage() {
   const filteredItems = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return items.filter((it) => {
-      if (inStockOnly && it.type === 'inventory' && (it.quantityOnHand ?? 0) <= 0) {
+      if (
+        inStockOnly &&
+        it.type === 'inventory' &&
+        (it.quantityOnHand ?? 0) <= 0
+      ) {
         return false;
       }
       if (
@@ -524,7 +539,11 @@ export function POSPage() {
     }
 
     const existing = cart.find((line) => line.item.id === item.id);
-    if (existing && item.type === 'inventory' && existing.quantity + 1 > stock) {
+    if (
+      existing &&
+      item.type === 'inventory' &&
+      existing.quantity + 1 > stock
+    ) {
       AppToaster.show({
         intent: Intent.WARNING,
         message: `Only ${stock} unit(s) of ${item.name} available in inventory.`,
@@ -621,8 +640,7 @@ export function POSPage() {
   };
 
   const subtotal = useMemo(
-    () =>
-      cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0),
+    () => cart.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0),
     [cart],
   );
 
@@ -638,7 +656,9 @@ export function POSPage() {
 
   const taxAmount = useMemo(() => {
     const taxable = Math.max(0, subtotal - discountAmount);
-    return activeTaxRate ? (taxable * Number(activeTaxRate.rate || 0)) / 100 : 0;
+    return activeTaxRate
+      ? (taxable * Number(activeTaxRate.rate || 0)) / 100
+      : 0;
   }, [subtotal, discountAmount, activeTaxRate]);
 
   const grandTotal = useMemo(
@@ -656,8 +676,7 @@ export function POSPage() {
   }, [paymentMethod, amountTendered, grandTotal]);
 
   const selectedGateway = useMemo(
-    () =>
-      gateways.find((g) => g.provider === paymentMethod) || null,
+    () => gateways.find((g) => g.provider === paymentMethod) || null,
     [gateways, paymentMethod],
   );
 
@@ -700,7 +719,9 @@ export function POSPage() {
         customer_id: Number(selectedCustomerId),
         deposit_account_id: Number(depositAccountId),
         ...(selectedBranchId ? { branch_id: Number(selectedBranchId) } : {}),
-        ...(selectedWarehouseId ? { warehouse_id: Number(selectedWarehouseId) } : {}),
+        ...(selectedWarehouseId
+          ? { warehouse_id: Number(selectedWarehouseId) }
+          : {}),
         receipt_date: today,
         closed: true,
         reference_no:
@@ -736,13 +757,15 @@ export function POSPage() {
             {
               amount: Number(grandTotal.toFixed(2)),
               currency: baseCurrency,
-              customer_email: customerObj?.email || 'pos-customer@borngreat.local',
+              customer_email:
+                customerObj?.email || 'pos-customer@borngreat.local',
               customer_name: customerObj?.displayName || 'Walk-in Customer',
               reference: receiptPayload.reference_no,
               description: `POS Sale ${receiptPayload.reference_no}`,
             },
           );
-          checkoutUrl = gwRes.data?.authorization_url || gwRes.data?.authorizationUrl;
+          checkoutUrl =
+            gwRes.data?.authorization_url || gwRes.data?.authorizationUrl;
         } catch {
           // Receipt was still recorded in accounting & inventory
         }
@@ -945,7 +968,13 @@ export function POSPage() {
             }}
           >
             {loading ? (
-              <div style={{ gridColumn: '1 / -1', padding: 40, textAlign: 'center' }}>
+              <div
+                style={{
+                  gridColumn: '1 / -1',
+                  padding: 40,
+                  textAlign: 'center',
+                }}
+              >
                 <Spinner size={30} />
               </div>
             ) : filteredItems.length === 0 ? (
@@ -1062,7 +1091,9 @@ export function POSPage() {
           }}
         >
           {/* Customer & Deposit Account */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}
+          >
             <FormGroup
               label="Customer"
               style={{ marginBottom: 0 }}
@@ -1078,7 +1109,8 @@ export function POSPage() {
                   }}
                   onClick={createWalkInCustomer}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') createWalkInCustomer();
+                    if (e.key === 'Enter' || e.key === ' ')
+                      createWalkInCustomer();
                   }}
                 >
                   + Walk-in
@@ -1167,7 +1199,9 @@ export function POSPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div
+                    style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                  >
                     <Button
                       small
                       minimal
@@ -1203,10 +1237,7 @@ export function POSPage() {
                       fontSize: 13,
                     }}
                   >
-                    {formatMoney(
-                      line.quantity * line.unitPrice,
-                      baseCurrency,
-                    )}
+                    {formatMoney(line.quantity * line.unitPrice, baseCurrency)}
                   </div>
                 </div>
               ))
@@ -1216,14 +1247,18 @@ export function POSPage() {
           <Divider style={{ margin: '4px 0' }} />
 
           {/* Discount, Tax & Payment Method */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}
+          >
             <FormGroup label="Discount (%)" style={{ marginBottom: 0 }}>
               <NumericInput
                 fill
                 min={0}
                 max={100}
                 value={discountPercent}
-                onValueChange={(v) => setDiscountPercent(Number.isFinite(v) ? v : 0)}
+                onValueChange={(v) =>
+                  setDiscountPercent(Number.isFinite(v) ? v : 0)
+                }
               />
             </FormGroup>
 
@@ -1232,9 +1267,7 @@ export function POSPage() {
                 fill
                 value={selectedTaxId}
                 onChange={(e) =>
-                  setSelectedTaxId(
-                    e.target.value ? Number(e.target.value) : '',
-                  )
+                  setSelectedTaxId(e.target.value ? Number(e.target.value) : '')
                 }
               >
                 <option value="">No Tax</option>
@@ -1247,7 +1280,9 @@ export function POSPage() {
             </FormGroup>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div
+            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}
+          >
             <FormGroup label="Payment Method" style={{ marginBottom: 0 }}>
               <HTMLSelect
                 fill
@@ -1258,7 +1293,9 @@ export function POSPage() {
                 <option value="card">Card / Bank POS</option>
                 <option value="mobile_money">Mobile Money (Manual)</option>
                 <option value="paystack">Paystack (Cards & MoMo)</option>
-                <option value="flutterwave">Flutterwave (Africa & Global)</option>
+                <option value="flutterwave">
+                  Flutterwave (Africa & Global)
+                </option>
                 <option value="hubtel">Hubtel (Ghana MoMo & GhQR)</option>
               </HTMLSelect>
             </FormGroup>
@@ -1421,7 +1458,9 @@ export function POSPage() {
                 {orgInfo.phone && (
                   <div style={{ fontSize: 10.5 }}>Tel: {orgInfo.phone}</div>
                 )}
-                <div style={{ fontWeight: 700, marginTop: 4 }}>SALES RECEIPT</div>
+                <div style={{ fontWeight: 700, marginTop: 4 }}>
+                  SALES RECEIPT
+                </div>
               </div>
 
               <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
@@ -1470,20 +1509,29 @@ export function POSPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal</span>
-                <span>{formatMoney(completedReceipt.subtotal, baseCurrency)}</span>
+                <span>
+                  {formatMoney(completedReceipt.subtotal, baseCurrency)}
+                </span>
               </div>
               {completedReceipt.discountAmount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
                   <span>Discount</span>
                   <span>
-                    -{formatMoney(completedReceipt.discountAmount, baseCurrency)}
+                    -
+                    {formatMoney(completedReceipt.discountAmount, baseCurrency)}
                   </span>
                 </div>
               )}
               {completedReceipt.taxAmount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
                   <span>Tax</span>
-                  <span>{formatMoney(completedReceipt.taxAmount, baseCurrency)}</span>
+                  <span>
+                    {formatMoney(completedReceipt.taxAmount, baseCurrency)}
+                  </span>
                 </div>
               )}
 
@@ -1508,14 +1556,20 @@ export function POSPage() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Change Due</span>
-                <span>{formatMoney(completedReceipt.changeDue, baseCurrency)}</span>
+                <span>
+                  {formatMoney(completedReceipt.changeDue, baseCurrency)}
+                </span>
               </div>
 
               <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
 
               <div style={{ textAlign: 'center', marginTop: 6, fontSize: 11 }}>
-                <div style={{ fontWeight: 700 }}>THANK YOU FOR YOUR BUSINESS!</div>
-                <div style={{ fontSize: 10 }}>Powered by BorngreatAccounting POS</div>
+                <div style={{ fontWeight: 700 }}>
+                  THANK YOU FOR YOUR BUSINESS!
+                </div>
+                <div style={{ fontSize: 10 }}>
+                  Powered by BorngreatAccounting POS
+                </div>
               </div>
             </div>
 

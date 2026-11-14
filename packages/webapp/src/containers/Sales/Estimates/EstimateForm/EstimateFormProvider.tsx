@@ -68,7 +68,9 @@ interface EstimateFormContextValue {
   saleEstimateState: UseGetSaleEstimatesStateResult['data'];
   isSaleEstimateStateLoading: boolean;
 
-  estimatesSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
+  estimatesSettings:
+    | import('@borngreataccounting/sdk-ts').SettingsGroup
+    | undefined;
 
   isBootLoading: boolean;
 }

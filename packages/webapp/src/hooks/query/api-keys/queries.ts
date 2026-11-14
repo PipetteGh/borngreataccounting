@@ -1,4 +1,8 @@
-import { fetchApiKeys, generateApiKey, revokeApiKey } from '@borngreataccounting/sdk-ts';
+import {
+  fetchApiKeys,
+  generateApiKey,
+  revokeApiKey,
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,

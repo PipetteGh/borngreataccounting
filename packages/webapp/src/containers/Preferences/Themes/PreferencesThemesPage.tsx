@@ -95,10 +95,7 @@ function PreferencesThemesPageRoot({
 
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <ButtonGroup>
-            <Button
-              active={filter === 'all'}
-              onClick={() => setFilter('all')}
-            >
+            <Button active={filter === 'all'} onClick={() => setFilter('all')}>
               All ({APP_THEMES.length})
             </Button>
             <Button

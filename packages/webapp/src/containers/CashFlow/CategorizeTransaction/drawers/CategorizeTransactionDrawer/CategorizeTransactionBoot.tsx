@@ -1,7 +1,10 @@
 import { first } from 'lodash';
 import React, { useMemo } from 'react';
 import type { GetAutofillCategorizeTransaction } from '@/hooks/query/banking';
-import type { AccountsList, BranchesListResponse } from '@borngreataccounting/sdk-ts';
+import type {
+  AccountsList,
+  BranchesListResponse,
+} from '@borngreataccounting/sdk-ts';
 import { DrawerLoading } from '@/components';
 import { Features } from '@/constants';
 import { useAccounts, useBranches } from '@/hooks/query';

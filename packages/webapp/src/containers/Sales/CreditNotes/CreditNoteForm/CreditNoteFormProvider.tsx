@@ -57,7 +57,9 @@ type CreditNoteFormContextValue = {
   isWarehousesSuccess: boolean;
   isBrandingTemplatesLoading: boolean;
   isCreditNoteStateLoading: boolean;
-  creditNoteSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
+  creditNoteSettings:
+    | import('@borngreataccounting/sdk-ts').SettingsGroup
+    | undefined;
   isBootLoading: boolean;
 
   createCreditNoteMutate: (values: CreateCreditNoteBody) => Promise<void>;

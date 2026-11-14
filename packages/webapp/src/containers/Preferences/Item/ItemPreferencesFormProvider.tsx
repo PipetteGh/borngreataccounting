@@ -4,7 +4,10 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 import { PreferencesPageLoader } from '../PreferencesPageLoader';
 import type { Account, User } from '@borngreataccounting/sdk-ts';
-import type { SaveSettingsBody, SettingsGroup } from '@borngreataccounting/sdk-ts';
+import type {
+  SaveSettingsBody,
+  SettingsGroup,
+} from '@borngreataccounting/sdk-ts';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import {

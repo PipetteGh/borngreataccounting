@@ -52,7 +52,10 @@ export const PreferencesBrandingForm = ({
   // Handle the form submitting.
   const handleSubmit = async (
     values: PreferencesBrandingFormValues,
-    { setSubmitting, setFieldValue }: FormikHelpers<PreferencesBrandingFormValues>,
+    {
+      setSubmitting,
+      setFieldValue,
+    }: FormikHelpers<PreferencesBrandingFormValues>,
   ) => {
     const _values = { ...values };
 

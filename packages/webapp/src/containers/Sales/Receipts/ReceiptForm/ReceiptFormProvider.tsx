@@ -52,7 +52,9 @@ type ReceiptFormContextValue = {
   isBranchesLoading: boolean;
   isFeatureLoading: boolean;
   isSettingLoading: boolean;
-  receiptSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
+  receiptSettings:
+    | import('@borngreataccounting/sdk-ts').SettingsGroup
+    | undefined;
   isBranchesSuccess: boolean;
   isWarehousesSuccess: boolean;
 

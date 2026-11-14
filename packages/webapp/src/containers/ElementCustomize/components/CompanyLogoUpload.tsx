@@ -81,8 +81,7 @@ export function CompanyLogoUpload({
       onReject={() =>
         AppToaster.show({
           intent: Intent.WARNING,
-          message:
-            'Please upload a valid PNG or JPG/JPEG image under 5MB.',
+          message: 'Please upload a valid PNG or JPG/JPEG image under 5MB.',
         })
       }
       maxSize={5 * 1024 ** 2}

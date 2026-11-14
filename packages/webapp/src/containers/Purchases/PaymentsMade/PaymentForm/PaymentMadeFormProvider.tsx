@@ -69,7 +69,9 @@ interface PaymentMadeFormContextValue {
   isExcessConfirmed: boolean;
   setIsExcessConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
 
-  billPaymentSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
+  billPaymentSettings:
+    | import('@borngreataccounting/sdk-ts').SettingsGroup
+    | undefined;
 }
 
 type PaymentMadeFormProviderProps = {

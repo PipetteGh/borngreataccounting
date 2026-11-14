@@ -1,5 +1,8 @@
 import React from 'react';
-import type { Account, AccountTransactionsList } from '@borngreataccounting/sdk-ts';
+import type {
+  Account,
+  AccountTransactionsList,
+} from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useAccount, useAccountTransactions } from '@/hooks/query';

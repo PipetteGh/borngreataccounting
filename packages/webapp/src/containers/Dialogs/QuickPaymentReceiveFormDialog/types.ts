@@ -1,5 +1,9 @@
 import type { useCreatePaymentReceive } from '@/hooks/query';
-import type { Account, Branch, SettingsGroup } from '@borngreataccounting/sdk-ts';
+import type {
+  Account,
+  Branch,
+  SettingsGroup,
+} from '@borngreataccounting/sdk-ts';
 
 /** Quick payment receive invoice (loose shape: form code reads camelCase fields). */
 export interface QuickPaymentReceiveInvoice {

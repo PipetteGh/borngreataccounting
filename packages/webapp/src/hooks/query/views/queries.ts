@@ -1,4 +1,7 @@
-import { fetchResourceView, fetchResourceMeta } from '@borngreataccounting/sdk-ts';
+import {
+  fetchResourceView,
+  fetchResourceMeta,
+} from '@borngreataccounting/sdk-ts';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { viewsKeys } from './query-keys';

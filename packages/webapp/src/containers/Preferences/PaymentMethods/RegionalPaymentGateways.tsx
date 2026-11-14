@@ -208,8 +208,12 @@ export function RegionalPaymentGateways() {
       <h4 style={{ marginBottom: 6 }}>
         African &amp; Mobile Money Gateways (Paystack, Flutterwave &amp; Hubtel)
       </h4>
-      <Text className={Classes.TEXT_MUTED} style={{ marginBottom: 14, display: 'block' }}>
-        Connect regional card and Mobile Money payment providers to accept online invoice payments.
+      <Text
+        className={Classes.TEXT_MUTED}
+        style={{ marginBottom: 14, display: 'block' }}
+      >
+        Connect regional card and Mobile Money payment providers to accept
+        online invoice payments.
       </Text>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -226,7 +230,14 @@ export function RegionalPaymentGateways() {
                 }}
               >
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      marginBottom: 6,
+                    }}
+                  >
                     <span
                       style={{
                         width: 10,
@@ -254,7 +265,10 @@ export function RegionalPaymentGateways() {
                       </Tag>
                     )}
                   </div>
-                  <Text className={Classes.TEXT_MUTED} style={{ display: 'block', marginBottom: 8 }}>
+                  <Text
+                    className={Classes.TEXT_MUTED}
+                    style={{ display: 'block', marginBottom: 8 }}
+                  >
                     {meta.tagline}
                   </Text>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -290,7 +304,9 @@ export function RegionalPaymentGateways() {
       <Dialog
         isOpen={Boolean(editing)}
         onClose={() => setEditing(null)}
-        title={editing ? `Configure ${editing.displayName}` : 'Configure Gateway'}
+        title={
+          editing ? `Configure ${editing.displayName}` : 'Configure Gateway'
+        }
       >
         {editing && (
           <form onSubmit={handleSave}>
@@ -318,7 +334,10 @@ export function RegionalPaymentGateways() {
 
               {editing.provider === 'hubtel' ? (
                 <>
-                  <FormGroup label="Hubtel Client ID (API ID)" labelFor="hubtel-client-id">
+                  <FormGroup
+                    label="Hubtel Client ID (API ID)"
+                    labelFor="hubtel-client-id"
+                  >
                     <InputGroup
                       id="hubtel-client-id"
                       required

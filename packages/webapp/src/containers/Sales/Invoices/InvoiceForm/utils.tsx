@@ -8,7 +8,10 @@ import intl from 'react-intl-universal';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import type { Batch } from '@/ee/batches/hooks/query/queries';
 import type { ItemEntryBatchAllocation } from '@/interfaces/ItemEntries';
-import type { SaleInvoice, CreateSaleInvoiceBody } from '@borngreataccounting/sdk-ts';
+import type {
+  SaleInvoice,
+  CreateSaleInvoiceBody,
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { ERROR } from '@/constants/errors';
 import {

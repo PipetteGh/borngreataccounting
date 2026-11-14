@@ -23,7 +23,10 @@ import {
   transformFormValuesToRequest,
 } from './utils';
 import type { ExpenseErrorResponse, ExpenseFormValues } from './types';
-import type { CreateExpenseBody, EditExpenseBody } from '@borngreataccounting/sdk-ts';
+import type {
+  CreateExpenseBody,
+  EditExpenseBody,
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, Box } from '@/components';
 import { PageForm } from '@/components/PageForm';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';

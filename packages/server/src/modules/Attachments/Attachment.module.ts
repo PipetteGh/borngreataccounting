@@ -74,7 +74,11 @@ const models = [
 
         return {
           storage: {
-            _handleFile(req: any, file: any, cb: (error: any, info?: any) => void) {
+            _handleFile(
+              req: any,
+              file: any,
+              cb: (error: any, info?: any) => void,
+            ) {
               const chunks: Buffer[] = [];
               file.stream.on('data', (chunk: Buffer) => chunks.push(chunk));
               file.stream.on('error', (err: any) => cb(err));
@@ -120,7 +124,11 @@ const models = [
                 }
               });
             },
-            _removeFile(req: any, file: any, cb: (error: Error | null) => void) {
+            _removeFile(
+              req: any,
+              file: any,
+              cb: (error: Error | null) => void,
+            ) {
               if (file?.key) {
                 storageService
                   .deleteLocalFile(file.key)

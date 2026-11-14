@@ -32,7 +32,8 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'light',
     name: 'Borngreat Classic Light',
-    description: 'Crisp white workspace & light sidebar with royal blue accents.',
+    description:
+      'Crisp white workspace & light sidebar with royal blue accents.',
     isDark: false,
     preview: {
       sidebar: '#ffffff',
@@ -164,7 +165,8 @@ export const APP_THEMES: AppThemeDefinition[] = [
   {
     id: 'slate',
     name: 'Monochrome Slate',
-    description: 'Minimalist neutral light theme & sidebar with graphite accents.',
+    description:
+      'Minimalist neutral light theme & sidebar with graphite accents.',
     isDark: false,
     preview: {
       sidebar: '#fafafa',
@@ -175,7 +177,9 @@ export const APP_THEMES: AppThemeDefinition[] = [
   },
 ];
 
-export function getThemeDefinition(themeId?: string | null): AppThemeDefinition {
+export function getThemeDefinition(
+  themeId?: string | null,
+): AppThemeDefinition {
   const found = APP_THEMES.find((t) => t.id === themeId);
   return found ?? APP_THEMES[0];
 }

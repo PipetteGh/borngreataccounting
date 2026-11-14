@@ -12,7 +12,10 @@ import {
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { inviteKeys } from './query-keys';
-import type { AcceptInviteBody, BulkInviteBody } from '@borngreataccounting/sdk-ts';
+import type {
+  AcceptInviteBody,
+  BulkInviteBody,
+} from '@borngreataccounting/sdk-ts';
 
 export function useAuthInviteAccept(
   props?: UseMutationOptions<unknown, Error, [Record<string, unknown>, string]>,

@@ -166,9 +166,13 @@ export class PaymentGatewaysService {
           ? Boolean(input.testMode)
           : Boolean(prevOptions.testMode),
       publicKey:
-        input.publicKey !== undefined ? input.publicKey.trim() : prevOptions.publicKey,
+        input.publicKey !== undefined
+          ? input.publicKey.trim()
+          : prevOptions.publicKey,
       clientId:
-        input.clientId !== undefined ? input.clientId.trim() : prevOptions.clientId,
+        input.clientId !== undefined
+          ? input.clientId.trim()
+          : prevOptions.clientId,
       merchantAccountNumber:
         input.merchantAccountNumber !== undefined
           ? input.merchantAccountNumber.trim()
@@ -218,18 +222,20 @@ export class PaymentGatewaysService {
           options: nextOptions,
         });
     } else {
-      await this.paymentIntegrationModel().query().insert({
-        name: meta.displayName,
-        service: meta.serviceName,
-        paymentEnabled,
-        payoutEnabled: paymentEnabled,
-        accountId:
-          nextOptions.merchantAccountNumber ||
-          nextOptions.publicKey ||
-          nextOptions.clientId ||
-          provider,
-        options: nextOptions,
-      });
+      await this.paymentIntegrationModel()
+        .query()
+        .insert({
+          name: meta.displayName,
+          service: meta.serviceName,
+          paymentEnabled,
+          payoutEnabled: paymentEnabled,
+          accountId:
+            nextOptions.merchantAccountNumber ||
+            nextOptions.publicKey ||
+            nextOptions.clientId ||
+            provider,
+          options: nextOptions,
+        });
     }
 
     const all = await this.getGatewaysState();
@@ -272,7 +278,9 @@ export class PaymentGatewaysService {
     const reference = payload.reference || `BGA-${randomUUID().slice(0, 12)}`;
     const amount = Number(payload.amount);
     if (!Number.isFinite(amount) || amount <= 0) {
-      throw new BadRequestException('Payment amount must be greater than zero.');
+      throw new BadRequestException(
+        'Payment amount must be greater than zero.',
+      );
     }
 
     if (provider === 'paystack') {
