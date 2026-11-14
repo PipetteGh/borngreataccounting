@@ -16,7 +16,7 @@ export const SERVER_BRAND_CONFIG = {
   githubOrg: 'soluotech',
   repositoryUrl:
     process.env.REPOSITORY_URL ||
-    'https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative',
+    'https://github.com/PipetteGh/borngreataccounting',
   version: process.env.APP_VERSION || '1.0.0',
   license: 'AGPL-3.0',
   upstreamAttribution:

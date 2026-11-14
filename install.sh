@@ -2,7 +2,8 @@
 # ==============================================================================
 # BorngreatAccounting (BtAccounting) — Automated Linux / macOS Installer
 # Your Accounting. Your Servers. Your Control.
-# Developer & Publisher: Peter Borngreat-Mensah (Borngreat)
+# Automatically installs missing dependencies (Docker, Compose, OpenSSL, Git,
+# curl) from official OS repositories before launching the stack.
 # ==============================================================================
 set -euo pipefail
 
@@ -15,10 +16,43 @@ echo "  BorngreatAccounting (BtAccounting) — Production Installer"
 echo "  Your Accounting. Your Servers. Your Control."
 echo "======================================================================"
 
+SUDO=""
+if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
+  SUDO="sudo"
+fi
+
+install_system_packages() {
+  if command -v apt-get >/dev/null 2>&1; then
+    ${SUDO} apt-get update -y
+    ${SUDO} apt-get install -y "$@"
+  elif command -v dnf >/dev/null 2>&1; then
+    ${SUDO} dnf install -y "$@"
+  elif command -v yum >/dev/null 2>&1; then
+    ${SUDO} yum install -y "$@"
+  elif command -v pacman >/dev/null 2>&1; then
+    ${SUDO} pacman -Sy --noconfirm "$@"
+  elif command -v apk >/dev/null 2>&1; then
+    ${SUDO} apk add --no-cache "$@"
+  elif command -v brew >/dev/null 2>&1; then
+    brew install "$@"
+  fi
+}
+
+# Ensure curl, openssl, git are installed
+for pkg in curl openssl git; do
+  if ! command -v "${pkg}" >/dev/null 2>&1; then
+    echo "[Dependencies] Installing missing package: ${pkg}..."
+    install_system_packages "${pkg}"
+  fi
+done
+
+# Ensure Docker Engine & Docker Compose are installed from official sources
 if ! command -v docker >/dev/null 2>&1; then
-  echo "[ERROR] Docker is not installed. Please install Docker Engine 24+ first."
-  echo "        See docs/DOCKER-DEPLOYMENT.md for instructions."
-  exit 1
+  echo "[Dependencies] Docker not found. Installing Docker Engine from official get.docker.com script..."
+  curl -fsSL https://get.docker.com | ${SUDO} sh
+  if command -v systemctl >/dev/null 2>&1; then
+    ${SUDO} systemctl enable --now docker || true
+  fi
 fi
 
 if docker compose version >/dev/null 2>&1; then
@@ -26,8 +60,13 @@ if docker compose version >/dev/null 2>&1; then
 elif command -v docker-compose >/dev/null 2>&1; then
   COMPOSE_CMD="docker-compose"
 else
-  echo "[ERROR] Docker Compose v2 is required."
-  exit 1
+  echo "[Dependencies] Installing docker-compose-plugin..."
+  install_system_packages docker-compose-plugin || install_system_packages docker-compose
+  if docker compose version >/dev/null 2>&1; then
+    COMPOSE_CMD="docker compose"
+  else
+    COMPOSE_CMD="docker-compose"
+  fi
 fi
 
 generate_secret() {

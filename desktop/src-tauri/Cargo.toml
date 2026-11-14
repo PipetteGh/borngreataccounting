@@ -4,7 +4,7 @@ version = "1.0.0"
 description = "BorngreatAccounting (BtAccounting) Desktop Runtime Manager"
 authors = ["Peter Borngreat-Mensah"]
 license = "AGPL-3.0"
-repository = "https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative"
+repository = "https://github.com/PipetteGh/borngreataccounting"
 edition = "2021"
 
 [build-dependencies]

@@ -1,5 +1,5 @@
-﻿# ==============================================================================
-# BorngreatAccounting (BtAccounting) — Automated Safe Upgrade Script (Windows)
+# ==============================================================================
+# BorngreatAccounting (BtAccounting) -- Automated Safe Upgrade Script (Windows)
 # Performs pre-upgrade backup, pulls latest images, runs migrations, and restarts
 # ==============================================================================
 param(
@@ -10,7 +10,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "======================================================================" -ForegroundColor Cyan
-Write-Host "  BorngreatAccounting — Windows Safe Upgrade" -ForegroundColor Cyan
+Write-Host "  BorngreatAccounting -- Windows Safe Upgrade" -ForegroundColor Cyan
 Write-Host "======================================================================" -ForegroundColor Cyan
 
 Write-Host "[1/4] Running pre-upgrade backup..." -ForegroundColor Yellow

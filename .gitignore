@@ -14,5 +14,6 @@ e2e/.auth/
 
 # Local database backups
 /backups/
+/.runtime/
 
 .pnpm-store

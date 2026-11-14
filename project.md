@@ -30,7 +30,7 @@ Do not blindly copy files without understanding their purpose.
 
 All customized source code must be maintained in this repository:
 
-https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git
+https://github.com/PipetteGh/borngreataccounting.git
 
 This is the primary repository for the entire BorngreatAccounting project.
 
@@ -68,7 +68,7 @@ Developer/Publisher: Peter Borngreat-Mensah
 GitHub organization/account: soluotech
 
 Official source repository:
-https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative
+https://github.com/PipetteGh/borngreataccounting
 
 The application must have a consistent brand identity throughout.
 
@@ -373,9 +373,9 @@ Never store critical business data exclusively inside disposable container files
 
 A new user should be able to deploy using:
 
-git clone https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative.git
+git clone https://github.com/PipetteGh/borngreataccounting.git
 
-cd Borngreat-Accounting---QuickBooks-Alternative
+cd borngreataccounting
 
 cp .env.example .env
 
@@ -700,7 +700,7 @@ Publisher: Borngreat
 Version: Dynamically displayed application version.
 
 Source repository:
-https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative
+https://github.com/PipetteGh/borngreataccounting
 
 License and third-party attribution information.
 
@@ -956,7 +956,7 @@ The project is not complete until the following deliverables exist or any unavai
 
 The final GitHub repository must be:
 
-https://github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative
+https://github.com/PipetteGh/borngreataccounting
 
 ---
 

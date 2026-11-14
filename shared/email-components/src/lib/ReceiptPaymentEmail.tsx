@@ -81,92 +81,92 @@ export const ReceiptEmailTemplate: React.FC<
   // # Items
   items = [{ label: 'Swaniawski Muller', quantity: '1', rate: '$1,000.00' }],
 }) => {
-  return (
-    <EmailTemplateLayout preview={preview}>
-      <EmailTemplate>
-        {companyLogoUri && <EmailTemplate.CompanyLogo src={companyLogoUri} />}
+    return (
+      <EmailTemplateLayout preview={preview}>
+        <EmailTemplate>
+          {companyLogoUri && <EmailTemplate.CompanyLogo src={companyLogoUri} />}
 
-        <Section style={headerInfoStyle}>
-          <Row>
-            <Heading style={invoiceCompanyNameStyle}>{companyName}</Heading>
-          </Row>
+          <Section style={headerInfoStyle}>
+            <Row>
+              <Heading style={invoiceCompanyNameStyle}>{companyName}</Heading>
+            </Row>
 
-          <Row>
-            <Text style={amountStyle}>{total}</Text>
-          </Row>
+            <Row>
+              <Text style={amountStyle}>{total}</Text>
+            </Row>
 
-          <Row>
-            <Text style={receiptNumberStyle}>
-              {receiptNumberLabel?.replace('{receiptNumber}', receiptNumber)}
-            </Text>
-          </Row>
-        </Section>
+            <Row>
+              <Text style={receiptNumberStyle}>
+                {receiptNumberLabel?.replace('{receiptNumber}', receiptNumber)}
+              </Text>
+            </Row>
+          </Section>
 
-        <Text style={messageStyle}>{message}</Text>
+          <Text style={messageStyle}>{message}</Text>
 
-        <Section style={totalsSectionStyle}>
-          {items.map((item, index) => (
-            <Row key={index} style={itemLineRowStyle}>
+          <Section style={totalsSectionStyle}>
+            {items.map((item, index) => (
+              <Row key={index} style={itemLineRowStyle}>
+                <Column width={'50%'}>
+                  <Text style={listItemLabelStyle}>{item.label}</Text>
+                </Column>
+
+                <Column width={'50%'}>
+                  <Text style={listItemAmountStyle}>
+                    {item.quantity} x {item.rate}
+                  </Text>
+                </Column>
+              </Row>
+            ))}
+
+            <Row style={totalLineRowStyle}>
               <Column width={'50%'}>
-                <Text style={listItemLabelStyle}>{item.label}</Text>
+                <Text style={dueAmountLineItemLabelStyle}>{subtotalLabel}</Text>
               </Column>
 
               <Column width={'50%'}>
-                <Text style={listItemAmountStyle}>
-                  {item.quantity} x {item.rate}
-                </Text>
+                <Text style={dueAmountLineItemAmountStyle}>{subtotal}</Text>
               </Column>
             </Row>
-          ))}
 
-          <Row style={totalLineRowStyle}>
-            <Column width={'50%'}>
-              <Text style={dueAmountLineItemLabelStyle}>{subtotalLabel}</Text>
-            </Column>
+            {!isEmpty(discount) && (
+              <Row style={itemLineRowStyle}>
+                <Column width={'50%'}>
+                  <Text style={listItemLabelStyle}>{discountLabel}</Text>
+                </Column>
 
-            <Column width={'50%'}>
-              <Text style={dueAmountLineItemAmountStyle}>{subtotal}</Text>
-            </Column>
-          </Row>
+                <Column width={'50%'}>
+                  <Text style={listItemAmountStyle}>{discount}</Text>
+                </Column>
+              </Row>
+            )}
 
-          {!isEmpty(discount) && (
-            <Row style={itemLineRowStyle}>
+            {!isEmpty(adjustment) && (
+              <Row style={itemLineRowStyle}>
+                <Column width={'50%'}>
+                  <Text style={listItemLabelStyle}>{adjustmentLabel}</Text>
+                </Column>
+
+                <Column width={'50%'}>
+                  <Text style={listItemAmountStyle}>{adjustment}</Text>
+                </Column>
+              </Row>
+            )}
+
+            <Row style={totalLineRowStyle}>
               <Column width={'50%'}>
-                <Text style={listItemLabelStyle}>{discountLabel}</Text>
+                <Text style={totalLineItemLabelStyle}>{totalLabel}</Text>
               </Column>
 
               <Column width={'50%'}>
-                <Text style={listItemAmountStyle}>{discount}</Text>
+                <Text style={totalLineItemAmountStyle}>{total}</Text>
               </Column>
             </Row>
-          )}
-
-          {!isEmpty(adjustment) && (
-            <Row style={itemLineRowStyle}>
-              <Column width={'50%'}>
-                <Text style={listItemLabelStyle}>{adjustmentLabel}</Text>
-              </Column>
-
-              <Column width={'50%'}>
-                <Text style={listItemAmountStyle}>{adjustment}</Text>
-              </Column>
-            </Row>
-          )}
-
-          <Row style={totalLineRowStyle}>
-            <Column width={'50%'}>
-              <Text style={totalLineItemLabelStyle}>{totalLabel}</Text>
-            </Column>
-
-            <Column width={'50%'}>
-              <Text style={totalLineItemAmountStyle}>{total}</Text>
-            </Column>
-          </Row>
-        </Section>
-      </EmailTemplate>
-    </EmailTemplateLayout>
-  );
-};
+          </Section>
+        </EmailTemplate>
+      </EmailTemplateLayout>
+    );
+  };
 
 /**
  * Renders the sale receipt mail template to string

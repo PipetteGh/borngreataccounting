@@ -4,8 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 [assembly: AssemblyTitle("BorngreatAccounting Setup & Desktop Control Center")]
@@ -23,18 +23,18 @@ namespace BorngreatAccountingDesktop
     {
         private TextBox logBox;
         private Label statusLabel;
-        private string workDir;
+        private string repoRoot;
 
         public MainForm()
         {
             this.Text = "BorngreatAccounting (BtAccounting v1.0.0) — Setup & Control Center";
-            this.Size = new Size(860, 600);
+            this.Size = new Size(920, 620);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(15, 23, 42);
             this.ForeColor = Color.White;
             this.Font = new Font("Segoe UI", 9.5f, FontStyle.Regular);
 
-            workDir = AppDomain.CurrentDomain.BaseDirectory;
+            repoRoot = ResolveRepositoryRoot();
 
             Panel headerPanel = new Panel
             {
@@ -74,22 +74,22 @@ namespace BorngreatAccountingDesktop
             };
 
             Button btnInstall = CreateButton("1. Initialize / Install", Color.FromArgb(30, 94, 255));
-            btnInstall.Click += (s, e) => InitializeEnvironment();
+            btnInstall.Click += (s, e) => RunRuntimeActionAsync("install");
 
             Button btnStart = CreateButton("2. Start Services", Color.FromArgb(16, 185, 129));
-            btnStart.Click += (s, e) => RunDockerCompose("up -d");
+            btnStart.Click += (s, e) => RunRuntimeActionAsync("start");
 
             Button btnStop = CreateButton("Stop Services", Color.FromArgb(71, 85, 105));
-            btnStop.Click += (s, e) => RunDockerCompose("down");
+            btnStop.Click += (s, e) => RunRuntimeActionAsync("stop");
 
             Button btnStatus = CreateButton("Check Status", Color.FromArgb(71, 85, 105));
-            btnStatus.Click += (s, e) => RunDockerCompose("ps");
+            btnStatus.Click += (s, e) => RunRuntimeActionAsync("status");
 
             Button btnBackup = CreateButton("Run Backup", Color.FromArgb(245, 158, 11));
-            btnBackup.Click += (s, e) => RunPowerShellScript("backup.ps1");
+            btnBackup.Click += (s, e) => RunRuntimeActionAsync("backup");
 
-            Button btnOpenWeb = CreateButton("Open Dashboard (http://localhost)", Color.FromArgb(30, 94, 255));
-            btnOpenWeb.Click += (s, e) => Process.Start("http://localhost");
+            Button btnOpenWeb = CreateButton("Open Dashboard (http://localhost:4100)", Color.FromArgb(30, 94, 255));
+            btnOpenWeb.Click += (s, e) => Process.Start("http://localhost:4100");
 
             actionPanel.Controls.AddRange(new Control[] {
                 btnInstall, btnStart, btnStop, btnStatus, btnBackup, btnOpenWeb
@@ -99,7 +99,7 @@ namespace BorngreatAccountingDesktop
             {
                 Dock = DockStyle.Bottom,
                 Height = 28,
-                Text = "  Ready  |  License: GNU AGPL-3.0  |  Repository: github.com/PipetteGh/Borngreat-Accounting---QuickBooks-Alternative",
+                Text = "  Ready  |  License: GNU AGPL-3.0  |  Repository: github.com/PipetteGh/borngreataccounting",
                 BackColor = Color.FromArgb(15, 23, 42),
                 ForeColor = Color.FromArgb(148, 163, 184),
                 TextAlign = ContentAlignment.MiddleLeft
@@ -123,8 +123,30 @@ namespace BorngreatAccountingDesktop
             this.Controls.Add(statusLabel);
 
             AppendLog("BorngreatAccounting (BtAccounting) v1.0.0 Desktop Control Center initialized.");
-            AppendLog("Working directory: " + workDir);
-            AppendLog("Click '1. Initialize / Install' to generate .env secrets and desktop shortcuts, or '2. Start Services' to launch.");
+            AppendLog("Application Root Directory: " + repoRoot);
+            AppendLog("Self-Healing Native Windows Runtime active (auto-installs Node.js, MariaDB 10.11, and Redis if missing).");
+            AppendLog("Click '1. Initialize / Install' or '2. Start Services' to launch, then 'Open Dashboard (http://localhost:4100)'.");
+        }
+
+        private string ResolveRepositoryRoot()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\', '/');
+            string[] candidates = new string[]
+            {
+                baseDir,
+                Path.GetFullPath(Path.Combine(baseDir, "..")),
+                Path.GetFullPath(Path.Combine(baseDir, "..", ".."))
+            };
+
+            foreach (string candidate in candidates)
+            {
+                if (File.Exists(Path.Combine(candidate, "scripts", "windows-runtime.ps1")) ||
+                    File.Exists(Path.Combine(candidate, "package.json")))
+                {
+                    return candidate;
+                }
+            }
+            return baseDir;
         }
 
         private Button CreateButton(string text, Color bg)
@@ -144,110 +166,55 @@ namespace BorngreatAccountingDesktop
 
         private void AppendLog(string message)
         {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action<string>(AppendLog), message);
+                return;
+            }
             string line = string.Format("[{0:HH:mm:ss}] {1}{2}", DateTime.Now, message, Environment.NewLine);
             logBox.AppendText(line);
         }
 
-        private string GenerateSecret(int length)
+        private void RunRuntimeActionAsync(string action)
         {
-            byte[] bytes = new byte[length];
-            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            Task.Run(() =>
             {
-                rng.GetBytes(bytes);
-            }
-            string b64 = Convert.ToBase64String(bytes).Replace("+", "A").Replace("/", "B").Replace("=", "C");
-            return b64.Length >= length ? b64.Substring(0, length) : b64;
-        }
+                try
+                {
+                    string scriptPath = Path.Combine(repoRoot, "scripts", "windows-runtime.ps1");
+                    if (!File.Exists(scriptPath))
+                    {
+                        AppendLog("ERROR: Runtime script not found at: " + scriptPath);
+                        return;
+                    }
 
-        private void InitializeEnvironment()
-        {
-            try
-            {
-                string envPath = Path.Combine(workDir, ".env");
-                string templatePath = Path.Combine(workDir, ".env.production.example");
-                if (!File.Exists(envPath) && File.Exists(templatePath))
-                {
-                    string content = File.ReadAllText(templatePath, Encoding.UTF8);
-                    content = content.Replace("APP_JWT_SECRET=", "APP_JWT_SECRET=" + GenerateSecret(48));
-                    content = content.Replace("TWO_FACTOR_ENCRYPTION_KEY=", "TWO_FACTOR_ENCRYPTION_KEY=" + GenerateSecret(32));
-                    content = content.Replace("DB_PASSWORD=", "DB_PASSWORD=" + GenerateSecret(24));
-                    content = content.Replace("DB_ROOT_PASSWORD=", "DB_ROOT_PASSWORD=" + GenerateSecret(24));
-                    content = content.Replace("CLICKHOUSE_PASSWORD=", "CLICKHOUSE_PASSWORD=" + GenerateSecret(24));
-                    File.WriteAllText(envPath, content, Encoding.UTF8);
-                    AppendLog("Created .env with strong cryptographic secrets.");
-                }
-                else
-                {
-                    AppendLog(".env configuration checked.");
-                }
-                RunDockerCompose("--version");
-            }
-            catch (Exception ex)
-            {
-                AppendLog("Initialization error: " + ex.Message);
-            }
-        }
+                    AppendLog("Executing action '" + action + "'...");
+                    ProcessStartInfo psi = new ProcessStartInfo("powershell.exe",
+                        "-NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\" -Action " + action)
+                    {
+                        WorkingDirectory = repoRoot,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
 
-        private void RunDockerCompose(string args)
-        {
-            try
-            {
-                AppendLog("Running: docker compose -f docker-compose.production.yml " + args);
-                ProcessStartInfo psi = new ProcessStartInfo("docker", "compose -f docker-compose.production.yml " + args)
-                {
-                    WorkingDirectory = workDir,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                using (Process proc = Process.Start(psi))
-                {
-                    string stdout = proc.StandardOutput.ReadToEnd();
-                    string stderr = proc.StandardError.ReadToEnd();
-                    proc.WaitForExit();
-                    if (!string.IsNullOrWhiteSpace(stdout)) AppendLog(stdout.Trim());
-                    if (!string.IsNullOrWhiteSpace(stderr)) AppendLog(stderr.Trim());
+                    using (Process proc = new Process())
+                    {
+                        proc.StartInfo = psi;
+                        proc.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) AppendLog(e.Data); };
+                        proc.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) AppendLog(e.Data); };
+                        proc.Start();
+                        proc.BeginOutputReadLine();
+                        proc.BeginErrorReadLine();
+                        proc.WaitForExit();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                AppendLog("Docker execution note: " + ex.Message + " (Ensure Docker Desktop for Windows is installed and running).");
-            }
-        }
-
-        private void RunPowerShellScript(string scriptName)
-        {
-            try
-            {
-                string scriptPath = Path.Combine(workDir, scriptName);
-                if (!File.Exists(scriptPath))
+                catch (Exception ex)
                 {
-                    AppendLog("Script not found in current folder: " + scriptPath);
-                    return;
+                    AppendLog("Execution error: " + ex.Message);
                 }
-                AppendLog("Executing PowerShell script: " + scriptName);
-                ProcessStartInfo psi = new ProcessStartInfo("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\"")
-                {
-                    WorkingDirectory = workDir,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                using (Process proc = Process.Start(psi))
-                {
-                    string stdout = proc.StandardOutput.ReadToEnd();
-                    string stderr = proc.StandardError.ReadToEnd();
-                    proc.WaitForExit();
-                    if (!string.IsNullOrWhiteSpace(stdout)) AppendLog(stdout.Trim());
-                    if (!string.IsNullOrWhiteSpace(stderr)) AppendLog(stderr.Trim());
-                }
-            }
-            catch (Exception ex)
-            {
-                AppendLog("Script execution error: " + ex.Message);
-            }
+            });
         }
 
         [STAThread]
