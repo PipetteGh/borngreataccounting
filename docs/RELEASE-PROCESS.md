@@ -20,11 +20,11 @@ BorngreatAccounting uses semantic versioning (`vMAJOR.MINOR.PATCH`, e.g., `v1.0.
 1. Ensure all local builds and unit tests pass:
    ```bash
    pnpm run build:shared
-   pnpm --filter "@bigcapital/server" run build
-   pnpm --filter "@bigcapital/server" test
-   pnpm --filter "@bigcapital/webapp" run build
+   pnpm --filter "@borngreataccounting/server" run build
+   pnpm --filter "@borngreataccounting/server" test
+   pnpm --filter "@borngreataccounting/webapp" run build
    ```
-2. Update the version in `shared/bigcapital-utils/src/branding.ts`, `packages/webapp/src/constants/brand.ts`, `packages/server/src/common/config/brand.ts`, and `desktop/src-tauri/tauri.conf.json`.
+2. Update the version in `shared/borngreataccounting-utils/src/branding.ts`, `packages/webapp/src/constants/brand.ts`, `packages/server/src/common/config/brand.ts`, and `desktop/src-tauri/tauri.conf.json`.
 3. Commit using Conventional Commits format:
    ```bash
    git commit -m "chore: release BorngreatAccounting v1.0.0"

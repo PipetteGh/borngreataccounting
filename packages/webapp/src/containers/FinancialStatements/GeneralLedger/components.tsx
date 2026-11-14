@@ -15,7 +15,7 @@ import { useGeneralLedgerContext } from './GeneralLedgerProvider';
 import type {
   GeneralLedgerXlsxQuery,
   GeneralLedgerCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   FormattedMessage as T,
   Icon,

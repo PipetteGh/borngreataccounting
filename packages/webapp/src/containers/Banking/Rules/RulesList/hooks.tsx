@@ -1,7 +1,7 @@
 import { Intent, Tag } from '@blueprintjs/core';
 import { useMemo } from 'react';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { BankRuleResponse } from '@bigcapital/sdk-ts';
+import type { BankRuleResponse } from '@borngreataccounting/sdk-ts';
 
 export type BankRuleTableRow = BankRuleResponse & {
   // Runtime-only fields injected by the server-side bank rules transformer

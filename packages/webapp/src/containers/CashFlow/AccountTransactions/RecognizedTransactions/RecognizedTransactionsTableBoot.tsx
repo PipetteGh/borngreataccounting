@@ -4,7 +4,7 @@ import { withBanking } from '../../withBanking';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
 import type { RecognizedTransactionRow } from './_utils';
 import type { WithBankingProps } from '../../withBanking';
-import type { BankTransactionsListPage } from '@bigcapital/sdk-ts';
+import type { BankTransactionsListPage } from '@borngreataccounting/sdk-ts';
 import { IntersectionObserver } from '@/components';
 import { useRecognizedBankTransactionsInfinity } from '@/hooks/query/banking';
 import { useFlattenInfinityPages } from '@/hooks/utils';

@@ -1,4 +1,4 @@
-import type { ApplyCreditNoteToInvoicesBody } from '@bigcapital/sdk-ts';
+import type { ApplyCreditNoteToInvoicesBody } from '@borngreataccounting/sdk-ts';
 
 export interface ReconcileCreditNoteFormEntry {
   id?: number | string;

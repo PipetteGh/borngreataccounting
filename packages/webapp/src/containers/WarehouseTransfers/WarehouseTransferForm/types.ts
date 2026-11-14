@@ -4,7 +4,7 @@ import type {
   Item,
   Warehouse,
   WarehouseTransfer,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type React from 'react';
 
 export interface WarehouseTransferEntry {
@@ -78,6 +78,6 @@ export interface WarehouseTransferFormContextValue {
   >;
 
   warehouseTransferSettings:
-    | import('@bigcapital/sdk-ts').SettingsGroup
+    | import('@borngreataccounting/sdk-ts').SettingsGroup
     | undefined;
 }

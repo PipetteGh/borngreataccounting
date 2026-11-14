@@ -1,4 +1,4 @@
-import { TransactionsByVendorsTableQuery } from '@bigcapital/sdk-ts';
+import { TransactionsByVendorsTableQuery } from '@borngreataccounting/sdk-ts';
 import moment from 'moment';
 import { useMemo } from 'react';
 import intl from 'react-intl-universal';

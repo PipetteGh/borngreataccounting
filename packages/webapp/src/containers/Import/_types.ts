@@ -1,7 +1,7 @@
 import type {
   ImportFileMetaResponse,
   ImportPreviewResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type { ReactNode } from 'react';
 
 export enum ImportStepperStep {

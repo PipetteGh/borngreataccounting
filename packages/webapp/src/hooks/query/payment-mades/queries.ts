@@ -8,7 +8,7 @@ import {
   validateBulkDeleteBillPayments,
   fetchBillPaymentEditPage,
   fetchBillPaymentNewPageEntries,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -27,7 +27,7 @@ import type {
   ValidateBulkDeleteBillPaymentsResponse,
   BillPaymentEditPageResponse,
   BillPaymentNewPageEntriesResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (client: ReturnType<typeof useQueryClient>) => {
   client.invalidateQueries({ queryKey: paymentMadesKeys.all() });

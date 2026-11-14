@@ -1,4 +1,4 @@
-import type { GetNotificationsQuery } from '@bigcapital/sdk-ts';
+import type { GetNotificationsQuery } from '@borngreataccounting/sdk-ts';
 
 // Query key constants
 export const NOTIFICATIONS = 'NOTIFICATIONS';

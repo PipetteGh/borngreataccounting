@@ -3,7 +3,7 @@ import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { SaleInvoicesListResponse } from '@bigcapital/sdk-ts';
+import type { SaleInvoicesListResponse } from '@borngreataccounting/sdk-ts';
 import {
   FormatDateCell,
   FormattedMessage as T,

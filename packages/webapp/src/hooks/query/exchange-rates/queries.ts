@@ -1,7 +1,7 @@
 import {
   fetchLatestExchangeRate,
   ExchangeRateLatestResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { exchangeRateKeys } from './query-keys';

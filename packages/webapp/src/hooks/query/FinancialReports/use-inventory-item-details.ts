@@ -3,7 +3,7 @@ import {
   fetchInventoryItemDetailsXlsx,
   fetchInventoryItemDetailsCsv,
   fetchInventoryItemDetailsPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   InventoryItemDetailsXlsxQuery,
   InventoryItemDetailsCsvQuery,
   InventoryItemDetailsPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 interface InventoryItemDetailsReport {
   columns: InventoryItemDetailsTableResponse['table']['columns'];

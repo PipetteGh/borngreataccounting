@@ -1,6 +1,6 @@
 import { Spinner } from '@blueprintjs/core';
 import React, { createContext, useContext } from 'react';
-import type { PaymentReceiveMailStateResponse } from '@bigcapital/sdk-ts';
+import type { PaymentReceiveMailStateResponse } from '@borngreataccounting/sdk-ts';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { usePaymentReceivedMailState } from '@/hooks/query';
 

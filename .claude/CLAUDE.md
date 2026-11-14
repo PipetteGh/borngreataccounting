@@ -1,4 +1,4 @@
-# Claude Code Settings for Bigcapital
+# Claude Code Settings for BorngreatAccounting
 
 ## Node.js Version
 

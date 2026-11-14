@@ -1,4 +1,4 @@
-import { TransactionsByCustomersTableQuery } from '@bigcapital/sdk-ts';
+import { TransactionsByCustomersTableQuery } from '@borngreataccounting/sdk-ts';
 import { castArray } from 'lodash';
 import moment from 'moment';
 import { useMemo } from 'react';

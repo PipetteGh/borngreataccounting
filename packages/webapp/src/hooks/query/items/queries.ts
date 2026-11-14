@@ -14,7 +14,7 @@ import {
   activateItem,
   validateBulkDeleteItems,
   bulkDeleteItems,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -37,11 +37,11 @@ import type {
   ItemAssociatedEstimatesResponse,
   ItemAssociatedReceiptsResponse,
   ItemWarehousesResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type {
   GetInventoryItemsCostQuery,
   GetInventoryItemsCostResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

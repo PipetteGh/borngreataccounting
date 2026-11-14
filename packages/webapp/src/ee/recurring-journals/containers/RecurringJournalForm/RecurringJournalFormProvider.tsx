@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import type {
   CreateRecurringJournalBody,
   EditRecurringJournalBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type { ReactNode } from 'react';
 import { DashboardInsider } from '@/components';
 import { Features } from '@/constants';

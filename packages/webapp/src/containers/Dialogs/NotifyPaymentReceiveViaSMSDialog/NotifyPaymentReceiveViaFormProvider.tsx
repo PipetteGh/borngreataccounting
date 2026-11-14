@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import type { PaymentReceiveSmsDetailsResponse } from '@bigcapital/sdk-ts';
+import type { PaymentReceiveSmsDetailsResponse } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import {
   useCreateNotifyPaymentReceiveBySMS,

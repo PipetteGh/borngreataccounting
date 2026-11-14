@@ -8,7 +8,7 @@ import type {
   CreateVendorBody,
   EditVendorBody,
   Vendor,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,

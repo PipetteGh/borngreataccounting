@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import type {
   CreateRecurringInvoiceBody,
   EditRecurringInvoiceBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type { ReactNode } from 'react';
 import { Features } from '@/constants';
 import {

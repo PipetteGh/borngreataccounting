@@ -1,7 +1,7 @@
 import {
   InvoicePaperTemplate,
   InvoicePaperTemplateProps,
-} from '@bigcapital/pdf-templates';
+} from '@borngreataccounting/pdf-templates';
 import { useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
 import { initialValues } from './constants';

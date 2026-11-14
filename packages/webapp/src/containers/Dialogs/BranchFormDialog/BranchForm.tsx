@@ -9,7 +9,7 @@ import { useBranchFormContext } from './BranchFormProvider';
 import { transformErrors } from './utils';
 import type { BranchFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { CreateBranchBody, EditBranchBody } from '@bigcapital/sdk-ts';
+import type { CreateBranchBody, EditBranchBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { transformToForm } from '@/utils';

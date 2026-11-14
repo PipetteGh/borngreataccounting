@@ -1,4 +1,4 @@
-import { SalesByItemsTableQuery } from '@bigcapital/sdk-ts';
+import { SalesByItemsTableQuery } from '@borngreataccounting/sdk-ts';
 import moment from 'moment';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';

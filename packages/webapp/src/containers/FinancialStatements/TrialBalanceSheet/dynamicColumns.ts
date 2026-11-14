@@ -1,7 +1,7 @@
 import * as FA from 'fp-ts/Array';
 import * as FF from 'fp-ts/function';
 import * as FO from 'fp-ts/Option';
-import type { TrialBalanceColumnKey } from '@bigcapital/sdk-ts';
+import type { TrialBalanceColumnKey } from '@borngreataccounting/sdk-ts';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { firstMatch, when } from '@/utils/fp';

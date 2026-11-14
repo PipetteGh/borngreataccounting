@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode } from 'react';
-import type { UsersListResponse } from '@bigcapital/sdk-ts';
+import type { UsersListResponse } from '@borngreataccounting/sdk-ts';
 import { useUsers } from '@/hooks/query';
 
 interface UsersListContextValue {

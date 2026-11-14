@@ -4,7 +4,7 @@ import {
   fetchInventorySummaryXlsx,
   fetchInventorySummaryCsv,
   fetchInventorySummaryPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -23,7 +23,7 @@ import type {
   InventorySummaryXlsxQuery,
   InventorySummaryCsvQuery,
   InventorySummaryPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useInventorySummary(
   query: InventorySummaryJsonQuery,

@@ -1,4 +1,4 @@
-import { Currency } from '@bigcapital/sdk-ts';
+import { Currency } from '@borngreataccounting/sdk-ts';
 import type {
   useCreateAccount,
   useEditAccount,

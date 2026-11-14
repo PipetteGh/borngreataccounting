@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import type { SaleReceiptSmsDetailsResponse } from '@bigcapital/sdk-ts';
+import type { SaleReceiptSmsDetailsResponse } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import {
   useCreateNotifyReceiptBySMS,

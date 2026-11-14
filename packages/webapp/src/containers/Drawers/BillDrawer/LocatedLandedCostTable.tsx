@@ -2,7 +2,7 @@ import * as FF from 'fp-ts/function';
 import React from 'react';
 import { useBillDrawerContext } from './BillDrawerProvider';
 import { useLocatedLandedCostColumns, ActionsMenu } from './components';
-import type { BillLandedCostTransaction } from '@bigcapital/sdk-ts';
+import type { BillLandedCostTransaction } from '@borngreataccounting/sdk-ts';
 import { DataTable, TableSkeletonRows, Card } from '@/components';
 import { TableStyle } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

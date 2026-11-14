@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { ITEMS_FILTER_ROLES } from './utils';
-import type { PdfTemplateResponse } from '@bigcapital/sdk-ts';
-import type { Item, Customer } from '@bigcapital/sdk-ts';
+import type { PdfTemplateResponse } from '@borngreataccounting/sdk-ts';
+import type { Item, Customer } from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useEstimate,
@@ -68,7 +68,7 @@ interface EstimateFormContextValue {
   saleEstimateState: UseGetSaleEstimatesStateResult['data'];
   isSaleEstimateStateLoading: boolean;
 
-  estimatesSettings: import('@bigcapital/sdk-ts').SettingsGroup | undefined;
+  estimatesSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
 
   isBootLoading: boolean;
 }

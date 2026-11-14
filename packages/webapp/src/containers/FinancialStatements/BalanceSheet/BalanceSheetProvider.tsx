@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';
-import type { BalanceSheetTableQuery } from '@bigcapital/sdk-ts';
+import type { BalanceSheetTableQuery } from '@borngreataccounting/sdk-ts';
 import { useBalanceSheet } from '@/hooks/query';
 
 type UseBalanceSheetResult = ReturnType<typeof useBalanceSheet>;

@@ -1,4 +1,4 @@
-import { fetchApiKeys, generateApiKey, revokeApiKey } from '@bigcapital/sdk-ts';
+import { fetchApiKeys, generateApiKey, revokeApiKey } from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -12,7 +12,7 @@ import type {
   ApiKeysList,
   GenerateApiKeyBody,
   GenerateApiKeyResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

@@ -14,7 +14,7 @@ import { useARAgingSummaryContext } from './ARAgingSummaryProvider';
 import type {
   ReceivableAgingXlsxQuery,
   ReceivableAgingCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import {
   useARAgingSheetCsvExport,

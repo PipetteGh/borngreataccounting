@@ -3,7 +3,7 @@ import {
   fetchVendorBalanceXlsx,
   fetchVendorBalanceCsv,
   fetchVendorBalancePdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -18,7 +18,7 @@ import type {
   VendorBalanceTableQuery,
   VendorBalanceTableResponse,
   VendorBalancePdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 interface VendorsBalanceSummaryReport {
   query: VendorBalanceTableResponse['query'];

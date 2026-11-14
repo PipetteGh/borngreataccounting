@@ -10,7 +10,7 @@ import type {
   Vendor,
   Warehouse,
   Branch,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import { Features } from '@/constants';
 import {
@@ -49,7 +49,7 @@ type VendorCreditFormContextValue = {
   isBranchesSuccess: boolean;
   isWarehousesSuccess: boolean;
 
-  vendorCreditSettings: import('@bigcapital/sdk-ts').SettingsGroup | undefined;
+  vendorCreditSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
 
   createVendorCreditMutate: (values: CreateVendorCreditBody) => Promise<void>;
   editVendorCreditMutate: (

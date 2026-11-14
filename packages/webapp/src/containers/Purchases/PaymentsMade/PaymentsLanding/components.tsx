@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { BillPaymentsListResponse } from '@bigcapital/sdk-ts';
+import type { BillPaymentsListResponse } from '@borngreataccounting/sdk-ts';
 import { Icon, Money, Can } from '@/components';
 import { PaymentMadeAction, AbilitySubject } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';

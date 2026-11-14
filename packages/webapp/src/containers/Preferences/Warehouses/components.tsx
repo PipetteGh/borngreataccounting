@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import type { Warehouse } from '@bigcapital/sdk-ts';
+import type { Warehouse } from '@borngreataccounting/sdk-ts';
 import { Icon, If } from '@/components';
 import { safeCallback } from '@/utils';
 

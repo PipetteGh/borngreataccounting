@@ -1,4 +1,4 @@
-import type { AuthSigninResponse } from '@bigcapital/sdk-ts';
+import type { AuthSigninResponse } from '@borngreataccounting/sdk-ts';
 
 /**
  * The second-factor methods the login flow can render. Keep these ids in sync

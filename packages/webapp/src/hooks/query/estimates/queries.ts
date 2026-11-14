@@ -16,7 +16,7 @@ import {
   fetchSaleEstimatesState,
   fetchSaleEstimateHtmlContent,
   fetchSaleEstimatePdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -40,7 +40,7 @@ import type {
   ValidateBulkDeleteEstimatesResponse,
   SaleEstimatesStateResponse,
   SaleEstimateMailStateResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

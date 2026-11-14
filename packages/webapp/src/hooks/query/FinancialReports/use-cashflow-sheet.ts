@@ -3,7 +3,7 @@ import {
   fetchCashflowStatementXlsx,
   fetchCashflowStatementCsv,
   fetchCashflowStatementPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   CashflowStatementXlsxQuery,
   CashflowStatementCsvQuery,
   CashflowStatementPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 interface CashFlowStatementReport {
   columns: CashflowStatementTableResponse['table']['columns'];

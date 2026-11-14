@@ -3,7 +3,7 @@ import {
   fetchReceivableAgingXlsx,
   fetchReceivableAgingCsv,
   fetchReceivableAgingPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   ReceivableAgingXlsxQuery,
   ReceivableAgingCsvQuery,
   ReceivableAgingPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useARAgingSummaryReport(
   query: ReceivableAgingTableQuery,

@@ -10,7 +10,7 @@ import { CreateMoneyOutSchema } from './MoneyOutForm.schema';
 import { MoneyOutFormContent } from './MoneyOutFormContent';
 import type { MoneyOutFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { CreateCashflowTransactionBody } from '@bigcapital/sdk-ts';
+import type { CreateCashflowTransactionBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';

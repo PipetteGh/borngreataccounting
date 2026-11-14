@@ -14,7 +14,7 @@ import {
   fetchSaleReceiptPdf,
   notifySaleReceiptBySms,
   fetchSaleReceiptSmsDetails,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -45,7 +45,7 @@ import type {
   GetSaleReceiptsQuery,
   BulkDeleteReceiptsBody,
   SaleReceiptSmsDetailsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 function commonInvalidateQueries(
   queryClient: ReturnType<typeof useQueryClient>,

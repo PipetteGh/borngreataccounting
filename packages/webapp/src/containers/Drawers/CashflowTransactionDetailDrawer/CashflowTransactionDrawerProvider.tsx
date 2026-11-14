@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { BankingTransactionDetailResponse } from '@bigcapital/sdk-ts';
+import type { BankingTransactionDetailResponse } from '@borngreataccounting/sdk-ts';
 import { DrawerLoading, DrawerHeaderContent } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useCashflowTransaction } from '@/hooks/query';

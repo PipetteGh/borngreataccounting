@@ -1,4 +1,4 @@
-import { InventorySummaryTableQuery } from '@bigcapital/sdk-ts';
+import { InventorySummaryTableQuery } from '@borngreataccounting/sdk-ts';
 import { createContext, useContext, useMemo } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';

@@ -2,7 +2,7 @@ import { MenuItem, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { CreditNote } from '@bigcapital/sdk-ts';
+import type { CreditNote } from '@borngreataccounting/sdk-ts';
 import type { ItemRendererProps } from '@blueprintjs/select';
 import { Icon, Choose, T, TextStatus } from '@/components';
 import { AbilitySubject, CreditNoteAction } from '@/constants/abilityOption';

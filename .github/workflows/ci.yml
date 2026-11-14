@@ -53,13 +53,13 @@ jobs:
         run: pnpm run build:shared
 
       - name: Build backend server
-        run: pnpm --filter "@bigcapital/server" run build
+        run: pnpm --filter "@borngreataccounting/server" run build
 
       - name: Run backend unit tests
-        run: pnpm --filter "@bigcapital/server" test
+        run: pnpm --filter "@borngreataccounting/server" test
 
       - name: Build frontend webapp
-        run: pnpm --filter "@bigcapital/webapp" run build
+        run: pnpm --filter "@borngreataccounting/webapp" run build
 
       - name: Verify documentation and licensing files
         run: |

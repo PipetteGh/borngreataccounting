@@ -3,7 +3,7 @@ import {
   allocateLandedCost,
   deleteAllocatedLandedCost,
   fetchBillLandedCostTransactions,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -18,7 +18,7 @@ import { landedCostKeys } from './query-keys';
 import type {
   BillLandedCostTransaction,
   BillLandedCostTransactionsResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: billsKeys.all() });

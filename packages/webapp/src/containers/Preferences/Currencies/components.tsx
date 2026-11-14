@@ -11,7 +11,7 @@ import {
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import type { Currency } from '@bigcapital/sdk-ts';
+import type { Currency } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
 

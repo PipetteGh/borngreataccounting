@@ -1,7 +1,7 @@
 import type {
   TransactionsLockingListResponse,
   TransactionsLockingMeta,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export const validateMoveToPartialLocking = (
   all: TransactionsLockingMeta,

@@ -1,4 +1,4 @@
-import { isNegativeAmount } from '@bigcapital/utils';
+import { isNegativeAmount } from '@borngreataccounting/utils';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import React, { useContext } from 'react';

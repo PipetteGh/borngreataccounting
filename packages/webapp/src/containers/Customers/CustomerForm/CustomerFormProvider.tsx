@@ -3,7 +3,7 @@ import {
   BranchesListResponse,
   ContactResponse,
   Customer,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import React, { createContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Features } from '@/constants';

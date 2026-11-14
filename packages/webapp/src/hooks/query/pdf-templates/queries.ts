@@ -6,7 +6,7 @@ import {
   deletePdfTemplate,
   assignPdfTemplateAsDefault,
   fetchPdfTemplateBrandingState,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -30,7 +30,7 @@ import type {
   PdfTemplatesListResponse,
   PdfTemplateBrandingStateResponse,
   GetPdfTemplatesQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 // Re-export types for consumers (aliases for SDK types)
 export type CreatePdfTemplateValues = CreatePdfTemplateBody;

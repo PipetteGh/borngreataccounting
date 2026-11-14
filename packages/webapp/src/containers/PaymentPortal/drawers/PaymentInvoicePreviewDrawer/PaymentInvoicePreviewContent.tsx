@@ -1,4 +1,4 @@
-import { InvoicePaperTemplate } from '@bigcapital/pdf-templates';
+import { InvoicePaperTemplate } from '@borngreataccounting/pdf-templates';
 import { usePaymentPortalBoot } from '../../PaymentPortalBoot';
 import { Box, DrawerBody, DrawerHeaderContent } from '@/components';
 

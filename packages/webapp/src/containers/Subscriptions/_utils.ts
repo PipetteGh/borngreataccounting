@@ -1,4 +1,4 @@
-import type { SubscriptionsListResponse } from '@bigcapital/sdk-ts';
+import type { SubscriptionsListResponse } from '@borngreataccounting/sdk-ts';
 
 type SubscriptionDetails = SubscriptionsListResponse['subscriptions'][number];
 

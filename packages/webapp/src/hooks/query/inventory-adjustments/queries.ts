@@ -5,7 +5,7 @@ import {
   publishInventoryAdjustment,
   fetchInventoryAdjustments,
   fetchInventoryAdjustment,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -21,7 +21,7 @@ import type {
   CreateQuickInventoryAdjustmentBody,
   EditQuickInventoryAdjustmentBody,
   GetInventoryAdjustmentsQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

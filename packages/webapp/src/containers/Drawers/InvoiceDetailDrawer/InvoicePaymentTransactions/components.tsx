@@ -2,7 +2,7 @@ import { Intent, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { InvoicePaymentTransactionsResponse } from '@bigcapital/sdk-ts';
+import type { InvoicePaymentTransactionsResponse } from '@borngreataccounting/sdk-ts';
 import { FormatDateCell, Icon, Can } from '@/components';
 import {
   PaymentReceiveAction,

@@ -14,7 +14,7 @@ import clsx from 'classnames';
 import React, { ReactNode } from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { Expense } from '@bigcapital/sdk-ts';
+import type { Expense } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T, Icon, If, Can } from '@/components';
 import { ExpenseAction, AbilitySubject } from '@/constants/abilityOption';
 import { CLASSES } from '@/constants/classes';

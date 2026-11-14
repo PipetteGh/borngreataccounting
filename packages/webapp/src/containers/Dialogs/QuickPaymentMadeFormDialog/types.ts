@@ -1,5 +1,5 @@
 import type { useCreatePaymentMade } from '@/hooks/query';
-import type { Account, Branch } from '@bigcapital/sdk-ts';
+import type { Account, Branch } from '@borngreataccounting/sdk-ts';
 
 /** Quick payment made bill (loose shape: form code reads camelCase fields). */
 export interface QuickPaymentMadeBill {

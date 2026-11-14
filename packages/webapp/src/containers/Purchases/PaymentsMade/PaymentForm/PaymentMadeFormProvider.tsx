@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { BillPaymentEditPageResponse } from '@bigcapital/sdk-ts';
+import type { BillPaymentEditPageResponse } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import { Features } from '@/constants';
 import {
@@ -69,7 +69,7 @@ interface PaymentMadeFormContextValue {
   isExcessConfirmed: boolean;
   setIsExcessConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
 
-  billPaymentSettings: import('@bigcapital/sdk-ts').SettingsGroup | undefined;
+  billPaymentSettings: import('@borngreataccounting/sdk-ts').SettingsGroup | undefined;
 }
 
 type PaymentMadeFormProviderProps = {

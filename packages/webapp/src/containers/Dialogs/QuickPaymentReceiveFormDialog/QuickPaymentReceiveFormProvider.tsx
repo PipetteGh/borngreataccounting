@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import React, { useContext, createContext, useMemo } from 'react';
 import type { QuickPaymentReceiveContextValue } from './types';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
 import {

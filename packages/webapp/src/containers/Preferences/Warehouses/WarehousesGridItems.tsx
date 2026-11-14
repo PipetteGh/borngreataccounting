@@ -6,7 +6,7 @@ import intl from 'react-intl-universal';
 import { WarehouseContextMenu, WarehousesGridItemBox } from './components';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { Warehouse } from '@bigcapital/sdk-ts';
+import type { Warehouse } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

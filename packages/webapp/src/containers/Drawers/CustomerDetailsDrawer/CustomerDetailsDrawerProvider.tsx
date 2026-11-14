@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Customer } from '@bigcapital/sdk-ts';
+import type { Customer } from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useCustomer } from '@/hooks/query';

@@ -1,6 +1,6 @@
 import intl from 'react-intl-universal';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';

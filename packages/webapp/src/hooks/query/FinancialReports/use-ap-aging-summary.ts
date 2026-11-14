@@ -3,7 +3,7 @@ import {
   fetchPayableAgingXlsx,
   fetchPayableAgingCsv,
   fetchPayableAgingPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   PayableAgingXlsxQuery,
   PayableAgingCsvQuery,
   PayableAgingPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useAPAgingSummaryReport(
   query: PayableAgingTableQuery,

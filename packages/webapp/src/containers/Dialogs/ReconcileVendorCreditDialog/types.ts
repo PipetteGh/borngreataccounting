@@ -1,4 +1,4 @@
-import type { ApplyVendorCreditToBillsBody } from '@bigcapital/sdk-ts';
+import type { ApplyVendorCreditToBillsBody } from '@borngreataccounting/sdk-ts';
 
 export interface ReconcileVendorCreditFormEntry {
   id?: number | string;

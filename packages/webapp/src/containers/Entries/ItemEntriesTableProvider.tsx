@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
 import type { ItemEntry } from '@/interfaces/ItemEntries';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 
 export interface ItemEntriesTableContextValue {
   /* Controlled value of the table. */

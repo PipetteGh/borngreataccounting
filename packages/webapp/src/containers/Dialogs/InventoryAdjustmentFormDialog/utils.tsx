@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
 import type { InventoryAdjustmentFormValues } from './types';
-import type { CreateQuickInventoryAdjustmentBody } from '@bigcapital/sdk-ts';
+import type { CreateQuickInventoryAdjustmentBody } from '@borngreataccounting/sdk-ts';
 
 export const decrementQuantity = (
   newQuantity: number,

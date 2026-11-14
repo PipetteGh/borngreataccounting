@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { RefundVendorCreditTransaction } from '@bigcapital/sdk-ts';
+import type { RefundVendorCreditTransaction } from '@borngreataccounting/sdk-ts';
 import { DrawerHeaderContent, DrawerLoading } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useRefundVendorCreditTransaction } from '@/hooks/query';

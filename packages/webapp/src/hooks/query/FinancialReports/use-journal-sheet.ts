@@ -3,7 +3,7 @@ import {
   fetchJournalXlsx,
   fetchJournalCsv,
   fetchJournalPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   JournalXlsxQuery,
   JournalCsvQuery,
   JournalPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useJournalSheet(
   query: JournalTableQuery,

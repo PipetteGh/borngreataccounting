@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { ManualJournal } from '@bigcapital/sdk-ts';
+import type { ManualJournal } from '@borngreataccounting/sdk-ts';
 import { DrawerLoading, DrawerHeaderContent } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { useJournal } from '@/hooks/query';

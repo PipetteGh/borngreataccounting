@@ -27,7 +27,7 @@ import type { WarehouseTransferFormValues } from './types';
 import type {
   CreateWarehouseTransferBody,
   EditWarehouseTransferBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';

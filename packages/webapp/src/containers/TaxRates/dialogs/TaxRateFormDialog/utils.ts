@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import { transformToForm } from '@/utils';
 
 export interface TaxRateFormValues {

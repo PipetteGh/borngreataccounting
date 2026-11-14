@@ -12,7 +12,7 @@ import { isNumber } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
+import type { InventoryAdjustment } from '@borngreataccounting/sdk-ts';
 import { Icon, Money, If, FormattedMessage as T, Can } from '@/components';
 import {
   InventoryAdjustmentAction,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FSelect } from '../Forms';
-import type { Warehouse } from '@bigcapital/sdk-ts';
+import type { Warehouse } from '@borngreataccounting/sdk-ts';
 
 type FSelectProps = React.ComponentProps<typeof FSelect>;
 

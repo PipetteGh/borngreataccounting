@@ -9,7 +9,7 @@ import {
 } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import { Can, Icon, If } from '@/components';
 import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
 import { safeCallback } from '@/utils';

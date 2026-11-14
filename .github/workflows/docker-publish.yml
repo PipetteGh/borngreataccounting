@@ -8,6 +8,10 @@ on:
     tags:
       - 'v*'
 
+concurrency:
+  group: docker-publish-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   WEB_IMAGE: ghcr.io/pipettegh/borngreataccounting-web
@@ -16,7 +20,7 @@ env:
 
 jobs:
   build-and-push:
-    name: Build & Push Multi-Arch GHCR Images
+    name: Build & Push GHCR Images
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,8 +30,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.20.4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies & build workspace bundles
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm run build:shared
+          pnpm --filter "@borngreataccounting/server" run build
+          pnpm --filter "@borngreataccounting/webapp" run build
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -54,10 +84,11 @@ jobs:
         with:
           context: ./
           file: ./docker/frontend/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.WEB_IMAGE }}:latest
+            ${{ env.WEB_IMAGE }}:1.0.0
             ${{ env.WEB_IMAGE }}:${{ steps.vars.outputs.VERSION }}
 
       - name: Build and push BorngreatAccounting API & Worker images
@@ -65,12 +96,14 @@ jobs:
         with:
           context: ./
           file: ./docker/backend/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.API_IMAGE }}:latest
+            ${{ env.API_IMAGE }}:1.0.0
             ${{ env.API_IMAGE }}:${{ steps.vars.outputs.VERSION }}
             ${{ env.WORKER_IMAGE }}:latest
+            ${{ env.WORKER_IMAGE }}:1.0.0
             ${{ env.WORKER_IMAGE }}:${{ steps.vars.outputs.VERSION }}
 
       - name: Generate CycloneDX SBOM

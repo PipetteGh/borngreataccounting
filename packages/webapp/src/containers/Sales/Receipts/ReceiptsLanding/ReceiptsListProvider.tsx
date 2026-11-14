@@ -6,7 +6,7 @@ import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
 import type {
   SettingsGroup,
   SaleReceiptsListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceMeta,

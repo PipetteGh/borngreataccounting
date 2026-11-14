@@ -2,7 +2,7 @@ import { Tooltip, Position, Spinner, Icon } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as FF from 'fp-ts/function';
 import React, { useState } from 'react';
-import type { Workspace } from '@bigcapital/sdk-ts';
+import type { Workspace } from '@borngreataccounting/sdk-ts';
 import { DRAWERS } from '@/constants/drawers';
 import {
   withDrawerActions,

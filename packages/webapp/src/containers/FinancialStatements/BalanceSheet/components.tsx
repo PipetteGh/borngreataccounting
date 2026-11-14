@@ -16,7 +16,7 @@ import { dynamicColumns } from './dynamicColumns';
 import type {
   BalanceSheetXlsxQuery,
   BalanceSheetCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   FormattedMessage as T,
   Icon,

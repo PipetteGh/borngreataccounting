@@ -4,7 +4,7 @@ import { TaxRatesTableActionsMenu } from './_components';
 import { useTaxRatesTableColumns } from './_utils';
 import { TaxRatesLandingEmptyState } from './TaxRatesLandingEmptyState';
 import { useTaxRatesLandingContext } from './TaxRatesLandingProvider';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import {
   DataTable,
   DashboardContentTable,

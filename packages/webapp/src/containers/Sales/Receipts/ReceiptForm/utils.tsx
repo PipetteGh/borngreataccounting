@@ -4,7 +4,7 @@ import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useReceiptFormContext } from './ReceiptFormProvider';
-import type { SaleReceipt, CreateSaleReceiptBody } from '@bigcapital/sdk-ts';
+import type { SaleReceipt, CreateSaleReceiptBody } from '@borngreataccounting/sdk-ts';
 import {
   transformAttachmentsToForm,
   transformAttachmentsToRequest,

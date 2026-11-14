@@ -6,7 +6,7 @@ import {
   deleteItemCategory,
   bulkDeleteItemCategories,
   validateBulkDeleteItemCategories,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -24,7 +24,7 @@ import type {
   BulkDeleteItemCategoriesBody,
   ValidateBulkDeleteItemCategoriesResponse,
   GetItemCategoriesQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

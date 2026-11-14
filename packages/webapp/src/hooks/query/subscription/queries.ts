@@ -7,7 +7,7 @@ import {
   cancelSubscription,
   resumeSubscription,
   changeSubscriptionPlan,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   UseMutationOptions,
@@ -27,7 +27,7 @@ import type {
   CreateSubscriptionCheckoutSessionResponse,
   CreateStripePortalSessionResponse,
   SyncStripeCheckoutSessionBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useCancelMainSubscription(
   options?: UseMutationOptions<void, Error, void>,

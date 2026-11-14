@@ -1337,7 +1337,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get the Bigcapital Cloud plan catalog */
+        /** Get the BorngreatAccounting Cloud plan catalog */
         get: operations["SubscriptionsController_getPlans"];
         put?: never;
         post?: never;
@@ -6047,7 +6047,7 @@ export interface components {
             secret: string;
             /**
              * @description otpauth:// URI to show as a QR code.
-             * @example otpauth://totp/Bigcapital:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Bigcapital&algorithm=SHA1&digits=6&period=30
+             * @example otpauth://totp/BorngreatAccounting:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=BorngreatAccounting&algorithm=SHA1&digits=6&period=30
              */
             otpauthUrl: string;
         };
@@ -18378,7 +18378,7 @@ export interface components {
              */
             features: components["schemas"]["DashboardFeatureResponseDto"][];
             /**
-             * @description Whether the app is running on Bigcapital Cloud
+             * @description Whether the app is running on BorngreatAccounting Cloud
              * @example true
              */
             isBigcapitalCloud: boolean;
@@ -30694,7 +30694,7 @@ export interface operations {
                      *         }
                      *       ],
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -31524,7 +31524,7 @@ export interface operations {
                      *         "previous_year_percentage_change": false
                      *       },
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -32887,7 +32887,7 @@ export interface operations {
                      *         }
                      *       ],
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -33526,7 +33526,7 @@ export interface operations {
                      *         ]
                      *       },
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -33932,7 +33932,7 @@ export interface operations {
                      *         }
                      *       },
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -34152,7 +34152,7 @@ export interface operations {
                      *         "none_zero": false
                      *       },
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -34632,7 +34632,7 @@ export interface operations {
                      *         }
                      *       ],
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,
@@ -34942,7 +34942,7 @@ export interface operations {
                      *         }
                      *       ],
                      *       "meta": {
-                     *         "organizationName": "BIGCAPITAL, INC",
+                     *         "organizationName": "BORNGREAT ACCOUNTING, INC",
                      *         "baseCurrency": "USD",
                      *         "dateFormat": "DD MMM yyyy",
                      *         "isCostComputeRunning": false,
@@ -35387,7 +35387,7 @@ export interface operations {
                      *         "basis": "cash"
                      *       },
                      *       "meta": {
-                     *         "organization_name": "BIGCAPITAL, INC",
+                     *         "organization_name": "BORNGREAT ACCOUNTING, INC",
                      *         "base_currency": "USD",
                      *         "date_format": "DD MMM yyyy",
                      *         "is_cost_compute_running": false,

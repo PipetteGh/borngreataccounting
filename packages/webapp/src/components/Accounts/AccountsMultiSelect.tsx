@@ -1,4 +1,4 @@
-import { Account } from '@bigcapital/sdk-ts';
+import { Account } from '@borngreataccounting/sdk-ts';
 import { MenuItem } from '@blueprintjs/core';
 import { SelectOptionProps } from '@blueprintjs-formik/select';
 import React from 'react';

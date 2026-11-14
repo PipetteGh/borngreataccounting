@@ -1,4 +1,4 @@
-import { TrialBalanceTableQuery } from '@bigcapital/sdk-ts';
+import { TrialBalanceTableQuery } from '@borngreataccounting/sdk-ts';
 import {
   createContext,
   useContext,

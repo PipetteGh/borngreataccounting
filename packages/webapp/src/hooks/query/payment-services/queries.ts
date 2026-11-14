@@ -8,7 +8,7 @@ import {
   type GetPaymentServicesStateResponse,
   type GetPaymentServiceResponse,
   type UpdatePaymentMethodResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,

@@ -1,5 +1,5 @@
 import type { useCreateInviteUser } from '@/hooks/query';
-import type { Role } from '@bigcapital/sdk-ts';
+import type { Role } from '@borngreataccounting/sdk-ts';
 
 export interface InviteUserFormValues {
   email: string;

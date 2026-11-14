@@ -12,7 +12,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useBillDrawerContext } from './BillDrawerProvider';
-import type { Bill } from '@bigcapital/sdk-ts';
+import type { Bill } from '@borngreataccounting/sdk-ts';
 import {
   TextOverviewTooltipCell,
   FormattedMessage as T,

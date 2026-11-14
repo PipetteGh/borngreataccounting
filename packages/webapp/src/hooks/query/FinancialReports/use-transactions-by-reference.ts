@@ -1,11 +1,11 @@
-import { fetchTransactionsByReferenceJson } from '@bigcapital/sdk-ts';
+import { fetchTransactionsByReferenceJson } from '@borngreataccounting/sdk-ts';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { financialReportsKeys } from './query-keys';
 import type {
   TransactionsByReferenceJsonQuery,
   TransactionsByReferenceJsonResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useTransactionsByReference(
   query: TransactionsByReferenceJsonQuery,

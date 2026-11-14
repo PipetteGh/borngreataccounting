@@ -14,7 +14,7 @@ import {
   validateBulkDeleteAccounts,
   AccountTypesList,
   AccountTransactionsList,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -33,7 +33,7 @@ import type {
   EditAccountBody,
   GetAccountsQuery,
   ValidateBulkDeleteResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

@@ -3,7 +3,7 @@ import {
   fetchTransactionsByVendorsXlsx,
   fetchTransactionsByVendorsCsv,
   fetchTransactionsByVendorsPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   TransactionsByVendorsXlsxQuery,
   TransactionsByVendorsCsvQuery,
   TransactionsByVendorsPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useVendorsTransactionsReport(
   query: TransactionsByVendorsTableQuery,

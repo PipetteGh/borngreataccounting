@@ -1,4 +1,4 @@
-import type { RecurringJournal } from '@bigcapital/sdk-ts';
+import type { RecurringJournal } from '@borngreataccounting/sdk-ts';
 
 export type RecurringJournalDetailTabId = 'details' | 'journals';
 

@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { useRecurringInvoiceDetailDrawerContext } from './RecurringInvoiceDetailDrawerProvider';
 import type { DataTableColumn } from '@/components/Datatable/types';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { RecurringInvoiceInvoicesResponse } from '@bigcapital/sdk-ts';
+import type { RecurringInvoiceInvoicesResponse } from '@borngreataccounting/sdk-ts';
 import { DataTable, Card, EmptyStatus, TableSkeletonRows } from '@/components';
 import { TableStyle } from '@/constants';
 import { DRAWERS } from '@/constants/drawers';

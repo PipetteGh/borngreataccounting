@@ -1,7 +1,7 @@
 import * as FF from 'fp-ts/function';
 import * as FO from 'fp-ts/Option';
 import intl from 'react-intl-universal';
-import type { CashFlowColumnKey } from '@bigcapital/sdk-ts';
+import type { CashFlowColumnKey } from '@borngreataccounting/sdk-ts';
 import { CellTextSpan } from '@/components/Datatable/Cells';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';

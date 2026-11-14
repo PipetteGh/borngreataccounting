@@ -1,4 +1,4 @@
-import { type CreditNoteMailStateResponse } from '@bigcapital/sdk-ts';
+import { type CreditNoteMailStateResponse } from '@borngreataccounting/sdk-ts';
 import { Spinner } from '@blueprintjs/core';
 import React, { createContext, useContext } from 'react';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';

@@ -1,5 +1,5 @@
 import type { useCreateLandedCost } from '@/hooks/query';
-import type { Bill } from '@bigcapital/sdk-ts';
+import type { Bill } from '@borngreataccounting/sdk-ts';
 
 /** A single form item (loose — bill entries come back from the SDK with camelCase fields). */
 export interface AllocateLandedCostItem {

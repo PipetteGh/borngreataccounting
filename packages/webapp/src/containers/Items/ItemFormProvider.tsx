@@ -8,7 +8,7 @@ import type {
   CreateItemBody,
   EditItemBody,
   ItemCategoriesListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useItem,

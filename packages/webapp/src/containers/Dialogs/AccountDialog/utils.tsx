@@ -1,4 +1,4 @@
-import { Account } from '@bigcapital/sdk-ts';
+import { Account } from '@borngreataccounting/sdk-ts';
 import { isUndefined } from 'lodash';
 import intl from 'react-intl-universal';
 import type { AccountDialogPayload } from './types';

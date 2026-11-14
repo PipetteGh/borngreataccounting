@@ -5,7 +5,7 @@ import {
   importProcess,
   uploadImportFile,
   downloadImportSample,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   QueryClient,
   useMutation,
@@ -37,7 +37,7 @@ import type {
   ImportFileMetaResponse,
   ImportProcessResponse,
   ImportFileUploadResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /**
  * Input accepted by the import file upload mutation. Callers may pass either a

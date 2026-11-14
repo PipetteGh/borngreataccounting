@@ -1,6 +1,6 @@
 import React from 'react';
 import { transfromVendorToForm } from './utils';
-import type { Branch } from '@bigcapital/sdk-ts';
+import type { Branch } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { Features } from '@/constants';
 import {

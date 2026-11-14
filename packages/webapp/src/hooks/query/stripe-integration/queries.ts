@@ -4,7 +4,7 @@ import {
   fetchCreateStripeAccountLink,
   fetchCreateStripeAccountSession,
   fetchCreateStripeAccount,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   UseMutationOptions,
@@ -23,7 +23,7 @@ import type {
   CreateStripeAccountLinkBody,
   CreateStripeAccountSessionBody,
   ExchangeStripeOAuthBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 // Create Stripe Account Link
 // ------------------------------------

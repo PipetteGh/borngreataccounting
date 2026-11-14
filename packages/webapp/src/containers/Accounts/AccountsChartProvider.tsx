@@ -4,8 +4,8 @@ import type {
   ResourceMetaResponse,
   ResourceViewResponse,
   GetAccountsQuery,
-} from '@bigcapital/sdk-ts';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import {
   useResourceViews,

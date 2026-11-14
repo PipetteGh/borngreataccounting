@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { DEFAULT_ITEM_UNIT } from './constants';
 import { transformItemFormData } from './ItemForm.schema';
 import type { ItemFormValues } from './types';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { useSettingsItems } from '@/hooks/query';
 import { useWatch } from '@/hooks/utils';

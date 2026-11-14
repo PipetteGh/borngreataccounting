@@ -3,7 +3,7 @@ import type {
   Role,
   RolesListResponse,
   User,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface UserFormValues {
   firstName: string;

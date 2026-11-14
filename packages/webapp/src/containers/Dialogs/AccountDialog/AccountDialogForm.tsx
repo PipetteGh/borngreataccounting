@@ -16,7 +16,7 @@ import {
 } from './utils';
 import type { AccountFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { CreateAccountBody, EditAccountBody } from '@bigcapital/sdk-ts';
+import type { CreateAccountBody, EditAccountBody } from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { transformToForm } from '@/utils';

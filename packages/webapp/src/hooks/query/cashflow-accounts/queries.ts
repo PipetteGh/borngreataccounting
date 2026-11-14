@@ -8,7 +8,7 @@ import {
   fetchUncategorizedTransaction,
   categorizeTransaction,
   uncategorizeTransaction,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -36,7 +36,7 @@ import type {
   GetBankingAccountsQuery,
   CategorizeTransactionBody,
   UncategorizedTransactionResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

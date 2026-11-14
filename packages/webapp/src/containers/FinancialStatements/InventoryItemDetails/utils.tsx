@@ -1,4 +1,4 @@
-import type { InventoryItemDetailsColumnKey } from '@bigcapital/sdk-ts';
+import type { InventoryItemDetailsColumnKey } from '@borngreataccounting/sdk-ts';
 import { Align } from '@/constants';
 import { getColumnWidth } from '@/utils';
 

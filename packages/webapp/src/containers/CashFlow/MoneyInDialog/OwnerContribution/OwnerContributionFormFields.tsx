@@ -6,7 +6,7 @@ import { useMoneyInDailogContext } from '../MoneyInDialogProvider';
 import { MoneyInExchangeRateField } from '../MoneyInExchangeRateField';
 import { useMoneyInFieldsContext } from '../MoneyInFieldsProvider';
 import { useSetPrimaryBranchToForm, BranchRowDivider } from '../utils';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import {
   FAccountsSuggestField,
   InputPrependText,

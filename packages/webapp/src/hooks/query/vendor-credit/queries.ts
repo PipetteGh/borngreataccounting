@@ -15,7 +15,7 @@ import {
   applyVendorCreditToBills,
   fetchAppliedBillsToVendorCredit,
   deleteAppliedBillToVendorCredit,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useQueryClient,
@@ -45,7 +45,7 @@ import type {
   VendorCreditAppliedBill,
   VendorCreditsListResponse,
   VendorCredit,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

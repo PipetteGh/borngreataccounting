@@ -1,42 +1,30 @@
 # Stage 1: Build
-FROM node:18.16.0-alpine AS builder
+FROM node:18.20-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm@9.0.5
-
-# Install build dependencies
-RUN apk add --no-cache python3 build-base chromium
-
-# Set Python environment
-ENV PYTHON=/usr/bin/python3
-
-# Copy package files for dependency installation
 COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
-COPY --chown=node:node packages/webapp/package.json ./packages/webapp/
+COPY --chown=node:node packages/webapp ./packages/webapp
 COPY --chown=node:node shared ./shared
 
-# Install all dependencies (including devDependencies for build)
-RUN pnpm install
-
-# Copy source code for webapp and dependencies
-COPY --chown=node:node ./packages/webapp ./packages/webapp
-
-# Build webapp package
-RUN pnpm run build:webapp
+RUN if [ ! -f "packages/webapp/dist/index.html" ]; then \
+      npm install -g pnpm@9.0.5 && \
+      pnpm install --no-frozen-lockfile && \
+      pnpm run build:webapp; \
+    else \
+      echo "Using prebuilt packages/webapp/dist bundle"; \
+    fi
 
 # Stage 2: Nginx
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
-# Copy nginx configuration
+LABEL org.opencontainers.image.title="BorngreatAccounting Web" \
+      org.opencontainers.image.description="BorngreatAccounting (BtAccounting) Web Frontend SPA" \
+      org.opencontainers.image.vendor="Borngreat (Peter Borngreat-Mensah)" \
+      org.opencontainers.image.licenses="AGPL-3.0" \
+      org.opencontainers.image.source="https://github.com/PipetteGh/borngreataccounting"
+
 COPY --chown=root:root ./packages/webapp/nginx/sites/default.conf /etc/nginx/conf.d/default.conf
-
-# Copy built webapp assets from builder stage
 COPY --from=builder --chown=nginx:nginx /app/packages/webapp/dist /usr/share/nginx/html
 
-# Expose port
 EXPOSE 80
-
-# Nginx runs as nginx user by default, which is good for security
-# No CMD needed as nginx base image already has it

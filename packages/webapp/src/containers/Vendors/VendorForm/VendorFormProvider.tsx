@@ -8,7 +8,7 @@ import type {
   BranchesListResponse,
   EditVendorBody,
   Vendor,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import {
   useVendor,

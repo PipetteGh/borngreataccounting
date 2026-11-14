@@ -7,7 +7,7 @@ import { useBranchesContext } from './BranchesProvider';
 import { useBranchesTableColumns, ActionsMenu } from './components';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
-import type { Branch } from '@bigcapital/sdk-ts';
+import type { Branch } from '@borngreataccounting/sdk-ts';
 import { DataTable, Card, AppToaster, TableSkeletonRows } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

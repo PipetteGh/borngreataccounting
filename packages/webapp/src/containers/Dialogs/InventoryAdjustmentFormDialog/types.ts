@@ -4,11 +4,11 @@ import type {
   InventoryAdjustment,
   Item,
   Warehouse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import type {
   CreateQuickInventoryAdjustmentBody,
   EditQuickInventoryAdjustmentBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface InventoryAdjustmentFormValues {
   date: string;

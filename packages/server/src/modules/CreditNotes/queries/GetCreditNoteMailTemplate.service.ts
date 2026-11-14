@@ -2,7 +2,7 @@ import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectab
 import {
   renderCreditNoteEmailTemplate,
   CreditNoteEmailProps,
-} from '@bigcapital/email-components';
+} from '@borngreataccounting/email-components';
 import { Inject, Injectable } from '@nestjs/common';
 import { GetCreditNoteService } from './GetCreditNote.service';
 import { CreditNoteBrandingTemplate } from './CreditNoteBrandingTemplate.service';

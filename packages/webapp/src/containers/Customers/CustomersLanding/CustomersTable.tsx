@@ -11,7 +11,7 @@ import type { WithCustomersActionsProps } from './withCustomersActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { Customer } from '@bigcapital/sdk-ts';
+import type { Customer } from '@borngreataccounting/sdk-ts';
 import {
   DataTable,
   DashboardContentTable,

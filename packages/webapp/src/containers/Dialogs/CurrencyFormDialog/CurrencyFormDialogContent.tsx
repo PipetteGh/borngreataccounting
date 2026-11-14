@@ -2,7 +2,7 @@ import React from 'react';
 import '@/style/pages/Currency/CurrencyFormDialog.scss';
 import { CurrencyForm } from './CurrencyForm';
 import { CurrencyFormProvider } from './CurrencyFormProvider';
-import type { Currency } from '@bigcapital/sdk-ts';
+import type { Currency } from '@borngreataccounting/sdk-ts';
 
 interface CurrencyFormDialogContentInnerProps {
   action?: string;

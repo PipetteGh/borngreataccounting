@@ -3,7 +3,7 @@ import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { ITEM_UNITS } from './constants';
 import type { ItemFormValues } from './types';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 
 const Schema = Yup.object().shape({

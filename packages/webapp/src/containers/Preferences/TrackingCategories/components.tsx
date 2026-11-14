@@ -1,7 +1,7 @@
 import { Intent, Menu, MenuDivider, MenuItem, Tag } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { TrackingCategoriesList } from '@bigcapital/sdk-ts';
+import type { TrackingCategoriesList } from '@borngreataccounting/sdk-ts';
 import { Icon, If } from '@/components';
 import {
   TRACKING_CATEGORY_MODULE_LABELS,

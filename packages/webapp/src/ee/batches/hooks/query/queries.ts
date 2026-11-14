@@ -3,7 +3,7 @@ import {
   rawRequest,
   type BulkSaveBatchesBody,
   type BulkSaveBatchesResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,

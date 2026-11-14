@@ -6,20 +6,19 @@ FROM node:18.20-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm@9.0.5 && \
-    apk add --no-cache python3 build-base chromium
-
-ENV PYTHON=/usr/bin/python3
-
 COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
-COPY --chown=node:node packages/server/package.json ./packages/server/
+COPY --chown=node:node packages/server ./packages/server
 COPY --chown=node:node shared ./shared
 
-RUN pnpm install --no-frozen-lockfile
-
-COPY --chown=node:node ./packages/server ./packages/server
-
-RUN pnpm run build:server --skip-nx-cache
+RUN if [ ! -f "packages/server/dist/main.js" ]; then \
+      npm install -g pnpm@9.0.5 && \
+      apk add --no-cache python3 build-base && \
+      export PYTHON=/usr/bin/python3 && \
+      pnpm install --no-frozen-lockfile && \
+      pnpm run build:server --skip-nx-cache; \
+    else \
+      echo "Using prebuilt packages/server/dist and shared bundles"; \
+    fi
 
 # Stage 2: Production runtime
 FROM node:18.20-alpine AS production
@@ -42,11 +41,9 @@ ENV PYTHON=/usr/bin/python3
 COPY --chown=nodejs:nodejs package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY --chown=nodejs:nodejs packages/server/package.json ./packages/server/
 COPY --chown=nodejs:nodejs shared ./shared
-COPY --chown=nodejs:nodejs .husky ./.husky
 
-RUN pnpm add -D -w husky && \
-    pnpm install --prod --no-frozen-lockfile && \
-    pnpm remove -w husky && \
+RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts && \
+    pnpm rebuild bcrypt && \
     apk del python3 build-base
 
 COPY --from=builder --chown=nodejs:nodejs /app/packages/server/dist ./packages/server/dist

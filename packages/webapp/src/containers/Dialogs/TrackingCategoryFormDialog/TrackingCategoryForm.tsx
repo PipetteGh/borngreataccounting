@@ -15,7 +15,7 @@ import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActio
 import type {
   CreateTrackingCategoryBody,
   EditTrackingCategoryBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { TRACKING_CATEGORY_MODULES } from '@/constants';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

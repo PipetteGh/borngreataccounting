@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { useTaxRate } from '@/hooks/query/tax-rates';
 

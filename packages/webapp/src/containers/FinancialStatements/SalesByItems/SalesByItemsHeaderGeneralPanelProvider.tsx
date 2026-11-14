@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { FinancialHeaderLoadingSkeleton } from '../FinancialHeaderLoadingSkeleton';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { useItems } from '@/hooks/query';
 
 interface SalesByItemGeneralPanelContextValue {

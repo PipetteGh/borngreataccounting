@@ -3,7 +3,7 @@ import {
   fetchProfitLossXlsx,
   fetchProfitLossCsv,
   fetchProfitLossPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   ProfitLossXlsxQuery,
   ProfitLossCsvQuery,
   ProfitLossPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useProfitLossSheet(
   query: ProfitLossTableQuery,

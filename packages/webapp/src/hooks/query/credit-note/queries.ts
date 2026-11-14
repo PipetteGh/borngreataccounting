@@ -20,7 +20,7 @@ import {
   fetchCreditNoteMail,
   sendCreditNoteMail,
   fetchCreditNoteHtmlContent,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -40,7 +40,7 @@ import { itemsKeys } from '../items/query-keys';
 import { organizationKeys } from '../organization/query-keys';
 import { settingsKeys } from '../settings/query-keys';
 import { creditNotesKeys } from './query-keys';
-import type { CreditNotesListResponse } from '@bigcapital/sdk-ts';
+import type { CreditNotesListResponse } from '@borngreataccounting/sdk-ts';
 import type {
   CreditNote,
   CreateCreditNoteBody,
@@ -50,7 +50,7 @@ import type {
   ValidateBulkDeleteCreditNotesResponse,
   CreditNoteMailStateResponse,
   CreditNoteHtmlContentResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

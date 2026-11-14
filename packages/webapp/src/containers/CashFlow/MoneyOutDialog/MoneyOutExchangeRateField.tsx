@@ -3,7 +3,7 @@ import React from 'react';
 import { useMoneyOutFieldsContext } from './MoneyOutFieldsProvider';
 import { useForeignAccount } from './utils';
 import type { MoneyOutFormValues } from './types';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import { ExchangeRateMutedField } from '@/components';
 
 /**

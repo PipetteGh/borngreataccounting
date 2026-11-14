@@ -1,6 +1,6 @@
 import { Intent, Tag, Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
-import type { TaxRate } from '@bigcapital/sdk-ts';
+import type { TaxRate } from '@borngreataccounting/sdk-ts';
 import { Align } from '@/constants';
 
 const codeAccessor = (taxRate: TaxRate) => {

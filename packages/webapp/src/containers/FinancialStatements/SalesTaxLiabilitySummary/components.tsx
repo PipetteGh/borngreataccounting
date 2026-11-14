@@ -12,7 +12,7 @@ import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBo
 import type {
   SalesTaxLiabilityXlsxQuery,
   SalesTaxLiabilityCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, Stack } from '@/components';
 import {
   useSalesTaxLiabilitySummaryCsvExport,

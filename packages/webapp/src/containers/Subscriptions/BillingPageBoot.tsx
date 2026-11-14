@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import type {
   SubscriptionPlansResponse,
   SubscriptionsListResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useGetSubscriptionPlans,
   useGetSubscriptions,

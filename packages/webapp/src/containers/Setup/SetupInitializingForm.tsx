@@ -2,7 +2,7 @@ import { ProgressBar, Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
 import { useState, useEffect } from 'react';
-import type { OrganizationCurrent } from '@bigcapital/sdk-ts';
+import type { OrganizationCurrent } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T } from '@/components';
 import {
   withOrganizationActions,

@@ -14,7 +14,7 @@ import { useProfitLossSheetContext } from './ProfitLossProvider';
 import type {
   ProfitLossXlsxQuery,
   ProfitLossCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   AppToaster,
   Icon,

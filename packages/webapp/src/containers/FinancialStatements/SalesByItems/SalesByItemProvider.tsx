@@ -1,4 +1,4 @@
-import { SalesByItemsTableQuery } from '@bigcapital/sdk-ts';
+import { SalesByItemsTableQuery } from '@borngreataccounting/sdk-ts';
 import { createContext, useContext, useMemo } from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { FinancialReportPage } from '../FinancialReportPage';

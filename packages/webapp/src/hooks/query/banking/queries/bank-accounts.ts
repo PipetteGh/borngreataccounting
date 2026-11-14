@@ -3,7 +3,7 @@ import {
   pauseBankAccount,
   refreshBankAccount,
   resumeBankAccount,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseMutationOptions,
   UseMutationResult,
@@ -17,7 +17,7 @@ import type {
   DisconnectBankAccountParams,
   PauseBankAccountParams,
   RefreshBankAccountParams,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 /** Mutation variables for pause (hook uses bankAccountId for the API id). */
 type PauseFeedsBankAccountValues = {

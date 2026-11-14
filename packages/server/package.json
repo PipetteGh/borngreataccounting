@@ -1,5 +1,5 @@
 {
-  "name": "@bigcapital/server",
+  "name": "@borngreataccounting/server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -36,10 +36,10 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.576.0",
     "@aws-sdk/s3-request-presigner": "^3.583.0",
-    "@bigcapital/email-components": "workspace:*",
-    "@bigcapital/pdf-templates": "workspace:*",
-    "@bigcapital/sdk-ts": "workspace:*",
-    "@bigcapital/utils": "workspace:*",
+    "@borngreataccounting/email-components": "workspace:*",
+    "@borngreataccounting/pdf-templates": "workspace:*",
+    "@borngreataccounting/sdk-ts": "workspace:*",
+    "@borngreataccounting/utils": "workspace:*",
     "@bull-board/api": "^5.22.0",
     "@bull-board/express": "^5.22.0",
     "@bull-board/nestjs": "^5.22.0",

@@ -5,7 +5,7 @@ import {
   setDefaultWorkspace,
   inactivateWorkspace,
   activateWorkspace,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useMutation,
   useQuery,
@@ -20,7 +20,7 @@ import type {
   CreateWorkspaceBody,
   CreateWorkspaceResponse,
   SetDefaultWorkspaceBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { useAuthOrganizationId } from '@/hooks/state';
 import { useApiFetcher } from '@/hooks/useRequest';
 

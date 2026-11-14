@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMoneyOutDialogContext } from './MoneyOutDialogProvider';
-import type { Account } from '@bigcapital/sdk-ts';
+import type { Account } from '@borngreataccounting/sdk-ts';
 import { DialogContent } from '@/components';
 import { useAccount } from '@/hooks/query';
 

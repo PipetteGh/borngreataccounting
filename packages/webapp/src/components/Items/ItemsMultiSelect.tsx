@@ -3,7 +3,7 @@ import { ItemRenderer, ItemPredicate } from '@blueprintjs/select';
 import React, { useCallback, useMemo, ComponentType } from 'react';
 import intl from 'react-intl-universal';
 import type { ItemRestrictType } from './ItemsSelect';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import type { SelectOptionProps } from '@blueprintjs-formik/select';
 import { FormattedMessage as T } from '@/components';
 import { FMultiSelect, MultiSelect } from '@/components/Forms';

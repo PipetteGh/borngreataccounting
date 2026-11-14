@@ -14,11 +14,11 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useCustomersBalanceSummaryContext } from './CustomersBalanceSummaryProvider';
-import type { CustomersBalanceColumnKey } from '@bigcapital/sdk-ts';
+import type { CustomersBalanceColumnKey } from '@borngreataccounting/sdk-ts';
 import type {
   CustomerBalanceXlsxQuery,
   CustomerBalanceCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import { Align } from '@/constants';
 import {

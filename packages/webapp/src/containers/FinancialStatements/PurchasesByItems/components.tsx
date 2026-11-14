@@ -12,7 +12,7 @@ import { usePurchaseByItemsContext } from './PurchasesByItemsProvider';
 import type {
   PurchasesByItemsXlsxQuery,
   PurchasesByItemsCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster, If, Stack } from '@/components';
 import {
   usePurchasesByItemsCsvExport,

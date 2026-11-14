@@ -13,7 +13,7 @@ import {
   useComposeRowsOnUpdateTableRow,
 } from './utils';
 import type { ItemEntry } from '@/interfaces/ItemEntries';
-import type { Item, TaxRate } from '@bigcapital/sdk-ts';
+import type { Item, TaxRate } from '@borngreataccounting/sdk-ts';
 import { DataTableEditable } from '@/components';
 import { Features } from '@/constants';
 import { CLASSES } from '@/constants/classes';

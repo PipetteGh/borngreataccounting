@@ -1,7 +1,7 @@
 import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
-import type { Item } from '@bigcapital/sdk-ts';
+import type { Item } from '@borngreataccounting/sdk-ts';
 import { Choose, FormattedMessage as T } from '@/components';
 
 /**

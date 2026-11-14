@@ -1,4 +1,4 @@
-import { BalanceSheetTableQuery } from '@bigcapital/sdk-ts';
+import { BalanceSheetTableQuery } from '@borngreataccounting/sdk-ts';
 import { castArray } from 'lodash';
 import moment from 'moment';
 import React from 'react';

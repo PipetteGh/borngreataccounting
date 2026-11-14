@@ -2,7 +2,7 @@ import type {
   AccountsList,
   BranchesListResponse,
   CreateRefundCreditNoteBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface RefundCreditNoteFormValues {
   fromAccountId: string | number;

@@ -9,7 +9,7 @@ import {
 import { useBillingPageBoot } from './BillingPageBoot';
 import styles from './BillingSubscription.module.scss';
 import { useUpgradeToGoCheckout } from './useUpgradeToGoCheckout';
-import type { SubscriptionsListResponse } from '@bigcapital/sdk-ts';
+import type { SubscriptionsListResponse } from '@borngreataccounting/sdk-ts';
 import { AppToaster, Can, Group, Stack } from '@/components';
 import { useCreateStripePortalSession } from '@/hooks/query/subscription';
 import { useAlertActions } from '@/hooks/state';

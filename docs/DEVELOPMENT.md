@@ -41,9 +41,9 @@ pnpm run dev:webapp
 | Task | Command |
 |---|---|
 | Build all shared packages | `pnpm run build:shared` |
-| Build backend server | `pnpm --filter "@bigcapital/server" run build` |
-| Build frontend webapp | `pnpm --filter "@bigcapital/webapp" run build` |
-| Run backend Jest unit tests | `pnpm --filter "@bigcapital/server" test` |
+| Build backend server | `pnpm --filter "@borngreataccounting/server" run build` |
+| Build frontend webapp | `pnpm --filter "@borngreataccounting/webapp" run build` |
+| Run backend Jest unit tests | `pnpm --filter "@borngreataccounting/server" test` |
 | Run backend E2E tests | `pnpm run test:e2e` |
 | Run Playwright browser E2E tests | `pnpm run e2e:webapp` |
 | Typecheck all packages | `pnpm run typecheck` |
@@ -55,7 +55,7 @@ pnpm run dev:webapp
 ## 3. Centralized Branding System
 
 All product identity strings and URLs are centralized so rebranding and white-labeling never require scattered edits:
-- **Shared Package**: [`shared/bigcapital-utils/src/branding.ts`](../shared/bigcapital-utils/src/branding.ts)
+- **Shared Package**: [`shared/borngreataccounting-utils/src/branding.ts`](../shared/borngreataccounting-utils/src/branding.ts)
 - **Webapp Frontend**: [`packages/webapp/src/constants/brand.ts`](../packages/webapp/src/constants/brand.ts)
 - **Backend Server**: [`packages/server/src/common/config/brand.ts`](../packages/server/src/common/config/brand.ts)
 - **Editable Vector & Raster Assets**: [`assets/branding/`](../assets/branding/)

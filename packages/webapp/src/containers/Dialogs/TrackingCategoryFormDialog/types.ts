@@ -3,7 +3,7 @@ import type {
   CreateTrackingCategoryBody,
   EditTrackingCategoryBody,
   TrackingCategory,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export interface TrackingCategoryFormOption {
   id?: number;

@@ -9,7 +9,7 @@ import type {
   ContactsAutoCompleteResponse,
   SettingsGroup,
   TrackingCategoriesList,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { DashboardInsider } from '@/components';
 import { Features } from '@/constants';
 import {

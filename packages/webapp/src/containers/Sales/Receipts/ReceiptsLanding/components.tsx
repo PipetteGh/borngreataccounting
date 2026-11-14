@@ -12,7 +12,7 @@ import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
-import type { SaleReceiptsListResponse } from '@bigcapital/sdk-ts';
+import type { SaleReceiptsListResponse } from '@borngreataccounting/sdk-ts';
 import { FormattedMessage as T } from '@/components';
 import { FormatDateCell, Choose, Money, Icon, If, Can } from '@/components';
 import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';

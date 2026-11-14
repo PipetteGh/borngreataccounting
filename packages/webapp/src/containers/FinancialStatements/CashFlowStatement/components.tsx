@@ -16,7 +16,7 @@ import { dynamicColumns } from './dynamicColumns';
 import type {
   CashflowStatementXlsxQuery,
   CashflowStatementCsvQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   AppToaster,
   Icon,

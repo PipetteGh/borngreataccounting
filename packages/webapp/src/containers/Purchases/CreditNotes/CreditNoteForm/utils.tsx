@@ -4,7 +4,7 @@ import { first } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import { useVendorCreditNoteFormContext } from './VendorCreditNoteFormProvider';
-import type { CreateVendorCreditBody, VendorCredit } from '@bigcapital/sdk-ts';
+import type { CreateVendorCreditBody, VendorCredit } from '@borngreataccounting/sdk-ts';
 import {
   transformAttachmentsToForm,
   transformAttachmentsToRequest,

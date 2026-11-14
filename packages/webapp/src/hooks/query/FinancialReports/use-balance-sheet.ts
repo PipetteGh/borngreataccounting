@@ -3,7 +3,7 @@ import {
   fetchBalanceSheetXlsx,
   fetchBalanceSheetCsv,
   fetchBalanceSheetPdf,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQuery,
   useMutation,
@@ -20,7 +20,7 @@ import type {
   BalanceSheetXlsxQuery,
   BalanceSheetCsvQuery,
   BalanceSheetPdfQuery,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
 export function useBalanceSheet(
   query: BalanceSheetTableQuery,

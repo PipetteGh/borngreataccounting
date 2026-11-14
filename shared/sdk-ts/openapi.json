@@ -4587,7 +4587,7 @@
     "/api/subscription/plans": {
       "get": {
         "operationId": "SubscriptionsController_getPlans",
-        "summary": "Get the Bigcapital Cloud plan catalog",
+        "summary": "Get the BorngreatAccounting Cloud plan catalog",
         "parameters": [
           {
             "name": "Authorization",
@@ -18111,7 +18111,7 @@
                     }
                   ],
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -18943,7 +18943,7 @@
                     "previous_year_percentage_change": false
                   },
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -20711,7 +20711,7 @@
                     }
                   ],
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -21477,7 +21477,7 @@
                     ]
                   },
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -22110,7 +22110,7 @@
                     }
                   },
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -22406,7 +22406,7 @@
                     "none_zero": false
                   },
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -23287,7 +23287,7 @@
                     }
                   ],
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -23797,7 +23797,7 @@
                     }
                   ],
                   "meta": {
-                    "organizationName": "BIGCAPITAL, INC",
+                    "organizationName": "BORNGREAT ACCOUNTING, INC",
                     "baseCurrency": "USD",
                     "dateFormat": "DD MMM yyyy",
                     "isCostComputeRunning": false,
@@ -24350,7 +24350,7 @@
                     "basis": "cash"
                   },
                   "meta": {
-                    "organization_name": "BIGCAPITAL, INC",
+                    "organization_name": "BORNGREAT ACCOUNTING, INC",
                     "base_currency": "USD",
                     "date_format": "DD MMM yyyy",
                     "is_cost_compute_running": false,
@@ -28545,7 +28545,7 @@
     }
   },
   "info": {
-    "title": "Bigcapital",
+    "title": "BorngreatAccounting",
     "description": "Financial accounting software",
     "version": "1.0",
     "contact": {}
@@ -28772,7 +28772,7 @@
           "otpauthUrl": {
             "type": "string",
             "description": "otpauth:// URI to show as a QR code.",
-            "example": "otpauth://totp/Bigcapital:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Bigcapital&algorithm=SHA1&digits=6&period=30"
+            "example": "otpauth://totp/BorngreatAccounting:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=BorngreatAccounting&algorithm=SHA1&digits=6&period=30"
           }
         },
         "required": [
@@ -50466,7 +50466,7 @@
           },
           "isBigcapitalCloud": {
             "type": "boolean",
-            "description": "Whether the app is running on Bigcapital Cloud",
+            "description": "Whether the app is running on BorngreatAccounting Cloud",
             "example": true
           }
         },

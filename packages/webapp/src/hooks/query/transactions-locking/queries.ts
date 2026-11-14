@@ -5,7 +5,7 @@ import {
   cancelLockTransactions,
   unlockPartialTransactions,
   cancelUnlockPartialTransactions,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   useQueryClient,
   useMutation,
@@ -15,7 +15,7 @@ import {
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { transactionsLockingKeys } from './query-keys';
-import type { TransactionsLockingListResponse } from '@bigcapital/sdk-ts';
+import type { TransactionsLockingListResponse } from '@borngreataccounting/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,

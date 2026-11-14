@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccountTransactionsContext } from '../AccountTransactionsProvider';
-import type { PendingBankTransactionsListPage } from '@bigcapital/sdk-ts';
+import type { PendingBankTransactionsListPage } from '@borngreataccounting/sdk-ts';
 import { IntersectionObserver } from '@/components';
 import { usePendingBankTransactionsInfinity } from '@/hooks/query/banking';
 import { useFlattenInfinityPages } from '@/hooks/utils';

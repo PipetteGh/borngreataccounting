@@ -34,7 +34,7 @@ import {
 import type {
   CreatePaymentReceivedBody,
   EditPaymentReceivedBody,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import { AppToaster } from '@/components';
 import { PageForm } from '@/components/PageForm';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';

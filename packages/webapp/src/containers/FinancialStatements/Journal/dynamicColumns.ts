@@ -3,7 +3,7 @@ import * as FF from 'fp-ts/function';
 import * as FO from 'fp-ts/Option';
 import React from 'react';
 import { useJournalSheetContext } from './JournalProvider';
-import type { JournalColumnKey } from '@bigcapital/sdk-ts';
+import type { JournalColumnKey } from '@borngreataccounting/sdk-ts';
 import { Align, CLASSES } from '@/constants';
 import { getColumnWidth } from '@/utils';
 import { firstMatch, when } from '@/utils/fp';

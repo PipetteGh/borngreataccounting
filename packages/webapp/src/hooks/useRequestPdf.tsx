@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PdfDocument } from '@bigcapital/sdk-ts';
+import type { PdfDocument } from '@borngreataccounting/sdk-ts';
 
 /**
  * Fetches a PDF document via the given SDK fetch function and exposes it as

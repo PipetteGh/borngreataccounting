@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
 import { PreferencesPageLoader } from '../PreferencesPageLoader';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useSettingsEstimates } from '@/hooks/query';

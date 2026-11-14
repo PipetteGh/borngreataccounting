@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 import React, { createContext } from 'react';
-import type { Warehouse } from '@bigcapital/sdk-ts';
+import type { Warehouse } from '@borngreataccounting/sdk-ts';
 import { Features } from '@/constants';
 import { CLASSES } from '@/constants/classes';
 import { useWarehouses } from '@/hooks/query';

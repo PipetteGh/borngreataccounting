@@ -1,5 +1,5 @@
 import { ButtonProps } from '@blueprintjs/core';
-import type { SubscriptionPlansResponse } from '@bigcapital/sdk-ts';
+import type { SubscriptionPlansResponse } from '@borngreataccounting/sdk-ts';
 import { PricingPlan } from '@/components/PricingPlan/PricingPlan';
 
 export type SubscriptionPlansPeriod = 'monthly' | 'annually';

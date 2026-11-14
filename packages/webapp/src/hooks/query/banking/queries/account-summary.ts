@@ -1,7 +1,7 @@
 import {
   fetchAutofillCategorizeTransaction,
   fetchBankingAccountSummary,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 import {
   UseQueryOptions,
   UseQueryResult,
@@ -12,9 +12,9 @@ import { bankingKeys } from '../query-keys';
 import type {
   AutofillCategorizeTransactionResponse,
   BankingAccountSummaryResponse,
-} from '@bigcapital/sdk-ts';
+} from '@borngreataccounting/sdk-ts';
 
-/** @deprecated Use AutofillCategorizeTransactionResponse from @bigcapital/sdk-ts */
+/** @deprecated Use AutofillCategorizeTransactionResponse from @borngreataccounting/sdk-ts */
 export type GetAutofillCategorizeTransaction =
   AutofillCategorizeTransactionResponse;
 

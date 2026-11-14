@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import React from 'react';
 import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
+import type { SettingsGroup } from '@borngreataccounting/sdk-ts';
 import type { ReactNode } from 'react';
 import { DashboardInsider } from '@/components/Dashboard';
 import {

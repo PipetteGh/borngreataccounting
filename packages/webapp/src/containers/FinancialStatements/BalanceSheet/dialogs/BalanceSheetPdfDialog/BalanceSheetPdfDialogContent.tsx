@@ -1,6 +1,6 @@
 import { AnchorButton } from '@blueprintjs/core';
 import { useBalanceSheetContext } from '../../BalanceSheetProvider';
-import type { BalanceSheetPdfQuery } from '@bigcapital/sdk-ts';
+import type { BalanceSheetPdfQuery } from '@borngreataccounting/sdk-ts';
 import {
   DialogContent,
   PdfDocumentPreview,

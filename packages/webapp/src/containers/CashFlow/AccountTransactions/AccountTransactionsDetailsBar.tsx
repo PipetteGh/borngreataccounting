@@ -11,7 +11,7 @@ import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
-import type { BankingAccountsListResponse } from '@bigcapital/sdk-ts';
+import type { BankingAccountsListResponse } from '@borngreataccounting/sdk-ts';
 import { Icon } from '@/components';
 import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
 
