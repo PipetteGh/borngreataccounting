@@ -116,7 +116,13 @@ function printThermalReceipt(
   receipt: CompletedReceipt,
   paperWidth: '80mm' | '58mm',
   currency: string,
-  orgInfo: { name: string; phone?: string; address?: string },
+  orgInfo: {
+    name: string;
+    phone?: string;
+    address?: string;
+    logoUri?: string;
+    taxNumber?: string;
+  },
 ) {
   const widthCss = paperWidth === '58mm' ? '54mm' : '74mm';
   const fontSize = paperWidth === '58mm' ? '10.5px' : '12px';
@@ -165,6 +171,7 @@ function printThermalReceipt(
     .center { text-align: center; }
     .bold { font-weight: 700; }
     .store-name { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .logo { max-width: 140px; max-height: 56px; object-fit: contain; display: block; margin: 0 auto 4px; filter: grayscale(100%) contrast(1.15); }
     .muted { font-size: 10.5px; }
     .dash { border-top: 1px dashed #000; margin: 6px 0; }
     .row { display: flex; justify-content: space-between; gap: 6px; }
@@ -177,9 +184,11 @@ function printThermalReceipt(
 </head>
 <body>
   <div class="center">
+    ${orgInfo.logoUri ? `<img class="logo" src="${escapeHtml(orgInfo.logoUri)}" alt="" />` : ''}
     <div class="store-name">${escapeHtml(orgInfo.name || 'BorngreatAccounting')}</div>
     ${orgInfo.address ? `<div class="muted">${escapeHtml(orgInfo.address)}</div>` : ''}
     ${orgInfo.phone ? `<div class="muted">Tel: ${escapeHtml(orgInfo.phone)}</div>` : ''}
+    ${orgInfo.taxNumber ? `<div class="muted">TIN: ${escapeHtml(orgInfo.taxNumber)}</div>` : ''}
     <div class="bold" style="margin-top:4px;">SALES RECEIPT</div>
   </div>
   <div class="dash"></div>
@@ -290,6 +299,8 @@ export function POSPage() {
     name: string;
     phone?: string;
     address?: string;
+    logoUri?: string;
+    taxNumber?: string;
   }>({ name: 'BorngreatAccounting' });
   const [paperWidth, setPaperWidth] = useState<'80mm' | '58mm'>('80mm');
 
@@ -338,6 +349,7 @@ export function POSPage() {
         api.get('/warehouses'),
       ]);
 
+      let primaryBranch: any = null;
       if (branchesRes.status === 'fulfilled') {
         const raw = transformToCamelCase(branchesRes.value.data);
         const list = Array.isArray(raw?.branches)
@@ -347,8 +359,9 @@ export function POSPage() {
             : Array.isArray(raw)
               ? raw
               : [];
-        const primary = list.find((b: any) => b.primary) || list[0];
-        if (primary?.id) setSelectedBranchId((prev) => prev || primary.id);
+        primaryBranch = list.find((b: any) => b.primary) || list[0] || null;
+        if (primaryBranch?.id)
+          setSelectedBranchId((prev) => prev || primaryBranch.id);
       }
 
       if (warehousesRes.status === 'fulfilled') {
@@ -446,14 +459,49 @@ export function POSPage() {
 
       if (orgRes.status === 'fulfilled') {
         const raw = transformToCamelCase(orgRes.value.data);
-        if (raw?.baseCurrency) {
-          setBaseCurrency(raw.baseCurrency);
+        const meta = raw?.metadata || raw;
+        if (meta?.baseCurrency) {
+          setBaseCurrency(meta.baseCurrency);
         }
-        if (raw?.name) {
+        const addrObj =
+          meta?.address && typeof meta.address === 'object'
+            ? meta.address
+            : null;
+        const orgAddressStr = addrObj
+          ? [
+              addrObj.address1,
+              addrObj.address2,
+              addrObj.city,
+              addrObj.stateProvince,
+              addrObj.postalCode,
+            ]
+              .filter(Boolean)
+              .join(', ')
+          : typeof meta?.address === 'string'
+            ? meta.address
+            : '';
+        const branchAddressStr = primaryBranch
+          ? [primaryBranch.address, primaryBranch.city, primaryBranch.country]
+              .filter(Boolean)
+              .join(', ')
+          : '';
+        const resolvedAddress =
+          orgAddressStr ||
+          branchAddressStr ||
+          meta?.location ||
+          undefined;
+        const resolvedPhone =
+          addrObj?.phone ||
+          meta?.phone ||
+          primaryBranch?.phoneNumber ||
+          undefined;
+        if (meta?.name) {
           setOrgInfo({
-            name: raw.name,
-            phone: raw.phone || undefined,
-            address: raw.address || raw.city || undefined,
+            name: meta.name,
+            phone: resolvedPhone,
+            address: resolvedAddress,
+            logoUri: meta.logoUri || undefined,
+            taxNumber: meta.taxNumber || undefined,
           });
         }
       }
@@ -1443,6 +1491,20 @@ export function POSPage() {
               }}
             >
               <div style={{ textAlign: 'center', marginBottom: 6 }}>
+                {orgInfo.logoUri && (
+                  <img
+                    src={orgInfo.logoUri}
+                    alt=""
+                    style={{
+                      maxWidth: 140,
+                      maxHeight: 56,
+                      objectFit: 'contain',
+                      display: 'block',
+                      margin: '0 auto 4px',
+                      filter: 'grayscale(100%) contrast(1.15)',
+                    }}
+                  />
+                )}
                 <div
                   style={{
                     fontWeight: 700,
@@ -1457,6 +1519,9 @@ export function POSPage() {
                 )}
                 {orgInfo.phone && (
                   <div style={{ fontSize: 10.5 }}>Tel: {orgInfo.phone}</div>
+                )}
+                {orgInfo.taxNumber && (
+                  <div style={{ fontSize: 10.5 }}>TIN: {orgInfo.taxNumber}</div>
                 )}
                 <div style={{ fontWeight: 700, marginTop: 4 }}>
                   SALES RECEIPT

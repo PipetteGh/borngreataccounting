@@ -10,6 +10,7 @@ import { Chromiumly } from '@/libs/chromiumly/Chromiumly';
 import { getPdfFilePath, getPdfFilesStorageDir } from './utils';
 import { Document } from './models/Document';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
+import { AttachmentStorageService } from '../Attachments/AttachmentStorage.service';
 
 const execFileAsync = promisify(execFile);
 
@@ -51,7 +52,45 @@ export class ChromiumlyHtmlConvert {
   constructor(
     @Inject(Document.name)
     private documentModel: TenantModelProxy<typeof Document>,
+    private readonly storageService: AttachmentStorageService,
   ) {}
+
+  /**
+   * Rewrites relative local attachment URLs (/api/attachments/public/file?...)
+   * into inline data: URIs so images (e.g. company logos) always render in
+   * headless Chromium, file:// fallbacks, and Gotenberg.
+   */
+  private async inlineLocalAttachmentUrls(html: string): Promise<string> {
+    const matches = html.match(/\/api\/attachments\/public\/file\?[^"'\s<>]+/g);
+    if (!matches || matches.length === 0) {
+      return html;
+    }
+
+    let result = html;
+    const seen = new Set<string>();
+    for (const rawUrl of matches) {
+      if (seen.has(rawUrl)) continue;
+      seen.add(rawUrl);
+
+      try {
+        const decodedQuery = rawUrl.split('?')[1]?.replace(/&amp;/g, '&') || '';
+        const params = new URLSearchParams(decodedQuery);
+        const key = params.get('key');
+        if (!key || !this.storageService.localFileExists(key)) continue;
+
+        const filePath = this.storageService.resolveLocalFilePath(key);
+        const buf = await fs.readFile(filePath);
+        const mimeType = params.get('ct') || 'image/png';
+        const dataUri = `data:${mimeType};base64,${buf.toString('base64')}`;
+        result = result.split(rawUrl).join(dataUri);
+      } catch (err: any) {
+        this.logger.warn(
+          `Failed to inline attachment URL for PDF: ${err?.message || 'unknown error'}`,
+        );
+      }
+    }
+    return result;
+  }
 
   /**
    * Write HTML content to temporary file.
@@ -149,7 +188,9 @@ export class ChromiumlyHtmlConvert {
     properties?: PageProperties,
     pdfFormat?: PdfFormat,
   ): Promise<Buffer> {
-    const [filename, cleanupTempFile] = await this.writeTempHtmlFile(html);
+    const resolvedHtml = await this.inlineLocalAttachmentUrls(html);
+    const [filename, cleanupTempFile] =
+      await this.writeTempHtmlFile(resolvedHtml);
     const fileDir = getPdfFilesStorageDir(filename).replace(/\\/g, '/');
 
     const baseDocsEndpoint = (
@@ -175,7 +216,11 @@ export class ChromiumlyHtmlConvert {
         `Gotenberg unavailable (${err?.message || 'error'}); falling back to local headless browser PDF renderer.`,
       );
       const localHttpUrl = `http://127.0.0.1:${process.env.PORT || 3000}/public/${normalizedFileDir}`;
-      return await this.convertWithLocalBrowser(html, localHttpUrl, properties);
+      return await this.convertWithLocalBrowser(
+        resolvedHtml,
+        localHttpUrl,
+        properties,
+      );
     } finally {
       await cleanupTempFile().catch(() => {});
     }
