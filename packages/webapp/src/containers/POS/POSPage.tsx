@@ -23,8 +23,10 @@ import React, {
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppToaster } from '@/components';
+import { useSettingsReceipts } from '@/hooks/query';
 import { useAuthOrganizationId, useAuthToken } from '@/hooks/state';
 import { transformToCamelCase } from '@/utils';
+import { generateCode128Svg } from '@/utils/barcode';
 
 interface PosItem {
   id: number;
@@ -112,6 +114,20 @@ function escapeHtml(str: string) {
     .replace(/"/g, '&quot;');
 }
 
+interface PosReceiptDisplayConfig {
+  showLogo: boolean;
+  showCompanyName: boolean;
+  showCompanyAddress: boolean;
+  showCompanyPhone: boolean;
+  showCompanyTaxNumber: boolean;
+  showCustomer: boolean;
+  showPaymentMethod: boolean;
+  thankYouMessage: string;
+  footerNote: string;
+  showBarcode: boolean;
+  barcodeValue: string;
+}
+
 function printThermalReceipt(
   receipt: CompletedReceipt,
   paperWidth: '80mm' | '58mm',
@@ -123,6 +139,7 @@ function printThermalReceipt(
     logoUri?: string;
     taxNumber?: string;
   },
+  config: PosReceiptDisplayConfig,
 ) {
   const widthCss = paperWidth === '58mm' ? '54mm' : '74mm';
   const fontSize = paperWidth === '58mm' ? '10.5px' : '12px';
@@ -146,6 +163,12 @@ function printThermalReceipt(
       `;
     })
     .join('');
+
+  const resolvedBarcodeValue =
+    (config.barcodeValue || '').trim() || receipt.receiptNumber || 'POS-RECEIPT';
+  const barcodeSvg = config.showBarcode
+    ? generateCode128Svg(resolvedBarcodeValue)
+    : '';
 
   const html = `<!doctype html>
 <html>
@@ -184,18 +207,18 @@ function printThermalReceipt(
 </head>
 <body>
   <div class="center">
-    ${orgInfo.logoUri ? `<img class="logo" src="${escapeHtml(orgInfo.logoUri)}" alt="" />` : ''}
-    <div class="store-name">${escapeHtml(orgInfo.name || 'BorngreatAccounting')}</div>
-    ${orgInfo.address ? `<div class="muted">${escapeHtml(orgInfo.address)}</div>` : ''}
-    ${orgInfo.phone ? `<div class="muted">Tel: ${escapeHtml(orgInfo.phone)}</div>` : ''}
-    ${orgInfo.taxNumber ? `<div class="muted">TIN: ${escapeHtml(orgInfo.taxNumber)}</div>` : ''}
+    ${config.showLogo && orgInfo.logoUri ? `<img class="logo" src="${escapeHtml(orgInfo.logoUri)}" alt="" />` : ''}
+    ${config.showCompanyName ? `<div class="store-name">${escapeHtml(orgInfo.name || 'BorngreatAccounting')}</div>` : ''}
+    ${config.showCompanyAddress && orgInfo.address ? `<div class="muted">${escapeHtml(orgInfo.address)}</div>` : ''}
+    ${config.showCompanyPhone && orgInfo.phone ? `<div class="muted">Tel: ${escapeHtml(orgInfo.phone)}</div>` : ''}
+    ${config.showCompanyTaxNumber && orgInfo.taxNumber ? `<div class="muted">TIN: ${escapeHtml(orgInfo.taxNumber)}</div>` : ''}
     <div class="bold" style="margin-top:4px;">SALES RECEIPT</div>
   </div>
   <div class="dash"></div>
   <div class="row"><span>Receipt #:</span><span>${escapeHtml(receipt.receiptNumber || '-')}</span></div>
   <div class="row"><span>Date:</span><span>${escapeHtml(receipt.receiptDate)} ${escapeHtml(nowTime)}</span></div>
-  <div class="row"><span>Customer:</span><span>${escapeHtml(receipt.customerName)}</span></div>
-  <div class="row"><span>Payment:</span><span>${escapeHtml(receipt.paymentMethodLabel)}</span></div>
+  ${config.showCustomer ? `<div class="row"><span>Customer:</span><span>${escapeHtml(receipt.customerName)}</span></div>` : ''}
+  ${config.showPaymentMethod ? `<div class="row"><span>Payment:</span><span>${escapeHtml(receipt.paymentMethodLabel)}</span></div>` : ''}
   <div class="dash"></div>
   ${rowsHtml}
   <div class="dash"></div>
@@ -208,8 +231,9 @@ function printThermalReceipt(
   <div class="row"><span>Change Due</span><span>${escapeHtml(formatMoney(receipt.changeDue, currency))}</span></div>
   <div class="dash"></div>
   <div class="footer">
-    <div class="bold">THANK YOU FOR YOUR BUSINESS!</div>
-    <div class="muted">Powered by BorngreatAccounting POS</div>
+    ${config.thankYouMessage ? `<div class="bold">${escapeHtml(config.thankYouMessage)}</div>` : ''}
+    ${config.footerNote ? `<div class="muted">${escapeHtml(config.footerNote)}</div>` : ''}
+    ${barcodeSvg}
   </div>
 </body>
 </html>`;
@@ -303,6 +327,39 @@ export function POSPage() {
     taxNumber?: string;
   }>({ name: 'BorngreatAccounting' });
   const [paperWidth, setPaperWidth] = useState<'80mm' | '58mm'>('80mm');
+  const { data: receiptSettings } = useSettingsReceipts();
+
+  const receiptConfig: PosReceiptDisplayConfig = useMemo(() => {
+    const s = (receiptSettings || {}) as Record<string, any>;
+    const toBool = (v: any, fallback: boolean) =>
+      v === undefined || v === null ? fallback : v === true || v === 'true';
+    return {
+      showLogo: toBool(s.posShowLogo, true),
+      showCompanyName: toBool(s.posShowCompanyName, true),
+      showCompanyAddress: toBool(s.posShowCompanyAddress, true),
+      showCompanyPhone: toBool(s.posShowCompanyPhone, true),
+      showCompanyTaxNumber: toBool(s.posShowCompanyTaxNumber, true),
+      showCustomer: toBool(s.posShowCustomer, true),
+      showPaymentMethod: toBool(s.posShowPaymentMethod, true),
+      thankYouMessage:
+        typeof s.posThankYouMessage === 'string' && s.posThankYouMessage.trim()
+          ? s.posThankYouMessage
+          : 'THANK YOU FOR YOUR BUSINESS!',
+      footerNote:
+        typeof s.posFooterNote === 'string'
+          ? s.posFooterNote
+          : 'Powered by BorngreatAccounting POS',
+      showBarcode: toBool(s.posShowBarcode, true),
+      barcodeValue: typeof s.posBarcodeValue === 'string' ? s.posBarcodeValue : '',
+    };
+  }, [receiptSettings]);
+
+  useEffect(() => {
+    const s = (receiptSettings || {}) as Record<string, any>;
+    if (s.posPaperWidth === '58mm' || s.posPaperWidth === '80mm') {
+      setPaperWidth(s.posPaperWidth);
+    }
+  }, [receiptSettings]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -1491,7 +1548,7 @@ export function POSPage() {
               }}
             >
               <div style={{ textAlign: 'center', marginBottom: 6 }}>
-                {orgInfo.logoUri && (
+                {receiptConfig.showLogo && orgInfo.logoUri && (
                   <img
                     src={orgInfo.logoUri}
                     alt=""
@@ -1505,22 +1562,24 @@ export function POSPage() {
                     }}
                   />
                 )}
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 14,
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {orgInfo.name}
-                </div>
-                {orgInfo.address && (
+                {receiptConfig.showCompanyName && (
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 14,
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {orgInfo.name}
+                  </div>
+                )}
+                {receiptConfig.showCompanyAddress && orgInfo.address && (
                   <div style={{ fontSize: 10.5 }}>{orgInfo.address}</div>
                 )}
-                {orgInfo.phone && (
+                {receiptConfig.showCompanyPhone && orgInfo.phone && (
                   <div style={{ fontSize: 10.5 }}>Tel: {orgInfo.phone}</div>
                 )}
-                {orgInfo.taxNumber && (
+                {receiptConfig.showCompanyTaxNumber && orgInfo.taxNumber && (
                   <div style={{ fontSize: 10.5 }}>TIN: {orgInfo.taxNumber}</div>
                 )}
                 <div style={{ fontWeight: 700, marginTop: 4 }}>
@@ -1538,14 +1597,22 @@ export function POSPage() {
                 <span>Date:</span>
                 <span>{completedReceipt.receiptDate}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Customer:</span>
-                <span>{completedReceipt.customerName}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Payment:</span>
-                <span>{completedReceipt.paymentMethodLabel}</span>
-              </div>
+              {receiptConfig.showCustomer && (
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <span>Customer:</span>
+                  <span>{completedReceipt.customerName}</span>
+                </div>
+              )}
+              {receiptConfig.showPaymentMethod && (
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <span>Payment:</span>
+                  <span>{completedReceipt.paymentMethodLabel}</span>
+                </div>
+              )}
 
               <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
 
@@ -1629,12 +1696,26 @@ export function POSPage() {
               <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
 
               <div style={{ textAlign: 'center', marginTop: 6, fontSize: 11 }}>
-                <div style={{ fontWeight: 700 }}>
-                  THANK YOU FOR YOUR BUSINESS!
-                </div>
-                <div style={{ fontSize: 10 }}>
-                  Powered by BorngreatAccounting POS
-                </div>
+                {receiptConfig.thankYouMessage && (
+                  <div style={{ fontWeight: 700 }}>
+                    {receiptConfig.thankYouMessage}
+                  </div>
+                )}
+                {receiptConfig.footerNote && (
+                  <div style={{ fontSize: 10 }}>{receiptConfig.footerNote}</div>
+                )}
+                {receiptConfig.showBarcode && (
+                  <div
+                    data-testid="pos-receipt-barcode"
+                    dangerouslySetInnerHTML={{
+                      __html: generateCode128Svg(
+                        (receiptConfig.barcodeValue || '').trim() ||
+                          completedReceipt.receiptNumber ||
+                          'POS-RECEIPT',
+                      ),
+                    }}
+                  />
+                )}
               </div>
             </div>
 
@@ -1670,6 +1751,12 @@ export function POSPage() {
               </HTMLSelect>
               <div style={{ display: 'flex', gap: 8 }}>
                 <Button
+                  icon="cog"
+                  minimal={true}
+                  title="Receipt Settings"
+                  onClick={() => history.push('/preferences/receipts')}
+                />
+                <Button
                   icon="print"
                   text="Print Receipt"
                   onClick={() =>
@@ -1678,6 +1765,7 @@ export function POSPage() {
                       paperWidth,
                       baseCurrency,
                       orgInfo,
+                      receiptConfig,
                     )
                   }
                 />

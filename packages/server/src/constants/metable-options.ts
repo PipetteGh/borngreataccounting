@@ -125,6 +125,42 @@ export const SettingsOptions = {
     table_size: {
       type: 'string',
     },
+    pos_show_logo: {
+      type: 'boolean',
+    },
+    pos_show_company_name: {
+      type: 'boolean',
+    },
+    pos_show_company_address: {
+      type: 'boolean',
+    },
+    pos_show_company_phone: {
+      type: 'boolean',
+    },
+    pos_show_company_tax_number: {
+      type: 'boolean',
+    },
+    pos_show_customer: {
+      type: 'boolean',
+    },
+    pos_show_payment_method: {
+      type: 'boolean',
+    },
+    pos_thank_you_message: {
+      type: 'string',
+    },
+    pos_footer_note: {
+      type: 'string',
+    },
+    pos_show_barcode: {
+      type: 'boolean',
+    },
+    pos_barcode_value: {
+      type: 'string',
+    },
+    pos_paper_width: {
+      type: 'string',
+    },
   },
   sales_invoices: {
     next_number: {

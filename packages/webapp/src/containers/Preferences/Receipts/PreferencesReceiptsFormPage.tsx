@@ -17,6 +17,18 @@ import { transformToForm, transfromToSnakeCase } from '@/utils';
 const defaultValues: ReceiptsPreferencesFormValues = {
   termsConditions: '',
   receiptMessage: '',
+  posShowLogo: true,
+  posShowCompanyName: true,
+  posShowCompanyAddress: true,
+  posShowCompanyPhone: true,
+  posShowCompanyTaxNumber: true,
+  posShowCustomer: true,
+  posShowPaymentMethod: true,
+  posThankYouMessage: 'THANK YOU FOR YOUR BUSINESS!',
+  posFooterNote: 'Powered by BorngreatAccounting POS',
+  posShowBarcode: true,
+  posBarcodeValue: '',
+  posPaperWidth: '80mm',
 };
 
 type PreferencesReceiptsFormPageRootProps = Pick<
