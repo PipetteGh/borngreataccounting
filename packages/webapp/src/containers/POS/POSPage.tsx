@@ -98,6 +98,134 @@ function formatMoney(value: number, currency = 'GHS') {
   }
 }
 
+function escapeHtml(str: string) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function printThermalReceipt(
+  receipt: CompletedReceipt,
+  paperWidth: '80mm' | '58mm',
+  currency: string,
+  orgInfo: { name: string; phone?: string; address?: string },
+) {
+  const widthCss = paperWidth === '58mm' ? '54mm' : '74mm';
+  const fontSize = paperWidth === '58mm' ? '10.5px' : '12px';
+  const nowTime = new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const rowsHtml = receipt.lines
+    .map((l) => {
+      const lineTotal = formatMoney(l.quantity * l.unitPrice, currency);
+      const unitPrice = formatMoney(l.unitPrice, currency);
+      return `
+        <div class="item-row">
+          <div class="item-name">${escapeHtml(l.item.name)}</div>
+          <div class="item-meta">
+            <span>${l.quantity} x ${escapeHtml(unitPrice)}</span>
+            <span>${escapeHtml(lineTotal)}</span>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+
+  const html = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Receipt ${escapeHtml(receipt.receiptNumber || '')}</title>
+  <style>
+    @page {
+      size: ${paperWidth} auto;
+      margin: 2mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: ${widthCss};
+      margin: 0 auto;
+      padding: 4px 2px 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: ${fontSize};
+      line-height: 1.35;
+      color: #000000;
+      background: #ffffff;
+    }
+    .center { text-align: center; }
+    .bold { font-weight: 700; }
+    .store-name { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .muted { font-size: 10.5px; }
+    .dash { border-top: 1px dashed #000; margin: 6px 0; }
+    .row { display: flex; justify-content: space-between; gap: 6px; }
+    .item-row { margin-bottom: 4px; }
+    .item-name { font-weight: 600; word-break: break-word; }
+    .item-meta { display: flex; justify-content: space-between; font-size: 11px; padding-left: 6px; }
+    .total-row { font-size: 14px; font-weight: 700; margin-top: 2px; }
+    .footer { text-align: center; margin-top: 10px; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="center">
+    <div class="store-name">${escapeHtml(orgInfo.name || 'BorngreatAccounting')}</div>
+    ${orgInfo.address ? `<div class="muted">${escapeHtml(orgInfo.address)}</div>` : ''}
+    ${orgInfo.phone ? `<div class="muted">Tel: ${escapeHtml(orgInfo.phone)}</div>` : ''}
+    <div class="bold" style="margin-top:4px;">SALES RECEIPT</div>
+  </div>
+  <div class="dash"></div>
+  <div class="row"><span>Receipt #:</span><span>${escapeHtml(receipt.receiptNumber || '-')}</span></div>
+  <div class="row"><span>Date:</span><span>${escapeHtml(receipt.receiptDate)} ${escapeHtml(nowTime)}</span></div>
+  <div class="row"><span>Customer:</span><span>${escapeHtml(receipt.customerName)}</span></div>
+  <div class="row"><span>Payment:</span><span>${escapeHtml(receipt.paymentMethodLabel)}</span></div>
+  <div class="dash"></div>
+  ${rowsHtml}
+  <div class="dash"></div>
+  <div class="row"><span>Subtotal</span><span>${escapeHtml(formatMoney(receipt.subtotal, currency))}</span></div>
+  ${receipt.discountAmount > 0 ? `<div class="row"><span>Discount</span><span>-${escapeHtml(formatMoney(receipt.discountAmount, currency))}</span></div>` : ''}
+  ${receipt.taxAmount > 0 ? `<div class="row"><span>Tax</span><span>${escapeHtml(formatMoney(receipt.taxAmount, currency))}</span></div>` : ''}
+  <div class="dash"></div>
+  <div class="row total-row"><span>TOTAL</span><span>${escapeHtml(formatMoney(receipt.total, currency))}</span></div>
+  <div class="row"><span>Tendered</span><span>${escapeHtml(formatMoney(receipt.amountTendered, currency))}</span></div>
+  <div class="row"><span>Change Due</span><span>${escapeHtml(formatMoney(receipt.changeDue, currency))}</span></div>
+  <div class="dash"></div>
+  <div class="footer">
+    <div class="bold">THANK YOU FOR YOUR BUSINESS!</div>
+    <div class="muted">Powered by BorngreatAccounting POS</div>
+  </div>
+</body>
+</html>`;
+
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow?.document;
+  if (!doc || !iframe.contentWindow) {
+    document.body.removeChild(iframe);
+    window.print();
+    return;
+  }
+  doc.open();
+  doc.write(html);
+  doc.close();
+  iframe.contentWindow.focus();
+  setTimeout(() => {
+    iframe.contentWindow?.print();
+    setTimeout(() => {
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }, 1000);
+  }, 150);
+}
+
 export function POSPage() {
   const history = useHistory();
   const token = useAuthToken();
@@ -122,6 +250,12 @@ export function POSPage() {
   const [taxRates, setTaxRates] = useState<PosTaxRate[]>([]);
   const [gateways, setGateways] = useState<PosGateway[]>([]);
   const [baseCurrency, setBaseCurrency] = useState('GHS');
+  const [orgInfo, setOrgInfo] = useState<{
+    name: string;
+    phone?: string;
+    address?: string;
+  }>({ name: 'BorngreatAccounting' });
+  const [paperWidth, setPaperWidth] = useState<'80mm' | '58mm'>('80mm');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -273,6 +407,13 @@ export function POSPage() {
         const raw = transformToCamelCase(orgRes.value.data);
         if (raw?.baseCurrency) {
           setBaseCurrency(raw.baseCurrency);
+        }
+        if (raw?.name) {
+          setOrgInfo({
+            name: raw.name,
+            phone: raw.phone || undefined,
+            address: raw.address || raw.city || undefined,
+          });
         }
       }
     } finally {
@@ -1193,65 +1334,144 @@ export function POSPage() {
         </Card>
       </div>
 
-      {/* Receipt Modal */}
+      {/* Thermal Receipt Modal */}
       <Dialog
         isOpen={Boolean(completedReceipt)}
         onClose={() => setCompletedReceipt(null)}
         title="POS Sale Completed"
         icon="endorsed"
+        style={{ width: 400 }}
       >
         {completedReceipt && (
           <div style={{ padding: 18 }}>
-            <div style={{ textAlign: 'center', marginBottom: 12 }}>
-              <h3 style={{ margin: '0 0 4px' }}>Sales Receipt</h3>
-              <div style={{ fontSize: 12, color: '#6b7280' }}>
-                Receipt #: {completedReceipt.receiptNumber} ·{' '}
-                {completedReceipt.receiptDate}
-              </div>
-              <div style={{ fontSize: 12, color: '#6b7280' }}>
-                Customer: {completedReceipt.customerName} · Paid via{' '}
-                {completedReceipt.paymentMethodLabel}
-              </div>
-            </div>
-
-            <Divider />
-
-            <div style={{ margin: '10px 0' }}>
-              {completedReceipt.lines.map((l) => (
+            <div
+              data-testid="thermal-receipt-preview"
+              style={{
+                width: paperWidth === '58mm' ? 235 : 302,
+                margin: '0 auto',
+                padding: '14px 12px',
+                background: '#ffffff',
+                color: '#000000',
+                fontFamily: "'Courier New', Courier, monospace",
+                fontSize: paperWidth === '58mm' ? 11 : 12,
+                lineHeight: 1.4,
+                border: '1px solid #d1d5db',
+                borderRadius: 4,
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+              }}
+            >
+              <div style={{ textAlign: 'center', marginBottom: 6 }}>
                 <div
-                  key={l.item.id}
                   style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    fontSize: 13,
-                    padding: '4px 0',
+                    fontWeight: 700,
+                    fontSize: 14,
+                    textTransform: 'uppercase',
                   }}
                 >
-                  <span>
-                    {l.item.name} × {l.quantity}
-                  </span>
-                  <span>
-                    {formatMoney(l.quantity * l.unitPrice, baseCurrency)}
-                  </span>
+                  {orgInfo.name}
+                </div>
+                {orgInfo.address && (
+                  <div style={{ fontSize: 10.5 }}>{orgInfo.address}</div>
+                )}
+                {orgInfo.phone && (
+                  <div style={{ fontSize: 10.5 }}>Tel: {orgInfo.phone}</div>
+                )}
+                <div style={{ fontWeight: 700, marginTop: 4 }}>SALES RECEIPT</div>
+              </div>
+
+              <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Receipt #:</span>
+                <span>{completedReceipt.receiptNumber}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Date:</span>
+                <span>{completedReceipt.receiptDate}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Customer:</span>
+                <span>{completedReceipt.customerName}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Payment:</span>
+                <span>{completedReceipt.paymentMethodLabel}</span>
+              </div>
+
+              <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
+
+              {completedReceipt.lines.map((l) => (
+                <div key={l.item.id} style={{ marginBottom: 4 }}>
+                  <div style={{ fontWeight: 600 }}>{l.item.name}</div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: 11,
+                      paddingLeft: 6,
+                    }}
+                  >
+                    <span>
+                      {l.quantity} x {formatMoney(l.unitPrice, baseCurrency)}
+                    </span>
+                    <span>
+                      {formatMoney(l.quantity * l.unitPrice, baseCurrency)}
+                    </span>
+                  </div>
                 </div>
               ))}
-            </div>
 
-            <Divider />
+              <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
 
-            <div style={{ marginTop: 10, fontSize: 13 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Total Paid</span>
-                <strong>{formatMoney(completedReceipt.total, baseCurrency)}</strong>
+                <span>Subtotal</span>
+                <span>{formatMoney(completedReceipt.subtotal, baseCurrency)}</span>
               </div>
-              {completedReceipt.changeDue > 0 && (
+              {completedReceipt.discountAmount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>Change Due</span>
+                  <span>Discount</span>
                   <span>
-                    {formatMoney(completedReceipt.changeDue, baseCurrency)}
+                    -{formatMoney(completedReceipt.discountAmount, baseCurrency)}
                   </span>
                 </div>
               )}
+              {completedReceipt.taxAmount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>Tax</span>
+                  <span>{formatMoney(completedReceipt.taxAmount, baseCurrency)}</span>
+                </div>
+              )}
+
+              <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontWeight: 700,
+                  fontSize: 14,
+                }}
+              >
+                <span>TOTAL</span>
+                <span>{formatMoney(completedReceipt.total, baseCurrency)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Tendered</span>
+                <span>
+                  {formatMoney(completedReceipt.amountTendered, baseCurrency)}
+                </span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Change Due</span>
+                <span>{formatMoney(completedReceipt.changeDue, baseCurrency)}</span>
+              </div>
+
+              <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
+
+              <div style={{ textAlign: 'center', marginTop: 6, fontSize: 11 }}>
+                <div style={{ fontWeight: 700 }}>THANK YOU FOR YOUR BUSINESS!</div>
+                <div style={{ fontSize: 10 }}>Powered by BorngreatAccounting POS</div>
+              </div>
             </div>
 
             {completedReceipt.checkoutUrl && (
@@ -1269,17 +1489,40 @@ export function POSPage() {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 gap: 8,
                 marginTop: 16,
               }}
             >
-              <Button icon="print" text="Print Receipt" onClick={() => window.print()} />
-              <Button
-                intent={Intent.PRIMARY}
-                text="New Sale"
-                onClick={() => setCompletedReceipt(null)}
-              />
+              <HTMLSelect
+                value={paperWidth}
+                onChange={(e) =>
+                  setPaperWidth(e.target.value as '80mm' | '58mm')
+                }
+              >
+                <option value="80mm">80mm Thermal</option>
+                <option value="58mm">58mm Thermal</option>
+              </HTMLSelect>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <Button
+                  icon="print"
+                  text="Print Receipt"
+                  onClick={() =>
+                    printThermalReceipt(
+                      completedReceipt,
+                      paperWidth,
+                      baseCurrency,
+                      orgInfo,
+                    )
+                  }
+                />
+                <Button
+                  intent={Intent.PRIMARY}
+                  text="New Sale"
+                  onClick={() => setCompletedReceipt(null)}
+                />
+              </div>
             </div>
           </div>
         )}
