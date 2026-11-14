@@ -10,6 +10,7 @@ export enum ISidebarMenuItemType {
 }
 
 export interface ISidebarMenuItemCommon {
+  icon?: string;
   ability?: ISidebarMenuItemPermission | ISidebarMenuItemPermission[];
   permission?: ISidebarMenuItemPermission;
   feature?: string;

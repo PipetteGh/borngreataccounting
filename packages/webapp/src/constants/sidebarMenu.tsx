@@ -35,6 +35,7 @@ export interface SidebarMenuItemPermission {
 }
 
 export interface SidebarMenuItem {
+  icon?: string;
   text: React.ReactNode;
   type: ISidebarMenuItemType;
   disabled?: boolean;
@@ -53,6 +54,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Homepage
   // ---------------
   {
+    icon: 'home',
     text: <T id={'sidebar.homepage'} />,
     type: ISidebarMenuItemType.Link,
     disabled: false,
@@ -67,6 +69,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
     type: ISidebarMenuItemType.Group,
     children: [
       {
+        icon: 'box',
         text: <T id={'sidebar.items'} />,
         type: ISidebarMenuItemType.Overlay,
         overlayId: ISidebarMenuOverlayIds.Items,
@@ -158,6 +161,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Sales
   // ---------------
   {
+    icon: 'document',
     text: <T id={'sidebar.sales'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Sales,
@@ -271,6 +275,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Purchases
   // ---------------
   {
+    icon: 'shopping-cart',
     text: <T id={'sidebar.purchases'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Purchases,
@@ -343,6 +348,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Contacts
   // ---------------
   {
+    icon: 'people',
     text: <T id={'sidebar.contacts'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Contacts,
@@ -405,6 +411,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
     type: ISidebarMenuItemType.Group,
     children: [
       {
+        icon: 'bank-account',
         text: <T id={'sidebar.financial'} />,
         type: ISidebarMenuItemType.Overlay,
         overlayId: ISidebarMenuOverlayIds.Financial,
@@ -481,6 +488,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Cashflow
   // ---------------
   {
+    icon: 'credit-card',
     text: <T id={'sidebar.banking'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Cashflow,
@@ -558,6 +566,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Expenses
   // ---------------
   {
+    icon: 'receipt',
     text: <T id={'sidebar.expenses'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Expenses,
@@ -598,6 +607,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
   // # Reports
   // ---------------
   {
+    icon: 'chart',
     text: <T id={'sidebar.reports'} />,
     type: ISidebarMenuItemType.Overlay,
     overlayId: ISidebarMenuOverlayIds.Reports,
@@ -821,6 +831,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
     type: ISidebarMenuItemType.Group,
     children: [
       {
+        icon: 'cog',
         text: <T id={'sidebar.preferences'} />,
         href: '/preferences',
         type: ISidebarMenuItemType.Link,

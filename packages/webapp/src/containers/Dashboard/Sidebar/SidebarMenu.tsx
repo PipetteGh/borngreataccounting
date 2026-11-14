@@ -11,6 +11,7 @@ interface SidebarMenuItemProps {
 }
 
 interface SidebarMenuItemComponentProps {
+  icon?: string;
   text?: React.ReactNode;
   disabled?: boolean;
   dropdownType?: string;
@@ -39,6 +40,7 @@ function SidebarMenuItem({ item, index }: SidebarMenuItemProps) {
   return (
     <SidebarMenuItemComponent
       key={index}
+      icon={item.icon}
       text={item.text}
       disabled={item.disabled}
       dropdownType={item.dropdownType || 'collapse'}

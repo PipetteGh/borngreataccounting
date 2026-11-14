@@ -46,9 +46,12 @@
       left: 12px;
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
 
       svg {
-        opacity: $sidebar-logo-opacity;
+        opacity: 1;
+        color: var(--color-primary);
+        fill: var(--color-primary);
       }
     }
     &-organization {
@@ -161,9 +164,16 @@
         color: var(--color-sidebar-menu-item-active-text);
       }
       >.#{$ns}-icon {
-        color: #767b9b;
+        color: var(--color-sidebar-menu-item-text);
+        opacity: 0.85;
         margin-right: 16px;
         margin-top: 0;
+      }
+
+      &:hover >.#{$ns}-icon,
+      &.bp4-active >.#{$ns}-icon {
+        color: var(--color-sidebar-menu-item-active-text);
+        opacity: 1;
       }
 
       >.#{$ns}-icon-caret-right {
@@ -259,25 +269,50 @@
         transition-delay: 0.15s;
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
       }
-
-      // Hide text of bigcapital logo.
-      &-logo {}
 
       &-organization {
         opacity: 0;
+        pointer-events: none;
         transition: opacity 0.3s ease-in-out;
       }
     }
 
-    .sidebar__menu,
     .sidebar__version {
       transition: opacity 0.3s ease-in-out;
       opacity: 0;
     }
 
+    .sidebar__menu {
+      opacity: 1;
+
+      .sidebar-menu {
+        min-width: 50px;
+      }
+
+      .#{$ns}-menu-item-labeler {
+        display: none;
+      }
+
+      .#{$ns}-menu-item {
+        padding: 10px 17px;
+        justify-content: center;
+
+        >.#{$ns}-icon {
+          margin-right: 0;
+        }
+
+        >.#{$ns}-fill,
+        >.#{$ns}-icon-caret-right {
+          display: none;
+        }
+      }
+    }
+
     .sidebar__scroll-wrapper {
-      background: $sidebar-background;
+      background: var(--color-sidebar-background);
+      border-right: 1px solid var(--color-sidebar-border-color, transparent);
       transition: min-width 0.15s ease-in-out;
       min-width: 50px;
 
@@ -289,6 +324,7 @@
 
         .sidebar__head-logo {
           opacity: 0;
+          pointer-events: none;
           transition-delay: 0s;
         }
 
@@ -296,6 +332,31 @@
         .sidebar__menu,
         .sidebar__version {
           opacity: 1;
+          pointer-events: auto;
+        }
+
+        .sidebar__menu {
+          .sidebar-menu {
+            min-width: $sidebar-width;
+          }
+
+          .#{$ns}-menu-item-labeler {
+            display: block;
+          }
+
+          .#{$ns}-menu-item {
+            padding: 8px 20px;
+            justify-content: flex-start;
+
+            >.#{$ns}-icon {
+              margin-right: 16px;
+            }
+
+            >.#{$ns}-fill,
+            >.#{$ns}-icon-caret-right {
+              display: block;
+            }
+          }
         }
 
         .ScrollbarsCustom-Scroller {
