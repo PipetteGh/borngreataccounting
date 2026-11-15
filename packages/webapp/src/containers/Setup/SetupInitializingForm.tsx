@@ -41,6 +41,7 @@ function SetupInitializingFormInner({
 
   useEffect(() => {
     if (isCompleted) {
+      setOrganizationSetupCompleted(true);
       refetch();
       setIsJobDone(true);
     }

@@ -11,6 +11,7 @@ import {
 } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
 import { AppToaster } from '@/components';
+import { useAuthOrganizationId, useAuthToken } from '@/hooks/state/authentication';
 import { transformToCamelCase } from '@/utils';
 
 interface SmtpSettingsFormProps {
@@ -24,6 +25,9 @@ export function SmtpSettingsForm({
   onSaved,
   onSkip,
 }: SmtpSettingsFormProps) {
+  const token = useAuthToken();
+  const organizationId = useAuthOrganizationId();
+
   const [host, setHost] = useState('');
   const [port, setPort] = useState<number>(587);
   const [secure, setSecure] = useState(false);
@@ -42,17 +46,20 @@ export function SmtpSettingsForm({
     text: string;
   } | null>(null);
 
+  const getAuthHeaders = React.useCallback(() => {
+    return {
+      accept: 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(organizationId ? { 'organization-id': organizationId } : {}),
+    };
+  }, [token, organizationId]);
+
   useEffect(() => {
     let active = true;
     setLoading(true);
-    const token = localStorage.getItem('token');
-    const orgId = localStorage.getItem('organization_id');
     axios
       .get('/api/settings/smtp', {
-        headers: {
-          ...(token ? { 'x-access-token': token } : {}),
-          ...(orgId ? { 'organization-id': orgId } : {}),
-        },
+        headers: getAuthHeaders(),
       })
       .then((res) => {
         if (!active) return;
@@ -75,16 +82,7 @@ export function SmtpSettingsForm({
     return () => {
       active = false;
     };
-  }, []);
-
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    const orgId = localStorage.getItem('organization_id');
-    return {
-      ...(token ? { 'x-access-token': token } : {}),
-      ...(orgId ? { 'organization-id': orgId } : {}),
-    };
-  };
+  }, [getAuthHeaders]);
 
   const buildPayload = () => ({
     host: host.trim(),
