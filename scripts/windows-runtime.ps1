@@ -180,7 +180,49 @@ function Start-BackingServices {
     Write-Step "MariaDB database 'borngreat_system' and tenant privileges verified."
 }
 
+function Ensure-Pnpm {
+    $pnpmCmd = Get-Command pnpm -ErrorAction SilentlyContinue
+    if ($pnpmCmd) {
+        Write-Step "pnpm verified: $($pnpmCmd.Source)"
+        return
+    }
+    Write-Step "pnpm not found. Enabling Corepack / installing pnpm..."
+    try {
+        & corepack enable 2>&1 | Out-Null
+    } catch {}
+    if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
+        & npm install -g pnpm@9 2>&1 | Out-Null
+    }
+    Write-Step "pnpm ready."
+}
+
+function Ensure-AppBuilt {
+    $serverMain = Join-Path $RepoRoot "packages\server\dist\main.js"
+    $serverCli = Join-Path $RepoRoot "packages\server\dist\cli.js"
+    $webappIndex = Join-Path $RepoRoot "packages\webapp\dist\index.html"
+    if ((Test-Path $serverMain) -and (Test-Path $serverCli) -and (Test-Path $webappIndex)) {
+        Write-Step "Application build artifacts verified."
+        return
+    }
+    Ensure-Pnpm
+    Push-Location $RepoRoot
+    try {
+        if (-not (Test-Path (Join-Path $RepoRoot "node_modules"))) {
+            Write-Step "Installing monorepo dependencies (pnpm install --ignore-scripts)..."
+            & pnpm install --ignore-scripts
+        }
+        Write-Step "Building shared packages, API server, and Webapp..."
+        & pnpm run build:shared
+        & pnpm run build:server
+        & pnpm run build:webapp
+    } finally {
+        Pop-Location
+    }
+    Write-Step "Application build complete."
+}
+
 function Run-Migrations {
+    Ensure-AppBuilt
     Write-Step "Running system & tenant database migrations..."
     Push-Location (Join-Path $RepoRoot "packages\server")
     try {

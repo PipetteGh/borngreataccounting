@@ -102,19 +102,23 @@ chmod +x install.sh
 ./install.sh
 ```
 
-### Windows (PowerShell, curl, or Setup EXE)
+### Windows (One-Click `.exe` Installer or PowerShell)
+
+[![Download BorngreatAccounting for Windows](https://img.shields.io/badge/Download_for_Windows-BorngreatAccounting--Setup.exe-0078D6?style=for-the-badge&logo=windows)](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)
+
+1. Click **[Download BorngreatAccounting-Setup.exe](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)** to download the standalone Windows installer.
+2. Run `BorngreatAccounting-Setup.exe` and click **`1. Initialize / Install`** — it automatically downloads the app into `%LOCALAPPDATA%\BorngreatAccounting`, installs portable Node.js, MariaDB 10.11, and Redis if missing, builds and migrates the database, creates Desktop & Start Menu shortcuts, and launches the dashboard at `http://localhost:4100`.
+
 ```powershell
-# Option A: Clone repository
+# Option A: Download latest standalone Windows Setup EXE via curl
+curl.exe -fsSL -L https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe -o BorngreatAccounting-Setup.exe
+.\BorngreatAccounting-Setup.exe
+
+# Option B: Clone repository and run PowerShell installer
 git clone https://github.com/PipetteGh/borngreataccounting.git
 cd borngreataccounting
 .\install.ps1
-
-# Option B: Download Windows Setup EXE (v1.0.1) via curl
-curl.exe -fsSL -L https://github.com/PipetteGh/borngreataccounting/releases/download/v1.0.1/BorngreatAccounting-Setup-1.0.1.exe -o BorngreatAccounting-Setup-1.0.1.exe
-.\BorngreatAccounting-Setup-1.0.1.exe
 ```
-Or launch the prebuilt Windows Desktop Setup & Control Center executable:
-- `dist/installers/BorngreatAccounting-Setup.exe` (`BorngreatAccounting-Setup-1.0.1.exe`)
 
 ---
 
