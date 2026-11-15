@@ -71,9 +71,10 @@ export async function fetchAccountTransactions(
 export async function createAccount(
   fetcher: ApiFetcher,
   values: CreateAccountBody
-): Promise<void> {
+): Promise<Account> {
   const create = fetcher.path(ACCOUNTS_ROUTES.LIST).method('post').create();
-  await create(values);
+  const { data } = await create(values);
+  return data as unknown as Account;
 }
 
 export async function editAccount(

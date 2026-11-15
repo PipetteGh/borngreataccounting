@@ -1,5 +1,7 @@
+import { Button, MenuItem } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
+import intl from 'react-intl-universal';
 import { FSelect } from '../Forms';
 import { createNewItemFromQuery, createNewItemRenderer } from './utils';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
@@ -27,7 +29,7 @@ function CustomerSelectRoot({
 
   // #ownProps
   items,
-  allowCreate,
+  allowCreate = true,
   name,
   ...props
 }: CustomerSelectRootProps) {
@@ -50,7 +52,7 @@ function CustomerSelectRoot({
     openDrawer(DRAWERS.QUICK_CREATE_CUSTOMER, { autofillRef, displayName });
   };
 
-  return (
+  const selectEl = (
     <FSelect
       name={name}
       items={items}
@@ -61,8 +63,33 @@ function CustomerSelectRoot({
       createNewItemRenderer={maybeCreateNewItemRenderer}
       createNewItemFromQuery={maybeCreateNewItemFromQuery}
       onCreateItemSelect={handleCreateItemClick}
+      noResults={
+        allowCreate ? (
+          <MenuItem
+            icon="add"
+            text={intl.get('new_customer')}
+            onClick={() => handleCreateItemClick({ name: '' })}
+          />
+        ) : undefined
+      }
       {...props}
     />
+  );
+
+  if (!allowCreate) {
+    return selectEl;
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: 6, width: '100%' }}>
+      <div style={{ flex: 1, minWidth: 0 }}>{selectEl}</div>
+      <Button
+        type="button"
+        icon="plus"
+        title={intl.get('new_customer')}
+        onClick={() => handleCreateItemClick({ name: '' })}
+      />
+    </div>
   );
 }
 

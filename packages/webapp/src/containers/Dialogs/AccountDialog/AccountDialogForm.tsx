@@ -107,7 +107,12 @@ function AccountFormDialogContent({
         .catch(handleError);
     } else {
       createAccountMutate({ ...form } as CreateAccountBody)
-        .then(handleSuccess)
+        .then((created) => {
+          (payload as { onCreated?: (account: unknown) => void })?.onCreated?.(
+            created,
+          );
+          handleSuccess();
+        })
         .catch(handleError);
     }
   };

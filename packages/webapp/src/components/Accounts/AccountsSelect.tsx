@@ -1,4 +1,5 @@
 import { MenuItem } from '@blueprintjs/core';
+import { useFormikContext } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { accountPredicate } from './_components';
@@ -72,7 +73,7 @@ const accountRenderer: ItemRenderer<AccountSelectModel> = (
  */
 export function AccountsSelect({
   items,
-  allowCreate,
+  allowCreate = true,
 
   filterByRootTypes,
   filterByParentTypes,
@@ -82,6 +83,12 @@ export function AccountsSelect({
   ...rest
 }: AccountsSelectProps): React.ReactElement {
   const { openDialog } = useDialogActions();
+  let setFieldValue: ((field: string, value: unknown) => void) | undefined;
+  try {
+    ({ setFieldValue } = useFormikContext());
+  } catch {
+    // AccountsSelect may occasionally be used outside Formik.
+  }
 
   // Filters accounts based on filter props.
   const filteredAccounts = usePreprocessingAccounts(items, {
@@ -100,7 +107,13 @@ export function AccountsSelect({
 
   // Handles the create item click.
   const handleCreateItemClick = (): void => {
-    openDialog(DialogsName.AccountForm);
+    openDialog(DialogsName.AccountForm, {
+      onCreated: (created: { id?: number }) => {
+        if (created?.id && rest.name && setFieldValue) {
+          setFieldValue(rest.name as string, created.id);
+        }
+      },
+    });
   };
 
   return (
@@ -116,6 +129,15 @@ export function AccountsSelect({
       createNewItemRenderer={maybeCreateNewItemRenderer}
       createNewItemFromQuery={maybeCreateNewItemFromQuery}
       onCreateItemSelect={handleCreateItemClick}
+      noResults={
+        allowCreate ? (
+          <MenuItem
+            icon="add"
+            text={intl.get('new_account')}
+            onClick={handleCreateItemClick}
+          />
+        ) : undefined
+      }
     />
   );
 }

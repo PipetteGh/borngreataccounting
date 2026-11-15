@@ -7,7 +7,7 @@ export const ItemMeta = {
     sortOrder: 'DESC',
   },
   print: {
-    pageTitle: 'Items',
+    pageTitle: 'Products',
   },
   fields: {
     type: {

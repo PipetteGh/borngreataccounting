@@ -50,7 +50,7 @@ function withItemsSelectLogic<C extends ComponentType<any>>(
       valueAccessor: 'id' as const,
       textAccessor: 'name' as const,
       labelAccessor: 'code' as const,
-      placeholder: 'Click to select an item.',
+      placeholder: 'Click to select a product.',
       popoverProps: { minimal: true },
       ...rest,
     } as ComponentProps<C>;

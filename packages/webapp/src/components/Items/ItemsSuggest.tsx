@@ -120,7 +120,7 @@ function withItemsSuggestLogic<C extends ComponentType<any>>(
     sellable = false,
     purchasable = false,
     restrictType,
-    allowCreate,
+    allowCreate = true,
     ...suggestProps
   }: ItemsSuggestOwnProps & Omit<ComponentProps<C>, ProvidedSuggestProps>) {
     const filteredItems = useMemo(() => {
@@ -135,7 +135,9 @@ function withItemsSuggestLogic<C extends ComponentType<any>>(
     const handleCreateItemSelect = useCallback(
       (item: ItemSuggestModel | Partial<ItemSuggestModel>) => {
         if (!('id' in item) || !item.id) {
-          openDrawer(DRAWERS.QUICK_CREATE_ITEM);
+          openDrawer(DRAWERS.QUICK_CREATE_ITEM, {
+            itemName: item.name,
+          });
         }
       },
       [openDrawer],
@@ -150,7 +152,15 @@ function withItemsSuggestLogic<C extends ComponentType<any>>(
 
     const processedSuggestProps = {
       items: filteredItems,
-      noResults: <MenuItem disabled={true} text={<T id={'no_results'} />} />,
+      noResults: allowCreate ? (
+        <MenuItem
+          icon="add"
+          text={<T id={'new_item'} />}
+          onClick={() => openDrawer(DRAWERS.QUICK_CREATE_ITEM)}
+        />
+      ) : (
+        <MenuItem disabled={true} text={<T id={'no_results'} />} />
+      ),
       itemRenderer,
       itemPredicate: filterItemsPredicater,
       inputValueRenderer,

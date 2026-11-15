@@ -1,4 +1,4 @@
-Item Type,Item Name,Item Code,Sellable,Purchasable,Cost Price,Sell Price,Cost Account,Sell Account,Inventory Account,Sell Description,Purchase Description,Category,Note,Active
+Product Type,Product Name,Product Code,Sellable,Purchasable,Cost Price,Sell Price,Cost Account,Sell Account,Inventory Account,Sell Description,Purchase Description,Category,Note,Active
 Inventory,Amoxicillin and Clavulanatea,1000,T,T,10000,1000,Cost of Goods Sold,Other Income,Inventory Asset,Description ....,Description ....,sdafasdfsadf,At dolor est non tempore et quisquam.,TRUE
 Inventory,Azithromycin,1001,T,T,10000,1000,Cost of Goods Sold,Other Income,Inventory Asset,Description ....,Description ....,sdafasdfsadf,Id perspiciatis at adipisci minus accusamus dolor iure dolore.,TRUE
 Inventory,Marks - Carroll,1002,T,T,10000,1000,Cost of Goods Sold,Other Income,Inventory Asset,Description ....,Description ....,sdafasdfsadf,Odio odio minus similique.,TRUE

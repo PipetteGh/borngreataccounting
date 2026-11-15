@@ -77,16 +77,16 @@ export const SidebarMenu: SidebarMenuItem[] = [
     children: [
       {
         icon: 'box',
-        text: <T id={'sidebar.items'} />,
+        text: <T id={'sidebar.products'} />,
         type: ISidebarMenuItemType.Overlay,
         overlayId: ISidebarMenuOverlayIds.Items,
         children: [
           {
-            text: <T id={'sidebar.items'} />,
+            text: <T id={'sidebar.product'} />,
             type: ISidebarMenuItemType.Group,
             children: [
               {
-                text: <T id={'sidebar.items'} />,
+                text: <T id={'sidebar.product'} />,
                 href: '/items',
                 type: ISidebarMenuItemType.Link,
                 permission: {

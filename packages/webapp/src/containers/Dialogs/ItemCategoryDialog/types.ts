@@ -19,6 +19,7 @@ export interface ItemCategoryFormValues {
 export type ItemCategoryDialogPayload = {
   action?: 'edit' | 'new' | string;
   id?: number | null;
+  onCreated?: (category: ItemCategory) => void;
 };
 
 export type ItemCategoryContextValue = {

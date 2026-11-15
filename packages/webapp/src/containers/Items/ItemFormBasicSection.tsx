@@ -1,11 +1,20 @@
-import { Radio, Position, Tooltip } from '@blueprintjs/core';
+import {
+  Button,
+  Intent,
+  MenuItem,
+  Position,
+  Radio,
+  Tooltip,
+} from '@blueprintjs/core';
 import classNames from 'classnames';
+import { useFormikContext } from 'formik';
 import React, { useRef, useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { getItemUnitOptions } from './constants';
 import { useItemFormContext } from './ItemFormProvider';
 import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 import {
+  AppToaster,
   FCheckbox,
   FieldRequiredHint,
   FormattedMessage as T,
@@ -15,9 +24,15 @@ import {
   FInputGroup,
   Box,
 } from '@/components';
+import { DialogsName } from '@/constants/dialogs';
+import { useCreateItemCategory } from '@/hooks/query';
+import { useDialogActions } from '@/hooks/state/dashboard';
 
 export function ItemFormBasicSection() {
+  const { openDialog } = useDialogActions();
   const { isNewMode, item, itemsCategories } = useItemFormContext();
+  const { setFieldValue } = useFormikContext<any>();
+  const { mutateAsync: createItemCategoryMutate } = useCreateItemCategory();
   const nameFieldRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -47,6 +62,52 @@ export function ItemFormBasicSection() {
         />
       </div>
     </>
+  );
+
+  const handleOpenNewCategoryDialog = () => {
+    openDialog(DialogsName.ItemCategoryForm, {
+      action: 'new',
+      onCreated: (created: any) => {
+        if (created?.id) {
+          setFieldValue('categoryId', created.id);
+        }
+      },
+    });
+  };
+
+  const handleQuickCreateCategory = async (createdItem: { name: string }) => {
+    const trimmedName = createdItem?.name?.trim();
+    if (!trimmedName) {
+      handleOpenNewCategoryDialog();
+      return;
+    }
+    try {
+      const created = await createItemCategoryMutate({
+        name: trimmedName,
+      } as any);
+      if (created?.id) {
+        setFieldValue('categoryId', created.id);
+      }
+      AppToaster.show({
+        message: intl.get('the_item_category_has_been_created_successfully'),
+        intent: Intent.SUCCESS,
+      });
+    } catch {
+      handleOpenNewCategoryDialog();
+    }
+  };
+
+  const createCategoryRenderer = (
+    query: string,
+    active: boolean,
+    handleClick: React.MouseEventHandler<HTMLElement>,
+  ) => (
+    <MenuItem
+      icon="add"
+      text={intl.get('list.create', { value: `"${query}"` })}
+      active={active}
+      onClick={handleClick}
+    />
   );
 
   return (
@@ -133,15 +194,35 @@ export function ItemFormBasicSection() {
         label={<T id={'category'} />}
         inline={true}
       >
-        <FSelect
-          name={'categoryId'}
-          items={itemsCategories}
-          valueAccessor={'id'}
-          textAccessor={'name'}
-          placeholder={<T id={'select_category'} />}
-          popoverProps={{ minimal: true, captureDismiss: true }}
-          fill
-        />
+        <div style={{ display: 'flex', gap: 6, width: '100%' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <FSelect
+              name={'categoryId'}
+              items={itemsCategories}
+              valueAccessor={'id'}
+              textAccessor={'name'}
+              placeholder={<T id={'select_category'} />}
+              popoverProps={{ minimal: true, captureDismiss: true }}
+              createNewItemRenderer={createCategoryRenderer}
+              createNewItemFromQuery={(name: string) => ({ name })}
+              onCreateItemSelect={handleQuickCreateCategory}
+              noResults={
+                <MenuItem
+                  icon="add"
+                  text={intl.get('sidebar.new_item_category')}
+                  onClick={handleOpenNewCategoryDialog}
+                />
+              }
+              fill
+            />
+          </div>
+          <Button
+            type="button"
+            icon="plus"
+            title={intl.get('sidebar.new_item_category')}
+            onClick={handleOpenNewCategoryDialog}
+          />
+        </div>
       </FFormGroup>
 
       {/*----------- Active ----------*/}

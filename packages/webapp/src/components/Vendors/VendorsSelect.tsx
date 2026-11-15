@@ -1,5 +1,7 @@
+import { Button, MenuItem } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
+import intl from 'react-intl-universal';
 import { FSelect } from '../Forms';
 import { createNewItemFromQuery, createNewItemRenderer } from './utils';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
@@ -28,7 +30,7 @@ function VendorsSelectRoot({
   // #ownProps
   name,
   items,
-  allowCreate,
+  allowCreate = true,
 
   ...restProps
 }: VendorsSelectRootProps) {
@@ -54,7 +56,7 @@ function VendorsSelectRoot({
     });
   };
 
-  return (
+  const selectEl = (
     <FSelect
       name={name}
       items={items}
@@ -65,8 +67,33 @@ function VendorsSelectRoot({
       createNewItemRenderer={maybeCreateNewItemRenderer}
       createNewItemFromQuery={maybeCreateNewItemFromQuery}
       onCreateItemSelect={handleCreateItemClick}
+      noResults={
+        allowCreate ? (
+          <MenuItem
+            icon="add"
+            text={intl.get('new_vendor')}
+            onClick={() => handleCreateItemClick({ name: '' })}
+          />
+        ) : undefined
+      }
       {...restProps}
     />
+  );
+
+  if (!allowCreate) {
+    return selectEl;
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: 6, width: '100%' }}>
+      <div style={{ flex: 1, minWidth: 0 }}>{selectEl}</div>
+      <Button
+        type="button"
+        icon="plus"
+        title={intl.get('new_vendor')}
+        onClick={() => handleCreateItemClick({ name: '' })}
+      />
+    </div>
   );
 }
 

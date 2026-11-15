@@ -1,7 +1,7 @@
 export const ExportResources = [
   { value: 'account', text: 'Accounts' },
   { value: 'item', text: 'Items' },
-  { value: 'item_category', text: 'Item Categories' },
+  { value: 'item_category', text: 'Product Categories' },
   { value: 'customer', text: 'Customers' },
   { value: 'vendor', text: 'Vendors' },
   { value: 'manual_journal', text: 'Manual Journal' },

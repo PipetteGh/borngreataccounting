@@ -58,10 +58,13 @@ interface ResponseError {
   type: string;
 }
 
-interface ItemCategoryFormProps extends WithDialogActionsProps {}
+interface ItemCategoryFormProps extends WithDialogActionsProps {
+  onCreated?: (category: any) => void;
+}
 
 function ItemCategoryFormInner({
   closeDialog,
+  onCreated,
 }: ItemCategoryFormProps): React.ReactElement {
   const {
     isNewMode,
@@ -128,7 +131,10 @@ function ItemCategoryFormInner({
     };
     if (isNewMode) {
       createItemCategoryMutate(transformFormToCreateBody(form))
-        .then(onSuccess)
+        .then((created) => {
+          onCreated?.(created);
+          onSuccess();
+        })
         .catch(onError);
     } else {
       editItemCategoryMutate([

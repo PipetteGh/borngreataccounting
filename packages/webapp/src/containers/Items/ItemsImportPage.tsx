@@ -17,7 +17,7 @@ export function ItemsImportpage() {
         resource={'items'}
         onImportSuccess={handleImportSuccess}
         onCancelClick={handleCancelBtnClick}
-        exampleTitle="Items Example"
+        exampleTitle="Products Example"
       />
     </DashboardInsider>
   );

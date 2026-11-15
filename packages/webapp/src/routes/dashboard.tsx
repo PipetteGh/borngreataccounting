@@ -100,7 +100,7 @@ export const getDashboardRoutes = () => [
       })),
     ),
     backLink: true,
-    pageTitle: 'Item Categories Import',
+    pageTitle: 'Product Categories Import',
     defaultSearchResource: RESOURCES_TYPES.ITEM,
   },
   {
@@ -123,7 +123,7 @@ export const getDashboardRoutes = () => [
       })),
     ),
     backLink: true,
-    pageTitle: 'Items Import',
+    pageTitle: 'Products Import',
     defaultSearchResource: RESOURCES_TYPES.CUSTOMER,
   },
 
@@ -169,9 +169,9 @@ export const getDashboardRoutes = () => [
         default: m.ItemsList,
       })),
     ),
-    breadcrumb: intl.get('items'),
+    breadcrumb: intl.get('product'),
     hotkey: 'shift+w',
-    pageTitle: intl.get('items'),
+    pageTitle: intl.get('product'),
     defaultSearchResource: RESOURCES_TYPES.ITEM,
   },
 

@@ -17,7 +17,7 @@ export function ItemCategoriesImport() {
         resource={'item_category'}
         onImportSuccess={handleImportSuccess}
         onCancelClick={handleCancelBtnClick}
-        exampleTitle="Item Categories Example"
+        exampleTitle="Product Categories Example"
       />
     </DashboardInsider>
   );

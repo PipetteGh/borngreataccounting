@@ -100,9 +100,9 @@ export const ItemDefaultViews = [
 
 export const ItemsSampleData = [
   {
-    'Item Type': 'Inventory',
-    'Item Name': 'Hettinger, Schumm and Bartoletti',
-    'Item Code': '1000',
+    'Product Type': 'Inventory',
+    'Product Name': 'Hettinger, Schumm and Bartoletti',
+    'Product Code': '1000',
     'Reorder Point': '10',
     Sellable: 'T',
     Purchasable: 'T',
@@ -118,9 +118,9 @@ export const ItemsSampleData = [
     Active: 'TRUE',
   },
   {
-    'Item Type': 'Inventory',
-    'Item Name': 'Schmitt Group',
-    'Item Code': '1001',
+    'Product Type': 'Inventory',
+    'Product Name': 'Schmitt Group',
+    'Product Code': '1001',
     'Reorder Point': '10',
     Sellable: 'T',
     Purchasable: 'T',
@@ -136,9 +136,9 @@ export const ItemsSampleData = [
     Active: 'TRUE',
   },
   {
-    'Item Type': 'Inventory',
-    'Item Name': 'Marks - Carroll',
-    'Item Code': '1002',
+    'Product Type': 'Inventory',
+    'Product Name': 'Marks - Carroll',
+    'Product Code': '1002',
     'Reorder Point': '10',
     Sellable: 'T',
     Purchasable: 'T',
@@ -154,9 +154,9 @@ export const ItemsSampleData = [
     Active: 'TRUE',
   },
   {
-    'Item Type': 'Inventory',
-    'Item Name': 'VonRueden, Ruecker and Hettinger',
-    'Item Code': '1003',
+    'Product Type': 'Inventory',
+    'Product Name': 'VonRueden, Ruecker and Hettinger',
+    'Product Code': '1003',
     'Reorder Point': '10',
     Sellable: 'T',
     Purchasable: 'T',

@@ -33,7 +33,7 @@ const commonInvalidateQueries = (
 };
 
 export function useCreateItemCategory(
-  props?: UseMutationOptions<void, Error, CreateItemCategoryBody>,
+  props?: UseMutationOptions<ItemCategory, Error, CreateItemCategoryBody>,
 ) {
   const queryClient = useQueryClient();
   const fetcher = useApiFetcher();

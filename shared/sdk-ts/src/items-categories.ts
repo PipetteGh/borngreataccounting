@@ -33,9 +33,10 @@ export async function fetchItemCategory(fetcher: ApiFetcher, id: number): Promis
 export async function createItemCategory(
   fetcher: ApiFetcher,
   values: CreateItemCategoryBody
-): Promise<void> {
+): Promise<ItemCategory> {
   const post = fetcher.path(ITEMS_CATEGORIES_ROUTES.LIST).method('post').create();
-  await post(values);
+  const { data } = await post(values);
+  return data as unknown as ItemCategory;
 }
 
 export async function editItemCategory(

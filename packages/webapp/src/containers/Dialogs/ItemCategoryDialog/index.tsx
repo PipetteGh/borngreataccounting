@@ -41,6 +41,7 @@ function ItemCategoryFormDialog({
           dialogName={dialogName}
           action={payload.action}
           itemCategoryId={payload.id}
+          onCreated={payload.onCreated}
         />
       </DialogSuspense>
     </Dialog>

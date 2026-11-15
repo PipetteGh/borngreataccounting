@@ -52,7 +52,7 @@ const transfromItemsToSearch = (item: ItemTableRow) => ({
  */
 export const universalSearchItemBind = () => ({
   resourceType: RESOURCES_TYPES.ITEM,
-  optionItemLabel: intl.get('items'),
+  optionItemLabel: intl.get('products'),
   selectItemAction: ItemUniversalSearchSelectAction,
   itemSelect: transfromItemsToSearch,
   permission: {

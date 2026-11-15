@@ -1,10 +1,10 @@
 {
-  "field.type": "Item Type",
+  "field.type": "Product Type",
   "field.type.inventory": "Inventory",
   "field.type.service": "Service",
   "field.type.non-inventory": "Non Inventory",
-  "field.name": "Item Name",
-  "field.code": "Item Code",
+  "field.name": "Product Name",
+  "field.code": "Product Code",
   "field.sellable": "Sellable",
   "field.purchasable": "Purchasable",
   "field.cost_price": "Cost Price",

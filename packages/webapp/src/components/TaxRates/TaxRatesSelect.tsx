@@ -30,7 +30,7 @@ function TaxRatesSelectRoot({
   openDialog,
 
   // #ownProps
-  allowCreate,
+  allowCreate = true,
 
   ...restProps
 }) {
@@ -54,6 +54,15 @@ function TaxRatesSelectRoot({
       createNewItemRenderer={maybeCreateNewItemRenderer}
       createNewItemFromQuery={maybeCreateNewItemFromQuery}
       onCreateItemSelect={handleCreateItemClick}
+      noResults={
+        allowCreate ? (
+          <MenuItem
+            icon="add"
+            text={intl.get('tax_rate.new_tax_rate')}
+            onClick={handleCreateItemClick}
+          />
+        ) : undefined
+      }
       {...restProps}
     />
   );
