@@ -86,7 +86,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
             type: ISidebarMenuItemType.Group,
             children: [
               {
-                text: <T id={'sidebar.product'} />,
+                text: <T id={'sidebar.list_add_products'} />,
                 href: '/items',
                 type: ISidebarMenuItemType.Link,
                 permission: {

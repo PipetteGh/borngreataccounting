@@ -2637,6 +2637,7 @@
   "batch.error.BATCH_ALLOCATION_DUPLICATE": "The same batch cannot be added twice to the same line.",
   "sidebar.products": "Products",
   "sidebar.product": "Product",
+  "sidebar.list_add_products": "List/Add Products",
   "product": "Product",
   "products": "Products"
 }

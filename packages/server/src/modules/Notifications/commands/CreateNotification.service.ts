@@ -74,13 +74,15 @@ export class CreateNotificationService {
    * @returns {Promise<number>} - Number of notifications marked as read
    */
   async markAllAsRead(userId: number): Promise<number> {
-    const result = await this.notificationModel()
+    const updatedCount = await this.notificationModel()
       .query()
-      .modify('forUser', userId)
-      .modify('unread')
+      .where((builder) => {
+        builder.where('userId', userId).orWhereNull('userId');
+      })
+      .whereNull('readAt')
       .patch({ readAt: new Date() });
 
-    return Array.isArray(result) ? result.length : 0;
+    return typeof updatedCount === 'number' ? updatedCount : 0;
   }
 
   /**
