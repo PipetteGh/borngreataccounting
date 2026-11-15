@@ -282,7 +282,10 @@ export function POSPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [workspaceHeight, setWorkspaceHeight] = useState<string>('calc(100vh - 96px)');
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [receiptCountdown, setReceiptCountdown] = useState(30);
+  const [receiptPrinted, setReceiptPrinted] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const playPosBeep = useCallback(() => {
@@ -936,6 +939,48 @@ export function POSPage() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [cart.length, submitting, completedReceipt]);
 
+  useEffect(() => {
+    if (!completedReceipt) {
+      setReceiptCountdown(30);
+      setReceiptPrinted(false);
+      return;
+    }
+    if (receiptPrinted) {
+      return;
+    }
+    setReceiptCountdown(30);
+    const interval = window.setInterval(() => {
+      setReceiptCountdown((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(interval);
+          setCompletedReceipt(null);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(interval);
+  }, [completedReceipt, receiptPrinted]);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (isFullscreen) {
+        setWorkspaceHeight('100vh');
+        return;
+      }
+      const top = rootRef.current?.getBoundingClientRect().top ?? 84;
+      const available = Math.max(420, Math.floor(window.innerHeight - top - 12));
+      setWorkspaceHeight(`${available}px`);
+    };
+    updateHeight();
+    const raf = requestAnimationFrame(updateHeight);
+    window.addEventListener('resize', updateHeight);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, [isFullscreen]);
+
   return (
     <div
       ref={rootRef}
@@ -950,7 +995,7 @@ export function POSPage() {
               overflow: 'hidden',
             }
           : {
-              height: 'calc(100vh - 56px)',
+              height: workspaceHeight,
               overflow: 'hidden',
             }),
         background: 'var(--bg-canvas, #f4f6f9)',
@@ -1208,13 +1253,13 @@ export function POSPage() {
         {/* Right: Cart & Checkout */}
         <Card
           style={{
-            padding: 14,
+            padding: 12,
             background: 'var(--bg-surface, #ffffff)',
             display: 'flex',
             flexDirection: 'column',
-            gap: 10,
+            gap: 8,
             minHeight: 0,
-            overflow: 'hidden',
+            overflowY: 'auto',
           }}
         >
           {/* Customer & Deposit Account */}
@@ -1277,7 +1322,7 @@ export function POSPage() {
           <Divider style={{ margin: '4px 0' }} />
 
           {/* Cart Items */}
-          <div style={{ flex: 1, overflowY: 'auto', minHeight: 140 }}>
+          <div style={{ flex: 1, overflowY: 'auto', minHeight: 72 }}>
             {cart.length === 0 ? (
               <div
                 style={{
@@ -1520,7 +1565,19 @@ export function POSPage() {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              flexShrink: 0,
+              position: 'sticky',
+              bottom: -12,
+              background: 'var(--bg-surface, #ffffff)',
+              paddingTop: 6,
+              paddingBottom: 2,
+              zIndex: 2,
+            }}
+          >
             <Button
               minimal
               intent={Intent.DANGER}
@@ -1551,6 +1608,7 @@ export function POSPage() {
         title="POS Sale Completed"
         icon="endorsed"
         style={{ width: 400 }}
+        portalContainer={isFullscreen && rootRef.current ? rootRef.current : undefined}
       >
         {completedReceipt && (
           <div style={{ padding: 18 }}>
@@ -1782,15 +1840,16 @@ export function POSPage() {
                 <Button
                   icon="print"
                   text="Print Receipt"
-                  onClick={() =>
+                  onClick={() => {
+                    setReceiptPrinted(true);
                     printThermalReceipt(
                       completedReceipt,
                       paperWidth,
                       baseCurrency,
                       orgInfo,
                       receiptConfig,
-                    )
-                  }
+                    );
+                  }}
                 />
                 <Button
                   intent={Intent.PRIMARY}
@@ -1799,6 +1858,18 @@ export function POSPage() {
                 />
               </div>
             </div>
+            {!receiptPrinted && (
+              <div
+                style={{
+                  marginTop: 8,
+                  textAlign: 'right',
+                  fontSize: 11.5,
+                  color: 'var(--text-muted, #6b7280)',
+                }}
+              >
+                Auto-closes in {receiptCountdown}s if not printed
+              </div>
+            )}
           </div>
         )}
       </Dialog>
