@@ -189,22 +189,37 @@ function Start-BackingServices {
         & (Join-Path $MariaDir "bin\mysql_install_db.exe") --datadir="$MariaDataDir" --default-user | Out-Null
     }
 
-    # 3. Start MariaDB if not listening on 3306
+    # 3. Start MariaDB on 3306 (or 3307 if another MySQL/XAMPP occupies 3306)
+    $dbPort = 3306
     $mariaListening = Get-NetTCPConnection -LocalPort 3306 -State Listen -ErrorAction SilentlyContinue
+    if ($mariaListening) {
+        $proc3306 = Get-Process -Id $mariaListening[0].OwningProcess -ErrorAction SilentlyContinue
+        $isOurMaria = $proc3306 -and $proc3306.Path -and $proc3306.Path.StartsWith($RuntimeDir, [System.StringComparison]::OrdinalIgnoreCase)
+        if (-not $isOurMaria) {
+            $dbPort = 3307
+            Write-Step "Port 3306 is in use by another service; using port 3307 for BorngreatAccounting MariaDB."
+            if (Test-Path $EnvFile) {
+                $rawEnv = Get-Content -Path $EnvFile -Raw
+                $rawEnv = [regex]::Replace($rawEnv, "(?m)^DB_PORT=.*$", "DB_PORT=3307")
+                Set-Content -Path $EnvFile -Value $rawEnv -Encoding UTF8
+            }
+            $mariaListening = Get-NetTCPConnection -LocalPort 3307 -State Listen -ErrorAction SilentlyContinue
+        }
+    }
     if (-not $mariaListening) {
-        Write-Step "Starting MariaDB 10.11 server on 127.0.0.1:3306..."
-        Start-Process -FilePath (Join-Path $MariaDir "bin\mysqld.exe") -ArgumentList "--datadir=`"$MariaDataDir`"", "--port=3306", "--bind-address=127.0.0.1", "--lower-case-table-names=1" -WindowStyle Hidden
+        Write-Step "Starting MariaDB 10.11 server on 127.0.0.1:$dbPort..."
+        Start-Process -FilePath (Join-Path $MariaDir "bin\mysqld.exe") -ArgumentList "--datadir=`"$MariaDataDir`"", "--port=$dbPort", "--bind-address=127.0.0.1", "--lower-case-table-names=1" -WindowStyle Hidden
         for ($i = 0; $i -lt 20; $i++) {
             Start-Sleep -Seconds 1
-            & (Join-Path $MariaDir "bin\mysqladmin.exe") -h 127.0.0.1 -u root ping 2>&1 | Out-Null
+            & (Join-Path $MariaDir "bin\mysqladmin.exe") -h 127.0.0.1 -P $dbPort -u root ping 2>&1 | Out-Null
             if ($LASTEXITCODE -eq 0) { break }
         }
     } else {
-        Write-Step "MariaDB is already running on port 3306."
+        Write-Step "MariaDB is already running on port $dbPort."
     }
 
     # 4. Ensure borngreat_system database and user privileges exist
-    & (Join-Path $MariaDir "bin\mysql.exe") -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS borngreat_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER IF NOT EXISTS 'borngreat'@'%' IDENTIFIED BY 'borngreat'; CREATE USER IF NOT EXISTS 'borngreat'@'localhost' IDENTIFIED BY 'borngreat'; CREATE USER IF NOT EXISTS 'borngreat'@'127.0.0.1' IDENTIFIED BY 'borngreat'; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'%' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'localhost' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'127.0.0.1' WITH GRANT OPTION; FLUSH PRIVILEGES;" 2>&1 | Out-Null
+    & (Join-Path $MariaDir "bin\mysql.exe") -h 127.0.0.1 -P $dbPort -u root -e "CREATE DATABASE IF NOT EXISTS borngreat_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER IF NOT EXISTS 'borngreat'@'%' IDENTIFIED BY 'borngreat'; CREATE USER IF NOT EXISTS 'borngreat'@'localhost' IDENTIFIED BY 'borngreat'; CREATE USER IF NOT EXISTS 'borngreat'@'127.0.0.1' IDENTIFIED BY 'borngreat'; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'%' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'localhost' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'borngreat'@'127.0.0.1' WITH GRANT OPTION; FLUSH PRIVILEGES;" 2>&1 | Out-Null
     Write-Step "MariaDB database 'borngreat_system' and tenant privileges verified."
 }
 
