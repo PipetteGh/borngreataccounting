@@ -946,10 +946,12 @@ export function POSPage() {
               position: 'fixed',
               inset: 0,
               zIndex: 9999,
-              overflow: 'auto',
+              height: '100vh',
+              overflow: 'hidden',
             }
           : {
-              minHeight: 'calc(100vh - 56px)',
+              height: 'calc(100vh - 56px)',
+              overflow: 'hidden',
             }),
         background: 'var(--bg-canvas, #f4f6f9)',
         color: 'var(--text-primary, #1f2937)',
@@ -1030,6 +1032,7 @@ export function POSPage() {
             flexDirection: 'column',
             gap: 10,
             minHeight: 0,
+            overflow: 'hidden',
           }}
         >
           <Card
@@ -1211,6 +1214,7 @@ export function POSPage() {
             flexDirection: 'column',
             gap: 10,
             minHeight: 0,
+            overflow: 'hidden',
           }}
         >
           {/* Customer & Deposit Account */}
