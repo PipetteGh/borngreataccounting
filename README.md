@@ -102,23 +102,40 @@ chmod +x install.sh
 ./install.sh
 ```
 
-### Windows (One-Click `.exe` Installer or PowerShell)
+### Windows (One-Click `.exe` Setup Wizard or PowerShell)
 
 [![Download BorngreatAccounting for Windows](https://img.shields.io/badge/Download_for_Windows-BorngreatAccounting--Setup.exe-0078D6?style=for-the-badge&logo=windows)](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)
 
-1. Click **[Download BorngreatAccounting-Setup.exe](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)** to download the standalone Windows Setup Wizard.
-2. Run `BorngreatAccounting-Setup.exe` and follow the wizard (**Next → I Agree → Choose Mode → Install Location → Finish**):
-   - **Single User (Standalone)**: Installs BorngreatAccounting privately on one PC (`http://localhost:4100`).
-   - **Multi-User Server (LAN Host)**: Installs the full server + database and opens LAN access + Windows Firewall port `4100` so other PCs on your network can join the same database.
-   - **Client Workstation (Join Existing Server)**: Lightweight client install — enter your Server PC's LAN URL (e.g. `http://192.168.1.50:4100`), test connection, and launch directly without installing a local database.
-3. Defaults to `C:\Program Files\BorngreatAccounting`, creates Desktop & Start Menu shortcuts, registers in Windows **Add or Remove Programs**, and launches BorngreatAccounting on **Finish**.
+#### Step 1: Download & Launch
+1. Click **[Download BorngreatAccounting-Setup.exe](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)** and save it to your computer.
+2. Double-click **`BorngreatAccounting-Setup.exe`** *(if Windows SmartScreen shows **"Windows protected your PC"**, click **More info → Run anyway**)*.
+3. Click **Next >**, check **I Agree** on the **GNU AGPL-3.0 License Agreement**, and click **Next >**.
+
+#### Step 2: Choose Your Installation Mode
+- **Option A — Single User (Standalone — 1 PC)**:
+  1. Select **Single User (Standalone)** and click **Next >**.
+  2. Choose the install location (defaults to `C:\Program Files\BorngreatAccounting`, or click **Browse...**), then click **Install** (approve the Windows UAC prompt if installing into `Program Files`).
+  3. Wait for the setup to finish, keep **Launch BorngreatAccounting now** checked, and click **Finish** (`http://localhost:4100`).
+- **Option B — Multi-User Server (Host for Multiple PCs on the Same Network)**:
+  1. On your main/host PC, select **Multi-User Server (Host on Local Network)** and click **Next >**.
+  2. Choose the install folder and click **Install**. The wizard installs the database & server, binds LAN access (`0.0.0.0:4100`), and opens **Windows Firewall port `4100`**.
+  3. On the **Finish** screen, copy the **Network Share URL** (for example `http://192.168.1.50:4100`) to share with your client PCs, then click **Finish**.
+- **Option C — Client Workstation (Join Existing Server)**:
+  1. Run **`BorngreatAccounting-Setup.exe`** on each additional PC on the same Wi-Fi/LAN.
+  2. Select **Client Workstation (Join Existing Server)**, enter the host PC's **Server URL** (e.g. `http://192.168.1.50:4100`), and click **Test Connection** to verify it shows `Connected!`.
+  3. Click **Next > → Install → Finish** (takes seconds; no local database is installed on the client).
+
+#### After Installation
+- **Launch**: Double-click the **BorngreatAccounting** shortcut on your **Desktop** or **Start Menu**.
+- **Server Control Center**: Open **Start Menu → BorngreatAccounting → BorngreatAccounting Control Center** to **Start**, **Stop**, **Restart**, check **Status**, view your **LAN URL**, or **Backup** the database.
+- **Uninstall**: Use **Windows Settings → Apps → BorngreatAccounting → Uninstall** (or **Start Menu → BorngreatAccounting → Uninstall BorngreatAccounting**).
 
 ```powershell
-# Option A: Download latest standalone Windows Setup EXE via curl
+# Alternative A: Download latest standalone Windows Setup EXE via curl
 curl.exe -fsSL -L https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe -o BorngreatAccounting-Setup.exe
 .\BorngreatAccounting-Setup.exe
 
-# Option B: Clone repository and run PowerShell installer
+# Alternative B: Clone repository and run PowerShell installer
 git clone https://github.com/PipetteGh/borngreataccounting.git
 cd borngreataccounting
 .\install.ps1
