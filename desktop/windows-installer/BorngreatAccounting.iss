@@ -56,8 +56,8 @@ Name: "{group}\{#AppName} Control Center"; Filename: "{app}\{#AppExeName}"; Para
 Name: "{group}\Uninstall {#AppName}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action install -Mode {code:GetInstallModeString}"; WorkingDir: "{app}\app"; StatusMsg: "Installing runtime dependencies (Node.js, MariaDB, Redis) and initializing database..."; Flags: runhidden waituntilterminated; Check: IsServerOrSingleMode
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action start -Mode {code:GetInstallModeString}"; WorkingDir: "{app}\app"; StatusMsg: "Starting BorngreatAccounting services..."; Flags: runhidden waituntilterminated; Check: IsServerOrSingleMode
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action install -Mode {code:GetInstallModeString}"; WorkingDir: "{app}\app"; StatusMsg: "Installing runtime dependencies (Node.js, MariaDB, Redis) and initializing database..."; Flags: runhidden waituntilterminated; Check: ShouldRunRuntime
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action start -Mode {code:GetInstallModeString}"; WorkingDir: "{app}\app"; StatusMsg: "Starting BorngreatAccounting services..."; Flags: runhidden waituntilterminated; Check: ShouldRunRuntime
 Filename: "{app}\{#AppExeName}"; Parameters: "--launch"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
@@ -82,6 +82,11 @@ var
 function IsServerOrSingleMode(): Boolean;
 begin
   Result := not rbClient.Checked;
+end;
+
+function ShouldRunRuntime(): Boolean;
+begin
+  Result := IsServerOrSingleMode() and (ExpandConstant('{param:SKIPRUNTIME|0}') <> '1');
 end;
 
 function GetInstallModeString(Param: String): String;
@@ -215,6 +220,16 @@ begin
   lblConnResult.Top := ScaleY(214);
   lblConnResult.Width := ModePage.SurfaceWidth - ScaleX(20);
   lblConnResult.Caption := '';
+
+  if LowerCase(ExpandConstant('{param:MODE|single}')) = 'server' then
+    rbServer.Checked := True
+  else if LowerCase(ExpandConstant('{param:MODE|single}')) = 'client' then
+    rbClient.Checked := True
+  else
+    rbSingle.Checked := True;
+
+  if ExpandConstant('{param:SERVER|}') <> '' then
+    edtServerUrl.Text := ExpandConstant('{param:SERVER|}');
 
   UpdateModeControls(nil);
 end;
