@@ -6,9 +6,28 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const WEB_PORT = Number(process.env.WEB_PORT || 4100);
+function readEnvValue(key) {
+  try {
+    const envPath = path.resolve(__dirname, '..', '.env');
+    if (!fs.existsSync(envPath)) return undefined;
+    const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const idx = trimmed.indexOf('=');
+      if (idx === -1) continue;
+      if (trimmed.slice(0, idx).trim() === key) {
+        return trimmed.slice(idx + 1).trim();
+      }
+    }
+  } catch {}
+  return undefined;
+}
+
+const WEB_PORT = Number(process.env.WEB_PORT || readEnvValue('WEB_PORT') || 4100);
+const WEB_HOST = process.env.WEB_HOST || readEnvValue('WEB_HOST') || '0.0.0.0';
 const API_HOST = process.env.API_HOST || '127.0.0.1';
-const API_PORT = Number(process.env.PORT || 3000);
+const API_PORT = Number(process.env.PORT || readEnvValue('PORT') || 3000);
 const DIST_DIR = path.resolve(__dirname, '..', 'packages', 'webapp', 'dist');
 
 const MIME_TYPES = {
@@ -145,8 +164,8 @@ process.on('uncaughtException', (err) => {
   console.error('[BorngreatAccounting Web Gateway] uncaughtException:', err?.message || err);
 });
 
-server.listen(WEB_PORT, '0.0.0.0', () => {
+server.listen(WEB_PORT, WEB_HOST, () => {
   console.log(
-    `[BorngreatAccounting Web Gateway] Listening on http://localhost:${WEB_PORT} -> proxying /api to http://${API_HOST}:${API_PORT}`,
+    `[BorngreatAccounting Web Gateway] Listening on http://${WEB_HOST}:${WEB_PORT} -> proxying /api to http://${API_HOST}:${API_PORT}`,
   );
 });

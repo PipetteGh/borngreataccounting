@@ -5,7 +5,9 @@
 # ==============================================================================
 param(
     [ValidateSet("install", "start", "stop", "restart", "status", "backup", "install-docker", "enable-autostart", "disable-autostart")]
-    [string]$Action = "status"
+    [string]$Action = "status",
+    [ValidateSet("", "single", "server")]
+    [string]$Mode = ""
 )
 
 $ErrorActionPreference = "Continue"
@@ -79,6 +81,7 @@ function Ensure-PortableMariaDB {
 }
 
 function Ensure-EnvFile {
+    $webHost = if ($Mode -eq "server") { "0.0.0.0" } elseif ($Mode -eq "single") { "127.0.0.1" } else { "0.0.0.0" }
     if (-not (Test-Path $EnvFile)) {
         Write-Step "Generating .env configuration with cryptographic secrets..."
         $jwt = New-RandomSecret 48
@@ -90,6 +93,7 @@ NODE_ENV=development
 BASE_URL=http://localhost:4100
 PORT=3000
 WEB_PORT=4100
+WEB_HOST=$webHost
 
 APP_JWT_SECRET=$jwt
 TWO_FACTOR_ENCRYPTION_KEY=$totp
@@ -137,7 +141,31 @@ THROTTLE_AUTH_LIMIT=60
         Set-Content -Path $EnvFile -Value $envContent -Encoding UTF8
         Write-Step ".env created at $EnvFile"
     } else {
+        if ($Mode -ne "") {
+            $raw = Get-Content -Path $EnvFile -Raw
+            if ($raw -match "(?m)^WEB_HOST=.*$") {
+                $raw = [regex]::Replace($raw, "(?m)^WEB_HOST=.*$", "WEB_HOST=$webHost")
+            } else {
+                $raw = $raw.TrimEnd() + "`r`nWEB_HOST=$webHost`r`n"
+            }
+            Set-Content -Path $EnvFile -Value $raw -Encoding UTF8
+        }
         Write-Step ".env configuration verified at $EnvFile"
+    }
+}
+
+function Configure-NetworkMode {
+    if ($Mode -eq "server") {
+        Write-Step "Configuring Multi-User Server mode (LAN access on port 4100)..."
+        try {
+            & netsh advfirewall firewall delete rule name="BorngreatAccounting Server (Port 4100)" 2>&1 | Out-Null
+            & netsh advfirewall firewall add rule name="BorngreatAccounting Server (Port 4100)" dir=in action=allow protocol=TCP localport=4100 2>&1 | Out-Null
+            Write-Step "Windows Firewall rule added for TCP port 4100."
+        } catch {
+            Write-Step "Note: Run as Administrator if Windows Firewall prompts for LAN access."
+        }
+    } elseif ($Mode -eq "single") {
+        Write-Step "Configuring Single-User standalone mode (127.0.0.1:4100)..."
     }
 }
 
@@ -365,6 +393,12 @@ function Show-Status {
     Write-Output "----------------------------------------------------------------------"
     if ($web -like "RUNNING*") {
         Write-Output "  READY! Open http://localhost:4100 in your browser."
+        $lanIps = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+            Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" } |
+            Select-Object -ExpandProperty IPAddress -Unique
+        foreach ($ip in $lanIps) {
+            Write-Output "  LAN Client URL: http://$($ip):4100"
+        }
     }
 }
 
@@ -372,6 +406,7 @@ switch ($Action) {
     "install" {
         Ensure-NodeJS
         Ensure-EnvFile
+        Configure-NetworkMode
         Start-BackingServices
         Run-Migrations
         Enable-AutoStart

@@ -106,8 +106,12 @@ chmod +x install.sh
 
 [![Download BorngreatAccounting for Windows](https://img.shields.io/badge/Download_for_Windows-BorngreatAccounting--Setup.exe-0078D6?style=for-the-badge&logo=windows)](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)
 
-1. Click **[Download BorngreatAccounting-Setup.exe](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)** to download the standalone Windows installer.
-2. Run `BorngreatAccounting-Setup.exe` and click **`1. Initialize / Install`** — it automatically downloads the app into `%LOCALAPPDATA%\BorngreatAccounting`, installs portable Node.js, MariaDB 10.11, and Redis if missing, builds and migrates the database, creates Desktop & Start Menu shortcuts, and launches the dashboard at `http://localhost:4100`.
+1. Click **[Download BorngreatAccounting-Setup.exe](https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe)** to download the standalone Windows Setup Wizard.
+2. Run `BorngreatAccounting-Setup.exe` and follow the wizard (**Next → I Agree → Choose Mode → Install Location → Finish**):
+   - **Single User (Standalone)**: Installs BorngreatAccounting privately on one PC (`http://localhost:4100`).
+   - **Multi-User Server (LAN Host)**: Installs the full server + database and opens LAN access + Windows Firewall port `4100` so other PCs on your network can join the same database.
+   - **Client Workstation (Join Existing Server)**: Lightweight client install — enter your Server PC's LAN URL (e.g. `http://192.168.1.50:4100`), test connection, and launch directly without installing a local database.
+3. Defaults to `C:\Program Files\BorngreatAccounting`, creates Desktop & Start Menu shortcuts, registers in Windows **Add or Remove Programs**, and launches BorngreatAccounting on **Finish**.
 
 ```powershell
 # Option A: Download latest standalone Windows Setup EXE via curl
