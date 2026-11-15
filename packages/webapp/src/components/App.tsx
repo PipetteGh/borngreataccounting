@@ -10,6 +10,7 @@ import AppIntlLoader from './AppIntlLoader';
 import { EnsureUserEmailNotVerified } from './Guards/EnsureUserEmailNotVerified';
 import { EnsureAuthenticated } from '@/components/Guards/EnsureAuthenticated';
 import { GlobalErrors } from '@/containers/GlobalErrors/GlobalErrors';
+import { AppUpdateChecker } from '@/components/AppUpdateChecker';
 
 const DashboardPrivatePages = lazy(
   () => import('@/components/Dashboard/PrivatePages'),
@@ -68,6 +69,7 @@ function AppInsider({ history }: { history: History }) {
         </Suspense>
 
         <GlobalErrors />
+        <AppUpdateChecker />
       </DashboardThemeProvider>
     </div>
   );

@@ -24,9 +24,117 @@ namespace BorngreatAccounting.Setup
     internal static class AppHelper
     {
         public const string AppName = "BorngreatAccounting";
-        public const string AppVersion = "1.0.2";
+        public const string AppVersion = "1.0.5";
         public const string Publisher = "Borngreat (Peter Borngreat-Mensah)";
         public const string UninstallRegKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\BorngreatAccounting";
+        public const string LatestReleaseUrl = "https://github.com/PipetteGh/borngreataccounting/releases/latest";
+        public const string LatestInstallerUrl = "https://github.com/PipetteGh/borngreataccounting/releases/latest/download/BorngreatAccounting-Setup.exe";
+
+        public static int CompareVersions(string a, string b)
+        {
+            string[] pa = (a ?? "0").Trim().TrimStart('v', 'V').Split('.');
+            string[] pb = (b ?? "0").Trim().TrimStart('v', 'V').Split('.');
+            int len = Math.Max(pa.Length, pb.Length);
+            for (int i = 0; i < len; i++)
+            {
+                int va = 0, vb = 0;
+                if (i < pa.Length) int.TryParse(pa[i], out va);
+                if (i < pb.Length) int.TryParse(pb[i], out vb);
+                if (va > vb) return 1;
+                if (va < vb) return -1;
+            }
+            return 0;
+        }
+
+        public static string FetchLatestReleaseVersion()
+        {
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(LatestReleaseUrl);
+                req.AllowAutoRedirect = false;
+                req.Timeout = 4500;
+                req.UserAgent = "BorngreatAccounting-Updater/1.0";
+                using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+                {
+                    string loc = resp.Headers["Location"];
+                    if (!string.IsNullOrEmpty(loc))
+                    {
+                        int idx = loc.LastIndexOf("/tag/");
+                        if (idx >= 0)
+                        {
+                            return loc.Substring(idx + 5).Trim().TrimStart('v', 'V');
+                        }
+                    }
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        public static void CheckForUpdateAndPrompt(string installDir, bool silentWhenUpToDate)
+        {
+            string latest = FetchLatestReleaseVersion();
+            if (string.IsNullOrEmpty(latest))
+            {
+                if (!silentWhenUpToDate)
+                {
+                    MessageBox.Show("Could not reach GitHub Releases. Please check your internet connection.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return;
+            }
+
+            if (CompareVersions(latest, AppVersion) <= 0)
+            {
+                if (!silentWhenUpToDate)
+                {
+                    MessageBox.Show("BorngreatAccounting is up to date (v" + AppVersion + ").", "No Updates Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return;
+            }
+
+            string skipFile = Path.Combine(installDir, "skipped-version.txt");
+            if (silentWhenUpToDate && File.Exists(skipFile))
+            {
+                string skipped = File.ReadAllText(skipFile).Trim().TrimStart('v', 'V');
+                if (string.Equals(skipped, latest, StringComparison.OrdinalIgnoreCase)) return;
+            }
+
+            DialogResult choice = MessageBox.Show(
+                "A new version of BorngreatAccounting (v" + latest + ") is available!\r\n" +
+                "You are currently running v" + AppVersion + ".\r\n\r\n" +
+                "Yes    = Update Now (download & run installer)\r\n" +
+                "No     = Skip This Version\r\n" +
+                "Cancel = Remind Me Later",
+                "BorngreatAccounting Update Available",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Information
+            );
+
+            if (choice == DialogResult.No)
+            {
+                try { File.WriteAllText(skipFile, latest, Encoding.UTF8); } catch { }
+                return;
+            }
+
+            if (choice == DialogResult.Yes)
+            {
+                try
+                {
+                    string tmpInstaller = Path.Combine(Path.GetTempPath(), "BorngreatAccounting-Setup-" + latest + ".exe");
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.Headers.Add("User-Agent", "BorngreatAccounting-Updater/1.0");
+                        wc.DownloadFile(LatestInstallerUrl, tmpInstaller);
+                    }
+                    Process.Start(new ProcessStartInfo { FileName = tmpInstaller, UseShellExecute = true });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to download update: " + ex.Message, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
         public static bool IsAdministrator()
         {
@@ -1093,6 +1201,10 @@ namespace BorngreatAccounting.Setup
             btnOpen.Click += (s, e) => AppHelper.OpenInAppWindow(serverUrl);
             buttons.Controls.Add(btnOpen);
 
+            Button btnUpdate = CreateBtn("Check Updates", Color.FromArgb(37, 99, 235));
+            btnUpdate.Click += (s, e) => AppHelper.CheckForUpdateAndPrompt(installDir, false);
+            buttons.Controls.Add(btnUpdate);
+
             if (mode != "client")
             {
                 Button btnStart = CreateBtn("Start Services", Color.FromArgb(22, 163, 74));
@@ -1139,6 +1251,7 @@ namespace BorngreatAccounting.Setup
             {
                 AppendLog("Server URL: " + serverUrl);
             }
+            this.Shown += (s, e) => Task.Run(() => AppHelper.CheckForUpdateAndPrompt(installDir, true));
         }
 
         private Button CreateBtn(string text, Color bg)
@@ -1205,6 +1318,7 @@ namespace BorngreatAccounting.Setup
 
             if (argList.Contains("--launch"))
             {
+                Task.Run(() => AppHelper.CheckForUpdateAndPrompt(baseDir, true));
                 string clientCfg = Path.Combine(baseDir, "client-config.json");
                 if (File.Exists(clientCfg))
                 {
