@@ -19,6 +19,7 @@ import {
 import { SettingsApplicationService } from './SettingsApplication.service';
 import { ISettingsDTO, PreferencesAction } from './Settings.types';
 import { SmsNotificationSettingsService } from './SmsNotificationSettings.service';
+import { SmtpSettingsDto, SmtpSettingsService } from './SmtpSettings.service';
 import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
 import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
@@ -43,6 +44,7 @@ export class SettingsController {
   constructor(
     private readonly settingsApplicationService: SettingsApplicationService,
     private readonly smsNotificationSettingsService: SmsNotificationSettingsService,
+    private readonly smtpSettingsService: SmtpSettingsService,
   ) {}
 
   @Put()
@@ -113,5 +115,25 @@ export class SettingsController {
   ): Promise<SmsNotificationSettingResponseDto> {
     const { key, ...values } = dto;
     return this.smsNotificationSettingsService.editSmsNotification(key, values);
+  }
+
+  @Get('smtp')
+  @ApiOperation({ summary: 'Retrieves SMTP email configuration.' })
+  async getSmtpSettings() {
+    return this.smtpSettingsService.getSmtpSettings();
+  }
+
+  @Put('smtp')
+  @RequirePermission(PreferencesAction.Mutate, AbilitySubject.Preferences)
+  @ApiOperation({ summary: 'Saves SMTP email configuration.' })
+  async saveSmtpSettings(@Body() dto: SmtpSettingsDto) {
+    return this.smtpSettingsService.saveSmtpSettings(dto);
+  }
+
+  @Post('smtp/test')
+  @RequirePermission(PreferencesAction.Mutate, AbilitySubject.Preferences)
+  @ApiOperation({ summary: 'Tests SMTP connection and optionally sends a test email.' })
+  async testSmtpSettings(@Body() dto: SmtpSettingsDto) {
+    return this.smtpSettingsService.testSmtpSettings(dto);
   }
 }

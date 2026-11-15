@@ -317,6 +317,7 @@ export function AutomationPage() {
   const [selectedBillId, setSelectedBillId] = useState<number>(0);
 
   const [quantity, setQuantity] = useState<number>(45);
+  const [initialStock, setInitialStock] = useState<number>(0);
   const [unitPrice, setUnitPrice] = useState<number>(0);
   const [costPrice, setCostPrice] = useState<number>(0);
   const [adjustmentType, setAdjustmentType] = useState<'increment' | 'decrement'>('increment');
@@ -517,6 +518,20 @@ export function AutomationPage() {
         detected = 'receive-payment';
       } else if (lower.includes('pay bill') || lower.includes('bill payment')) {
         detected = 'pay-bill';
+      } else if (
+        lower.startsWith('add product') ||
+        lower.startsWith('add item') ||
+        lower.startsWith('add new product') ||
+        lower.startsWith('add new item') ||
+        lower.startsWith('add inventory product') ||
+        lower.startsWith('add inventory item') ||
+        lower.includes('create product') ||
+        lower.includes('create item') ||
+        lower.includes('create inventory product') ||
+        lower.includes('new product') ||
+        lower.includes('new item')
+      ) {
+        detected = 'add-item';
       } else if (lower.includes('inventory') || lower.includes('stock') || lower.includes('adjust')) {
         detected = 'inventory-adjustment';
       } else if (lower.includes('send email') || (lower.includes('email ') && !lower.startsWith('add '))) {
@@ -525,8 +540,6 @@ export function AutomationPage() {
         detected = 'add-customer';
       } else if (lower.startsWith('add vendor') || lower.includes('new vendor') || lower.includes('create vendor')) {
         detected = 'add-vendor';
-      } else if (lower.startsWith('add product') || lower.startsWith('add item') || lower.includes('new product')) {
-        detected = 'add-item';
       } else if (lower.includes('estimate') || lower.includes('quote')) {
         detected = 'create-estimate';
       } else if (lower.includes('invoice')) {
@@ -555,17 +568,26 @@ export function AutomationPage() {
       const matchedVendor = vendors.find((v) => lower.includes(v.displayName.toLowerCase()));
       if (matchedVendor) setSelectedVendorId(matchedVendor.id);
 
+      const explicitQtyMatch =
+        text.match(/(?:with|qty|quantity|quantities|stock)\s+(\d+(?:\.\d+)?)\b/i) ||
+        text.match(/\b(\d+(?:\.\d+)?)\s+(?:quantities|quantity|qty|pcs|units|pieces|bottles|packs)\b/i);
       const qtyMatch =
-        text.match(/(?:with|qty|quantity|quantities|sell|transfer|pay|receive|journal|expense)\s+(\d+(?:\.\d+)?)\b/i) ||
-        text.match(/\b(\d+(?:\.\d+)?)\s+(?:quantities|quantity|qty|pcs|units|pieces|bottles|packs|%)\b/i) ||
+        explicitQtyMatch ||
+        text.match(/(?:sell|transfer|pay|receive|journal|expense)\s+(\d+(?:\.\d+)?)\b/i) ||
+        text.match(/\b(\d+(?:\.\d+)?)\s*%/i) ||
         text.match(/\b(\d+(?:\.\d+)?)\b/);
       if (qtyMatch) {
         const val = Number(qtyMatch[1]);
         setQuantity(val);
+        if (detected === 'add-item') {
+          setInitialStock(explicitQtyMatch ? val : 0);
+        }
         if (detected === 'add-tax-rate') setTaxRateValue(val);
         if (detected === 'receive-payment' || detected === 'pay-bill' || detected === 'create-journal' || detected === 'create-expense') {
           setUnitPrice(val);
         }
+      } else if (detected === 'add-item') {
+        setInitialStock(0);
       }
 
       const priceMatch = text.match(/(?:at|@|price|for)\s+(\d+(?:\.\d+)?)\b/i);
@@ -592,7 +614,7 @@ export function AutomationPage() {
 
       if (detected === 'add-customer' || detected === 'add-vendor' || detected === 'add-item' || detected === 'add-category' || detected === 'add-warehouse' || detected === 'add-account' || detected === 'add-tax-rate') {
         const nameMatch = text.match(
-          /(?:add|create|new)\s+(?:customer|vendor|product|item|category|warehouse|account|tax rate)\s+([a-zA-Z0-9\s.&'-]+?)(?=\s+(?:email|phone|price|cost|inventory|service|type|\d|$))/i,
+          /(?:add|create|new)\s+(?:(?:new|inventory|service)\s+)?(?:customer|vendor|product|item|category|warehouse|account|tax rate)\s+([a-zA-Z0-9\s.&'-]+?)(?=\s+(?:email|phone|price|cost|qty|quantity|quantities|with|stock|inventory|service|type|\d|$))/i,
         );
         if (nameMatch) setEntityName(nameMatch[1].trim());
         if (detected === 'add-item') setNewItemType(lower.includes('service') ? 'service' : 'inventory');
@@ -800,7 +822,7 @@ export function AutomationPage() {
         const sellAcc = accounts.find((a) => a.accountType === 'income') || accounts[0];
         const costAcc = accounts.find((a) => a.accountType === 'cost-of-goods-sold' || a.accountType === 'expense') || accounts[0];
         const invAcc = accounts.find((a) => a.slug === 'inventory-asset' || a.accountType === 'inventory') || accounts[0];
-        await axios.post(
+        const itemRes = await axios.post(
           '/api/items',
           {
             name: entityName.trim(),
@@ -816,7 +838,35 @@ export function AutomationPage() {
           },
           { headers },
         );
-        const msg = `Added ${newItemType} product "${entityName.trim()}"`;
+        const createdItemId = itemRes.data?.id || itemRes.data?.data?.id;
+        let stockNote = '';
+        if (newItemType === 'inventory' && initialStock > 0 && createdItemId) {
+          const adjAcc =
+            accounts.find((a) => a.slug === 'inventory-adjustment') ||
+            accounts.find((a) => a.accountType === 'cost-of-goods-sold') ||
+            accounts.find((a) => a.accountType === 'expense') ||
+            accounts[0];
+          if (adjAcc) {
+            await axios.post(
+              '/api/inventory-adjustments/quick',
+              {
+                date: actionDate,
+                type: 'increment',
+                adjustment_account_id: adjAcc.id,
+                reason: reasonOrDesc || 'Initial stock from automation',
+                description: commandText,
+                item_id: createdItemId,
+                quantity: initialStock,
+                cost: costPrice || 0,
+                publish: true,
+              },
+              { headers },
+            );
+            stockNote = ` with initial stock ${initialStock}`;
+          }
+        }
+        await fetchEntities();
+        const msg = `Added ${newItemType} product "${entityName.trim()}"${stockNote}`;
         appendLog({ action: 'Add Product', summary: msg, status: 'success', route: '/items' });
         AppToaster.show({ intent: Intent.SUCCESS, message: msg });
       } else if (activePreset === 'add-category') {
@@ -1403,6 +1453,17 @@ export function AutomationPage() {
                 <option value="inventory">Inventory</option>
                 <option value="service">Service</option>
               </HTMLSelect>
+            </FormGroup>
+          )}
+
+          {activePreset === 'add-item' && newItemType === 'inventory' && (
+            <FormGroup label="Initial Stock Quantity (optional)">
+              <NumericInput
+                fill
+                min={0}
+                value={initialStock}
+                onValueChange={(val) => setInitialStock(val || 0)}
+              />
             </FormGroup>
           )}
 

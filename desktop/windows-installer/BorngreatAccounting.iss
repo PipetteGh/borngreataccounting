@@ -63,7 +63,11 @@ Filename: "{app}\{#AppExeName}"; Parameters: "--launch"; Description: "{cm:Launc
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action stop"; Flags: runhidden waituntilterminated; RunOnceId: "StopBGA"; Check: FileExists(ExpandConstant('{app}\app\scripts\windows-runtime.ps1'))
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\app\scripts\windows-runtime.ps1"" -Action disable-autostart"; Flags: runhidden waituntilterminated; RunOnceId: "DisableAutostartBGA"; Check: FileExists(ExpandConstant('{app}\app\scripts\windows-runtime.ps1'))
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Get-CimInstance Win32_Process | Where-Object {{ $_.ExecutablePath -and $_.ExecutablePath.StartsWith('{app}', [System.StringComparison]::OrdinalIgnoreCase) }} | ForEach-Object {{ Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }}"""; Flags: runhidden waituntilterminated; RunOnceId: "KillBGAProcesses"
 Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=""BorngreatAccounting Server (Port 4100)"""; Flags: runhidden waituntilterminated; RunOnceId: "RemoveFirewallBGA"
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}"
 
 [Code]
 var
@@ -276,5 +280,19 @@ begin
       Json := '{' + #13#10 + '  "mode": "' + GetInstallModeString('') + '",' + #13#10 + '  "serverUrl": "http://localhost:4100"' + #13#10 + '}' + #13#10;
       SaveStringToFile(ConfigPath, Json, False);
     end;
+  end;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  ResultCode: Integer;
+begin
+  if CurUninstallStep = usPostUninstall then
+  begin
+    Exec('powershell.exe',
+      '-NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -and $_.ExecutablePath.StartsWith(''' + ExpandConstant('{app}') + ''', [System.StringComparison]::OrdinalIgnoreCase) } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"',
+      '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    Sleep(500);
+    DelTree(ExpandConstant('{app}'), True, True, True);
   end;
 end;

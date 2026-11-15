@@ -11,6 +11,7 @@ import { OrganizationTwoFactorSetting } from './OrganizationTwoFactorSetting';
 import type { GeneralFormValues } from './types';
 import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { AppToaster } from '@/components';
+import { SmtpSettingsForm } from '@/components/SmtpSettingsForm';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { transformToForm } from '@/utils';
 
@@ -91,6 +92,21 @@ function GeneralFormPageInner({
         component={GeneralForm}
       />
       <OrganizationTwoFactorSetting />
+      <div
+        style={{
+          marginTop: 28,
+          paddingTop: 24,
+          borderTop: '1px solid rgba(130, 140, 155, 0.2)',
+          maxWidth: 680,
+        }}
+      >
+        <h3 style={{ marginTop: 0, marginBottom: 6 }}>Email Server (SMTP)</h3>
+        <p style={{ opacity: 0.75, marginBottom: 16 }}>
+          Configure your outgoing SMTP server for sending invoices, estimates,
+          receipts, and user notifications.
+        </p>
+        <SmtpSettingsForm mode="preferences" />
+      </div>
     </>
   );
 }

@@ -7,6 +7,7 @@ import { SettingsController } from './Settings.controller';
 import { SETTINGS_PROVIDER } from './Settings.types';
 import { GetSettingsService } from './queries/GetSettings.service';
 import { SmsNotificationSettingsService } from './SmsNotificationSettings.service';
+import { SmtpSettingsService } from './SmtpSettings.service';
 import { ClsModule } from 'nestjs-cls';
 import { SMSModule } from '../SMS/SMS.module';
 import { FeaturesModule } from '../Features/Features.module';
@@ -38,8 +39,9 @@ import { FeaturesModule } from '../Features/Features.module';
     SettingsApplicationService,
     SaveSettingsService,
     SmsNotificationSettingsService,
+    SmtpSettingsService,
   ],
-  exports: [SettingRepository, SmsNotificationSettingsService],
+  exports: [SettingRepository, SmsNotificationSettingsService, SmtpSettingsService],
   controllers: [SettingsController],
 })
 export class SettingsModule {}

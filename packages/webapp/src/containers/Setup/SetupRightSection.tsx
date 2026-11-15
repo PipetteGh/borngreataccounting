@@ -1,5 +1,5 @@
 import { x } from '@xstyled/emotion';
-import React from 'react';
+import React, { useState } from 'react';
 import { SetupWizardContent } from './SetupWizardContent';
 import { useCurrentOrganization } from '@/hooks/query';
 import { useIsOrganizationSetupCompleted } from '@/hooks/state';
@@ -12,6 +12,7 @@ export function SetupRightSection() {
   const isOrganizationReady = !!organization?.isReady;
   const isOrganizationBuildRunning = !!organization?.isBuildRunning;
   const isOrganizationSetupCompleted = useIsOrganizationSetupCompleted();
+  const [smtpStepDone, setSmtpStepDone] = useState(false);
 
   const scenarios = [
     {
@@ -19,7 +20,8 @@ export function SetupRightSection() {
       step: 'organization',
     },
     { condition: isOrganizationBuildRunning, step: 'initializing' },
-    { condition: isOrganizationSetupCompleted, step: 'congrats' },
+    { condition: isOrganizationSetupCompleted && !smtpStepDone, step: 'smtp' },
+    { condition: isOrganizationSetupCompleted && smtpStepDone, step: 'congrats' },
   ];
   const setupStep = scenarios.find((scenario) => scenario.condition);
   const setupStepId = setupStep?.step ?? '';
@@ -27,7 +29,11 @@ export function SetupRightSection() {
 
   return (
     <x.section w="100%" overflow="auto">
-      <SetupWizardContent stepId={setupStepId} stepIndex={setupStepIndex} />
+      <SetupWizardContent
+        stepId={setupStepId}
+        stepIndex={setupStepIndex}
+        onSmtpComplete={() => setSmtpStepDone(true)}
+      />
     </x.section>
   );
 }

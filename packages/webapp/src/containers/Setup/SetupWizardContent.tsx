@@ -3,11 +3,13 @@ import { x } from '@xstyled/emotion';
 import { SetupCongratsPage } from './SetupCongratsPage';
 import { SetupInitializingForm } from './SetupInitializingForm';
 import { SetupOrganizationPage } from './SetupOrganizationPage';
+import { SetupSmtpPage } from './SetupSmtpPage';
 import { Stepper } from '@/components/Stepper';
 
 interface SetupWizardContentProps {
   stepIndex: number;
   stepId: string;
+  onSmtpComplete: () => void;
 }
 
 const itemsClassName = css`
@@ -20,6 +22,7 @@ const itemsClassName = css`
 export function SetupWizardContent({
   stepIndex,
   stepId,
+  onSmtpComplete,
 }: SetupWizardContentProps) {
   return (
     <x.div w="100%" overflow="auto">
@@ -35,6 +38,10 @@ export function SetupWizardContent({
 
         <Stepper.Step label={'Initializing'}>
           <SetupInitializingForm />
+        </Stepper.Step>
+
+        <Stepper.Step label={'Email (SMTP)'}>
+          <SetupSmtpPage onComplete={onSmtpComplete} />
         </Stepper.Step>
 
         <Stepper.Step label={'Congrats'}>
