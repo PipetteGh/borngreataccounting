@@ -78,6 +78,20 @@ if ($BuildLocal) {
 Write-Host "[3/4] Starting BorngreatAccounting stack and executing database migrations..." -ForegroundColor Yellow
 docker compose -f $ComposeFile --env-file $EnvFile up -d
 
+Write-Host "[3.5/4] Configuring Windows Auto-Start on reboot/logon..." -ForegroundColor Yellow
+try {
+    $absCompose = (Resolve-Path $ComposeFile).Path
+    $absEnv = (Resolve-Path $EnvFile).Path
+    $dockerCmd = "for (`$i=0; `$i -lt 30; `$i++) { docker info *> `$null; if (`$LASTEXITCODE -eq 0) { break }; Start-Sleep -Seconds 2 }; docker compose -f `"$absCompose`" --env-file `"$absEnv`" up -d"
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$dockerCmd`"" -WorkingDirectory $PSScriptRoot
+    $trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+    Register-ScheduledTask -TaskName "BorngreatAccounting-Docker-AutoStart" -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
+    Write-Host "      Auto-start configured via Scheduled Task 'BorngreatAccounting-Docker-AutoStart'." -ForegroundColor Green
+} catch {
+    Write-Host "      Could not register Scheduled Task ($($_.Exception.Message))." -ForegroundColor Yellow
+}
+
 Write-Host "[4/4] Stack launched!" -ForegroundColor Green
 Write-Host "======================================================================" -ForegroundColor Cyan
 Write-Host "  BorngreatAccounting is running at: http://localhost" -ForegroundColor Green

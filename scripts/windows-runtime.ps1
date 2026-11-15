@@ -4,7 +4,7 @@
 # MariaDB 10.11, or Docker Desktop) from official sources and manages the stack.
 # ==============================================================================
 param(
-    [ValidateSet("install", "start", "stop", "restart", "status", "backup", "install-docker")]
+    [ValidateSet("install", "start", "stop", "restart", "status", "backup", "install-docker", "enable-autostart", "disable-autostart")]
     [string]$Action = "status"
 )
 
@@ -247,6 +247,64 @@ function Stop-AllServices {
     Write-Step "All BorngreatAccounting services stopped."
 }
 
+$AutoStartTaskName = "BorngreatAccounting-AutoStart"
+$StartupVbsPath = Join-Path ([Environment]::GetFolderPath("Startup")) "BorngreatAccounting-AutoStart.vbs"
+
+function Test-AutoStartEnabled {
+    $taskExists = $false
+    try {
+        $t = Get-ScheduledTask -TaskName $AutoStartTaskName -ErrorAction SilentlyContinue
+        if ($t -and $t.State -ne "Disabled") { $taskExists = $true }
+    } catch {}
+    return ($taskExists -or (Test-Path $StartupVbsPath))
+}
+
+function Enable-AutoStart {
+    $scriptPath = Join-Path $RepoRoot "scripts\windows-runtime.ps1"
+    $psArgs = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$scriptPath`" -Action start"
+    $taskRegistered = $false
+
+    try {
+        $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $psArgs -WorkingDirectory $RepoRoot
+        $triggers = @((New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME))
+        $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        if ($isAdmin) {
+            $triggers += (New-ScheduledTaskTrigger -AtStartup)
+        }
+        $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 0)
+        Register-ScheduledTask -TaskName $AutoStartTaskName -Action $action -Trigger $triggers -Settings $settings -Description "Auto-starts BorngreatAccounting services (MariaDB, Redis, API Server, Web Gateway) on boot/logon." -Force | Out-Null
+        $taskRegistered = $true
+        # Remove Startup VBS if Scheduled Task succeeded to avoid duplicate triggers
+        if (Test-Path $StartupVbsPath) {
+            Remove-Item $StartupVbsPath -Force -ErrorAction SilentlyContinue
+        }
+        Write-Step "Windows Auto-Start enabled via Scheduled Task '$AutoStartTaskName'."
+    } catch {
+        Write-Step "Scheduled Task registration unavailable ($($_.Exception.Message)); falling back to Windows Startup folder launcher..."
+    }
+
+    if (-not $taskRegistered) {
+        $vbsDir = Split-Path -Parent $StartupVbsPath
+        if (-not (Test-Path $vbsDir)) {
+            New-Item -ItemType Directory -Force -Path $vbsDir | Out-Null
+        }
+        $escapedCmd = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$scriptPath`" -Action start".Replace('"', '""')
+        $vbsContent = "Set WshShell = CreateObject(`"WScript.Shell`")`r`nWshShell.Run `"$escapedCmd`", 0, False`r`n"
+        Set-Content -Path $StartupVbsPath -Value $vbsContent -Encoding ASCII
+        Write-Step "Windows Auto-Start enabled via Startup folder: $StartupVbsPath"
+    }
+}
+
+function Disable-AutoStart {
+    try {
+        Unregister-ScheduledTask -TaskName $AutoStartTaskName -Confirm:$false -ErrorAction SilentlyContinue
+    } catch {}
+    if (Test-Path $StartupVbsPath) {
+        Remove-Item $StartupVbsPath -Force -ErrorAction SilentlyContinue
+    }
+    Write-Step "Windows Auto-Start disabled."
+}
+
 function Show-Status {
     Write-Output "----------------------------------------------------------------------"
     Write-Output "  BorngreatAccounting (BtAccounting) -- Live System Status"
@@ -255,11 +313,13 @@ function Show-Status {
     $redis = if (Get-NetTCPConnection -LocalPort 6379 -State Listen -ErrorAction SilentlyContinue) { "RUNNING (127.0.0.1:6379)" } else { "STOPPED" }
     $api   = if (Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue) { "RUNNING (http://127.0.0.1:3000)" } else { "STOPPED" }
     $web   = if (Get-NetTCPConnection -LocalPort 4100 -State Listen -ErrorAction SilentlyContinue) { "RUNNING (http://localhost:4100)" } else { "STOPPED" }
+    $autoStart = if (Test-AutoStartEnabled) { "ENABLED" } else { "DISABLED" }
 
     Write-Output "  MariaDB 10.11 Database : $maria"
     Write-Output "  Redis Queue & Cache    : $redis"
     Write-Output "  NestJS Backend API     : $api"
     Write-Output "  Webapp SPA Dashboard   : $web"
+    Write-Output "  Auto-Start on Boot     : $autoStart"
     Write-Output "----------------------------------------------------------------------"
     if ($web -like "RUNNING*") {
         Write-Output "  READY! Open http://localhost:4100 in your browser."
@@ -272,9 +332,11 @@ switch ($Action) {
         Ensure-EnvFile
         Start-BackingServices
         Run-Migrations
-        Write-Step "Installation & initialization complete! Click '2. Start Services' to launch the application."
+        Enable-AutoStart
+        Write-Step "Installation & initialization complete! Auto-start on boot/logon is enabled."
     }
     "start" {
+        Enable-AutoStart
         Start-AllServices
     }
     "stop" {
@@ -287,6 +349,12 @@ switch ($Action) {
     }
     "status" {
         Show-Status
+    }
+    "enable-autostart" {
+        Enable-AutoStart
+    }
+    "disable-autostart" {
+        Disable-AutoStart
     }
     "backup" {
         $backupDir = Join-Path $RepoRoot "backups"

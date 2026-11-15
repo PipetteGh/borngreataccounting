@@ -122,6 +122,76 @@ ${COMPOSE_CMD} -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" pull || \
 echo "[3/4] Starting BorngreatAccounting services and running database migrations..."
 ${COMPOSE_CMD} -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" up -d
 
+# Configure automatic startup on reboot for Linux (systemd) and macOS (launchd)
+ABS_DIR="$(cd "$(dirname "${COMPOSE_FILE}")" && pwd)"
+ABS_COMPOSE="${ABS_DIR}/$(basename "${COMPOSE_FILE}")"
+ABS_ENV="$(cd "$(dirname "${ENV_FILE}")" && pwd)/$(basename "${ENV_FILE}")"
+COMPOSE_BIN="$(command -v docker-compose || command -v docker)"
+
+if [ "$(uname -s)" = "Linux" ] && command -v systemctl >/dev/null 2>&1; then
+  echo "[3.5/4] Configuring systemd auto-start service (borngreataccounting.service)..."
+  ${SUDO} systemctl enable --now docker >/dev/null 2>&1 || true
+  if [ "${COMPOSE_CMD}" = "docker compose" ]; then
+    EXEC_START="${COMPOSE_BIN} compose -f ${ABS_COMPOSE} --env-file ${ABS_ENV} up -d"
+    EXEC_STOP="${COMPOSE_BIN} compose -f ${ABS_COMPOSE} --env-file ${ABS_ENV} down"
+  else
+    EXEC_START="${COMPOSE_BIN} -f ${ABS_COMPOSE} --env-file ${ABS_ENV} up -d"
+    EXEC_STOP="${COMPOSE_BIN} -f ${ABS_COMPOSE} --env-file ${ABS_ENV} down"
+  fi
+  ${SUDO} tee /etc/systemd/system/borngreataccounting.service >/dev/null <<EOF
+[Unit]
+Description=BorngreatAccounting (BtAccounting) Service Stack
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=${ABS_DIR}
+ExecStart=${EXEC_START}
+ExecStop=${EXEC_STOP}
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  ${SUDO} systemctl daemon-reload
+  ${SUDO} systemctl enable borngreataccounting.service >/dev/null 2>&1 || true
+  echo "      systemd auto-start enabled (borngreataccounting.service)."
+elif [ "$(uname -s)" = "Darwin" ]; then
+  echo "[3.5/4] Configuring macOS LaunchAgent auto-start..."
+  LAUNCH_AGENTS_DIR="${HOME}/Library/LaunchAgents"
+  PLIST_PATH="${LAUNCH_AGENTS_DIR}/com.borngreat.accounting.plist"
+  mkdir -p "${LAUNCH_AGENTS_DIR}"
+  cat > "${PLIST_PATH}" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.borngreat.accounting</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>open -a Docker >/dev/null 2>&amp;1 || true; for i in \$(seq 1 30); do docker info >/dev/null 2>&amp;1 &amp;&amp; break; sleep 2; done; cd "${ABS_DIR}" &amp;&amp; ${COMPOSE_CMD} -f "${ABS_COMPOSE}" --env-file "${ABS_ENV}" up -d</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>${ABS_DIR}/.runtime/launchd-stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>${ABS_DIR}/.runtime/launchd-stderr.log</string>
+</dict>
+</plist>
+EOF
+  mkdir -p "${ABS_DIR}/.runtime"
+  launchctl unload "${PLIST_PATH}" >/dev/null 2>&1 || true
+  launchctl load -w "${PLIST_PATH}" >/dev/null 2>&1 || true
+  echo "      macOS LaunchAgent enabled (${PLIST_PATH})."
+fi
+
 echo "[4/4] Verifying service readiness..."
 PORT_VAL="$(grep -E '^PUBLIC_PROXY_PORT=' "${ENV_FILE}" | cut -d= -f2 || echo 80)"
 PORT_VAL="${PORT_VAL:-80}"

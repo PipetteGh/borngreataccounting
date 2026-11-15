@@ -85,6 +85,9 @@ namespace BorngreatAccountingDesktop
             Button btnStatus = CreateButton("Check Status", Color.FromArgb(71, 85, 105));
             btnStatus.Click += (s, e) => RunRuntimeActionAsync("status");
 
+            Button btnAutoStart = CreateButton("Enable Auto-Start", Color.FromArgb(14, 116, 144));
+            btnAutoStart.Click += (s, e) => RunRuntimeActionAsync("enable-autostart");
+
             Button btnBackup = CreateButton("Run Backup", Color.FromArgb(245, 158, 11));
             btnBackup.Click += (s, e) => RunRuntimeActionAsync("backup");
 
@@ -92,7 +95,7 @@ namespace BorngreatAccountingDesktop
             btnOpenWeb.Click += (s, e) => Process.Start("http://localhost:4100");
 
             actionPanel.Controls.AddRange(new Control[] {
-                btnInstall, btnStart, btnStop, btnStatus, btnBackup, btnOpenWeb
+                btnInstall, btnStart, btnStop, btnStatus, btnAutoStart, btnBackup, btnOpenWeb
             });
 
             statusLabel = new Label
