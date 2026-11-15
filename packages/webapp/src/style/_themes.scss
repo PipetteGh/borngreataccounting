@@ -378,12 +378,18 @@ html[data-theme='slate'] {
 }
 
 // Apply theme primary accent consistently to Blueprint primary buttons & active tabs
-.bp4-button.bp4-intent-primary {
+.bp4-button.bp4-intent-primary:not(.bp4-minimal):not(.bp4-outlined) {
   background-color: var(--color-primary) !important;
+  color: #ffffff !important;
 }
 
-.bp4-button.bp4-intent-primary:hover {
+.bp4-button.bp4-intent-primary:not(.bp4-minimal):not(.bp4-outlined):hover {
   filter: brightness(0.92);
+}
+
+.bp4-button.bp4-intent-primary.bp4-minimal,
+.bp4-button.bp4-intent-primary.bp4-outlined {
+  color: var(--color-primary) !important;
 }
 
 .bp4-tab[aria-selected='true'] {

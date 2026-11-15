@@ -48,15 +48,21 @@ function proxyToBackend(req, res) {
   });
 
   proxyReq.on('error', (err) => {
-    res.writeHead(502, { 'Content-Type': 'application/json' });
-    res.end(
-      JSON.stringify({
-        error: 'Bad Gateway',
-        message: `BorngreatAccounting API server (${API_HOST}:${API_PORT}) is starting or unreachable: ${err.message}`,
-      }),
-    );
+    if (!res.headersSent) {
+      res.writeHead(502, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({
+          error: 'Bad Gateway',
+          message: `BorngreatAccounting API server (${API_HOST}:${API_PORT}) is starting or unreachable: ${err.message}`,
+        }),
+      );
+    } else {
+      res.destroy();
+    }
   });
 
+  req.on('error', () => proxyReq.destroy());
+  res.on('error', () => proxyReq.destroy());
   req.pipe(proxyReq, { end: true });
 }
 
@@ -103,7 +109,16 @@ const server = http.createServer((req, res) => {
   });
 });
 
+server.on('clientError', (_err, socket) => {
+  if (socket.writable) {
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+  } else {
+    socket.destroy();
+  }
+});
+
 server.on('upgrade', (req, socket, head) => {
+  socket.on('error', () => {});
   const proxyReq = http.request({
     hostname: API_HOST,
     port: API_PORT,
@@ -112,6 +127,8 @@ server.on('upgrade', (req, socket, head) => {
     headers: req.headers,
   });
   proxyReq.on('upgrade', (proxyRes, proxySocket, proxyHead) => {
+    proxySocket.on('error', () => socket.destroy());
+    socket.on('error', () => proxySocket.destroy());
     socket.write('HTTP/1.1 101 Switching Protocols\r\n');
     Object.keys(proxyRes.headers).forEach((k) => {
       socket.write(`${k}: ${proxyRes.headers[k]}\r\n`);
@@ -122,6 +139,10 @@ server.on('upgrade', (req, socket, head) => {
   });
   proxyReq.on('error', () => socket.destroy());
   proxyReq.end();
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[BorngreatAccounting Web Gateway] uncaughtException:', err?.message || err);
 });
 
 server.listen(WEB_PORT, '0.0.0.0', () => {
