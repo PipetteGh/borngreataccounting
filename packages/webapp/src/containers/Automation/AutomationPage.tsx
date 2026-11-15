@@ -20,20 +20,32 @@ import { AppToaster } from '@/components';
 import { useAuthOrganizationId, useAuthToken } from '@/hooks/state';
 import { transformToCamelCase } from '@/utils';
 
+type PresetCategory = 'All' | 'Sales' | 'Inventory & Purchases' | 'Accounting & Banking' | 'Contacts & Settings';
+
 type PresetId =
   | 'inventory-adjustment'
   | 'create-receipt'
   | 'create-invoice'
   | 'create-estimate'
+  | 'receive-payment'
   | 'send-email'
   | 'add-customer'
   | 'add-vendor'
   | 'add-item'
+  | 'add-category'
+  | 'add-warehouse'
+  | 'warehouse-transfer'
   | 'create-expense'
-  | 'create-bill';
+  | 'create-bill'
+  | 'pay-bill'
+  | 'add-account'
+  | 'create-journal'
+  | 'add-tax-rate'
+  | 'update-settings';
 
 interface PresetDefinition {
   id: PresetId;
+  category: Exclude<PresetCategory, 'All'>;
   title: string;
   subtitle: string;
   icon: any;
@@ -43,6 +55,7 @@ interface PresetDefinition {
 const PRESETS: PresetDefinition[] = [
   {
     id: 'inventory-adjustment',
+    category: 'Inventory & Purchases',
     title: 'Update Inventory Stock',
     subtitle: 'Increase or decrease product stock quantity',
     icon: 'box',
@@ -50,6 +63,7 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'create-receipt',
+    category: 'Sales',
     title: 'Sell Item / Create Receipt',
     subtitle: 'Record an instant sale & payment receipt',
     icon: 'receipt',
@@ -57,6 +71,7 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'create-invoice',
+    category: 'Sales',
     title: 'Create Sales Invoice',
     subtitle: 'Generate a customer invoice with line items',
     icon: 'document',
@@ -64,13 +79,23 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'create-estimate',
+    category: 'Sales',
     title: 'Create Estimate / Quote',
     subtitle: 'Create a sales estimate for a customer',
     icon: 'clipboard',
     example: 'create estimate for Walk-in Customer with 12 belta malt at 15',
   },
   {
+    id: 'receive-payment',
+    category: 'Sales',
+    title: 'Receive Customer Payment',
+    subtitle: 'Record a payment received against an invoice',
+    icon: 'dollar',
+    example: 'receive payment 150 from Walk-in Customer',
+  },
+  {
     id: 'send-email',
+    category: 'Sales',
     title: 'Send Document Email',
     subtitle: 'Email an invoice, receipt, or estimate',
     icon: 'envelope',
@@ -78,6 +103,7 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'add-customer',
+    category: 'Contacts & Settings',
     title: 'Add Customer',
     subtitle: 'Create a new customer profile',
     icon: 'new-person',
@@ -85,6 +111,7 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'add-vendor',
+    category: 'Contacts & Settings',
     title: 'Add Vendor',
     subtitle: 'Create a new supplier / vendor',
     icon: 'office',
@@ -92,13 +119,39 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'add-item',
+    category: 'Inventory & Purchases',
     title: 'Add Product / Service',
     subtitle: 'Create a new inventory or service item',
     icon: 'cube-add',
     example: 'add product Belta Malt price 15 cost 10 inventory',
   },
   {
+    id: 'add-category',
+    category: 'Inventory & Purchases',
+    title: 'Add Product Category',
+    subtitle: 'Create a new item category',
+    icon: 'tag',
+    example: 'add category Beverages',
+  },
+  {
+    id: 'add-warehouse',
+    category: 'Inventory & Purchases',
+    title: 'Create Warehouse',
+    subtitle: 'Add a new storage warehouse location',
+    icon: 'home',
+    example: 'add warehouse Accra Main Depot',
+  },
+  {
+    id: 'warehouse-transfer',
+    category: 'Inventory & Purchases',
+    title: 'Transfer Warehouse Stock',
+    subtitle: 'Move inventory between two warehouses',
+    icon: 'exchange',
+    example: 'transfer 10 belta malt between warehouses',
+  },
+  {
     id: 'create-expense',
+    category: 'Accounting & Banking',
     title: 'Record Expense',
     subtitle: 'Log a business expense payment',
     icon: 'credit-card',
@@ -106,10 +159,51 @@ const PRESETS: PresetDefinition[] = [
   },
   {
     id: 'create-bill',
+    category: 'Inventory & Purchases',
     title: 'Create Vendor Bill',
     subtitle: 'Record a purchase bill from a vendor',
     icon: 'endorsed',
     example: 'create bill from jofanos vendor for 45 belta malt at 10',
+  },
+  {
+    id: 'pay-bill',
+    category: 'Accounting & Banking',
+    title: 'Pay Vendor Bill',
+    subtitle: 'Record a payment made to a vendor',
+    icon: 'bank-account',
+    example: 'pay bill 200 to jofanos vendor',
+  },
+  {
+    id: 'add-account',
+    category: 'Accounting & Banking',
+    title: 'Add Ledger Account',
+    subtitle: 'Create a chart-of-accounts ledger account',
+    icon: 'book',
+    example: 'add account MTN MoMo Business type cash',
+  },
+  {
+    id: 'create-journal',
+    category: 'Accounting & Banking',
+    title: 'Create Manual Journal',
+    subtitle: 'Post a balanced debit & credit journal entry',
+    icon: 'calculator',
+    example: 'create journal 500 for Petty Cash Top-up',
+  },
+  {
+    id: 'add-tax-rate',
+    category: 'Contacts & Settings',
+    title: 'Add Tax Rate',
+    subtitle: 'Create a new sales/purchase tax rate',
+    icon: 'percentage',
+    example: 'add tax rate VAT Standard 15%',
+  },
+  {
+    id: 'update-settings',
+    category: 'Contacts & Settings',
+    title: 'Update Settings / Preferences',
+    subtitle: 'Update invoice prefixes, notes, or system settings',
+    icon: 'cog',
+    example: 'update setting key next_number value 00100 group sales_invoices',
   },
 ];
 
@@ -136,10 +230,18 @@ interface SimpleAccount {
   slug?: string;
 }
 
+interface SimpleWarehouse {
+  id: number;
+  name: string;
+  code?: string;
+}
+
 interface SimpleDoc {
   id: number;
   number: string;
-  customerEmail?: string;
+  dueAmount?: number;
+  customerId?: number;
+  vendorId?: number;
 }
 
 interface ExecutionLog {
@@ -193,47 +295,73 @@ export function AutomationPage() {
   const [customers, setCustomers] = useState<SimpleContact[]>([]);
   const [vendors, setVendors] = useState<SimpleContact[]>([]);
   const [accounts, setAccounts] = useState<SimpleAccount[]>([]);
+  const [warehouses, setWarehouses] = useState<SimpleWarehouse[]>([]);
   const [invoices, setInvoices] = useState<SimpleDoc[]>([]);
   const [receipts, setReceipts] = useState<SimpleDoc[]>([]);
   const [estimates, setEstimates] = useState<SimpleDoc[]>([]);
+  const [bills, setBills] = useState<SimpleDoc[]>([]);
 
+  const [categoryFilter, setCategoryFilter] = useState<PresetCategory>('All');
   const [commandText, setCommandText] = useState<string>(PRESETS[0].example);
   const [activePreset, setActivePreset] = useState<PresetId>('inventory-adjustment');
 
-  // Structured automation parameters (auto-filled by parser OR edited manually)
+  // Structured automation parameters
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>(0);
   const [selectedVendorId, setSelectedVendorId] = useState<number>(0);
   const [selectedAccountId, setSelectedAccountId] = useState<number>(0);
   const [selectedExpenseAccountId, setSelectedExpenseAccountId] = useState<number>(0);
+  const [fromWarehouseId, setFromWarehouseId] = useState<number>(0);
+  const [toWarehouseId, setToWarehouseId] = useState<number>(0);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<number>(0);
+  const [selectedBillId, setSelectedBillId] = useState<number>(0);
+
   const [quantity, setQuantity] = useState<number>(45);
   const [unitPrice, setUnitPrice] = useState<number>(0);
+  const [costPrice, setCostPrice] = useState<number>(0);
   const [adjustmentType, setAdjustmentType] = useState<'increment' | 'decrement'>('increment');
   const [actionDate, setActionDate] = useState<string>(todayIso());
   const [entityName, setEntityName] = useState<string>('');
   const [entityEmail, setEntityEmail] = useState<string>('');
   const [entityPhone, setEntityPhone] = useState<string>('');
   const [newItemType, setNewItemType] = useState<'inventory' | 'service'>('inventory');
-  const [costPrice, setCostPrice] = useState<number>(0);
+  const [newAccountType, setNewAccountType] = useState<string>('cash');
+  const [taxRateValue, setTaxRateValue] = useState<number>(15);
   const [reasonOrDesc, setReasonOrDesc] = useState<string>('');
   const [emailDocType, setEmailDocType] = useState<'invoice' | 'receipt' | 'estimate'>('invoice');
   const [emailDocId, setEmailDocId] = useState<number>(0);
+
+  // Settings update fields
+  const [settingGroup, setSettingGroup] = useState<string>('sales_invoices');
+  const [settingKey, setSettingKey] = useState<string>('next_number');
+  const [settingValue, setSettingValue] = useState<string>('00100');
 
   const [logs, setLogs] = useState<ExecutionLog[]>([]);
 
   const fetchEntities = useCallback(async () => {
     setLoadingData(true);
     try {
-      const [itemsRes, custRes, vendRes, accRes, invRes, recRes, estRes] =
-        await Promise.allSettled([
-          axios.get('/api/items?page=1&page_size=500', { headers }),
-          axios.get('/api/customers?page=1&page_size=200', { headers }),
-          axios.get('/api/vendors?page=1&page_size=200', { headers }),
-          axios.get('/api/accounts', { headers }),
-          axios.get('/api/sale-invoices?page=1&page_size=50', { headers }),
-          axios.get('/api/sale-receipts?page=1&page_size=50', { headers }),
-          axios.get('/api/sale-estimates?page=1&page_size=50', { headers }),
-        ]);
+      const [
+        itemsRes,
+        custRes,
+        vendRes,
+        accRes,
+        whRes,
+        invRes,
+        recRes,
+        estRes,
+        billRes,
+      ] = await Promise.allSettled([
+        axios.get('/api/items?page=1&page_size=500', { headers }),
+        axios.get('/api/customers?page=1&page_size=200', { headers }),
+        axios.get('/api/vendors?page=1&page_size=200', { headers }),
+        axios.get('/api/accounts', { headers }),
+        axios.get('/api/warehouses', { headers }),
+        axios.get('/api/sale-invoices?page=1&page_size=50', { headers }),
+        axios.get('/api/sale-receipts?page=1&page_size=50', { headers }),
+        axios.get('/api/sale-estimates?page=1&page_size=50', { headers }),
+        axios.get('/api/bills?page=1&page_size=50', { headers }),
+      ]);
 
       if (itemsRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(itemsRes.value.data);
@@ -293,16 +421,32 @@ export function AutomationPage() {
         if (expAcc && !selectedExpenseAccountId) setSelectedExpenseAccountId(expAcc.id);
       }
 
+      if (whRes.status === 'fulfilled') {
+        const raw: any = transformToCamelCase(whRes.value.data);
+        const list: SimpleWarehouse[] = Array.isArray(raw?.warehouses)
+          ? raw.warehouses
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : Array.isArray(raw)
+              ? raw
+              : [];
+        setWarehouses(list);
+        if (list.length > 0 && !fromWarehouseId) setFromWarehouseId(list[0].id);
+        if (list.length > 1 && !toWarehouseId) setToWarehouseId(list[1].id);
+        else if (list.length > 0 && !toWarehouseId) setToWarehouseId(list[0].id);
+      }
+
       if (invRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(invRes.value.data);
         const list = Array.isArray(raw?.salesInvoices) ? raw.salesInvoices : [];
-        setInvoices(
-          list.map((d: any) => ({
-            id: d.id,
-            number: d.invoiceNo || `INV-${d.id}`,
-            customerEmail: d.customer?.email,
-          })),
-        );
+        const mapped = list.map((d: any) => ({
+          id: d.id,
+          number: d.invoiceNo || `INV-${d.id}`,
+          dueAmount: Number(d.dueAmount ?? d.balance ?? 0),
+          customerId: d.customerId,
+        }));
+        setInvoices(mapped);
+        if (mapped.length > 0 && !selectedInvoiceId) setSelectedInvoiceId(mapped[0].id);
       }
 
       if (recRes.status === 'fulfilled') {
@@ -312,7 +456,6 @@ export function AutomationPage() {
           list.map((d: any) => ({
             id: d.id,
             number: d.receiptNumber || `REC-${d.id}`,
-            customerEmail: d.customer?.email,
           })),
         );
       }
@@ -324,9 +467,21 @@ export function AutomationPage() {
           list.map((d: any) => ({
             id: d.id,
             number: d.estimateNumber || `EST-${d.id}`,
-            customerEmail: d.customer?.email,
           })),
         );
+      }
+
+      if (billRes.status === 'fulfilled') {
+        const raw: any = transformToCamelCase(billRes.value.data);
+        const list = Array.isArray(raw?.bills) ? raw.bills : [];
+        const mapped = list.map((d: any) => ({
+          id: d.id,
+          number: d.billNumber || `BILL-${d.id}`,
+          dueAmount: Number(d.dueAmount ?? d.balance ?? 0),
+          vendorId: d.vendorId,
+        }));
+        setBills(mapped);
+        if (mapped.length > 0 && !selectedBillId) setSelectedBillId(mapped[0].id);
       }
     } finally {
       setLoadingData(false);
@@ -343,20 +498,30 @@ export function AutomationPage() {
       const lower = text.toLowerCase();
       if (!text) return;
 
-      // 1. Detect Preset / Intent
       let detected: PresetId = activePreset;
-      if (
-        lower.includes('inventory') ||
-        lower.includes('stock') ||
-        lower.includes('adjust')
-      ) {
+      if (lower.includes('setting') || lower.includes('preference')) {
+        detected = 'update-settings';
+      } else if (lower.includes('warehouse transfer') || (lower.includes('transfer') && lower.includes('warehouse'))) {
+        detected = 'warehouse-transfer';
+      } else if (lower.startsWith('add warehouse') || lower.includes('create warehouse')) {
+        detected = 'add-warehouse';
+      } else if (lower.startsWith('add category') || lower.includes('create category')) {
+        detected = 'add-category';
+      } else if (lower.includes('tax rate') || lower.includes('add tax')) {
+        detected = 'add-tax-rate';
+      } else if (lower.startsWith('add account') || lower.includes('create account')) {
+        detected = 'add-account';
+      } else if (lower.includes('journal')) {
+        detected = 'create-journal';
+      } else if (lower.includes('receive payment') || lower.includes('customer payment')) {
+        detected = 'receive-payment';
+      } else if (lower.includes('pay bill') || lower.includes('bill payment')) {
+        detected = 'pay-bill';
+      } else if (lower.includes('inventory') || lower.includes('stock') || lower.includes('adjust')) {
         detected = 'inventory-adjustment';
-      } else if (lower.includes('send email') || lower.includes('email ') || lower.includes('mail ')) {
-        if (!lower.startsWith('add customer') && !lower.startsWith('add vendor')) {
-          detected = 'send-email';
-        }
-      }
-      if (lower.startsWith('add customer') || lower.includes('new customer') || lower.includes('create customer')) {
+      } else if (lower.includes('send email') || (lower.includes('email ') && !lower.startsWith('add '))) {
+        detected = 'send-email';
+      } else if (lower.startsWith('add customer') || lower.includes('new customer') || lower.includes('create customer')) {
         detected = 'add-customer';
       } else if (lower.startsWith('add vendor') || lower.includes('new vendor') || lower.includes('create vendor')) {
         detected = 'add-vendor';
@@ -377,7 +542,6 @@ export function AutomationPage() {
       setActivePreset(detected);
       setActionDate(extractDateFromText(text));
 
-      // 2. Match known item, customer, vendor
       const matchedItem = items.find((i) => lower.includes(i.name.toLowerCase()));
       if (matchedItem) {
         setSelectedItemId(matchedItem.id);
@@ -391,13 +555,17 @@ export function AutomationPage() {
       const matchedVendor = vendors.find((v) => lower.includes(v.displayName.toLowerCase()));
       if (matchedVendor) setSelectedVendorId(matchedVendor.id);
 
-      // 3. Extract quantity / numbers
       const qtyMatch =
-        text.match(/(?:with|qty|quantity|quantities|sell|for)\s+(\d+(?:\.\d+)?)\b/i) ||
-        text.match(/\b(\d+(?:\.\d+)?)\s+(?:quantities|quantity|qty|pcs|units|pieces|bottles|packs)\b/i) ||
+        text.match(/(?:with|qty|quantity|quantities|sell|transfer|pay|receive|journal|expense)\s+(\d+(?:\.\d+)?)\b/i) ||
+        text.match(/\b(\d+(?:\.\d+)?)\s+(?:quantities|quantity|qty|pcs|units|pieces|bottles|packs|%)\b/i) ||
         text.match(/\b(\d+(?:\.\d+)?)\b/);
       if (qtyMatch) {
-        setQuantity(Number(qtyMatch[1]));
+        const val = Number(qtyMatch[1]);
+        setQuantity(val);
+        if (detected === 'add-tax-rate') setTaxRateValue(val);
+        if (detected === 'receive-payment' || detected === 'pay-bill' || detected === 'create-journal' || detected === 'create-expense') {
+          setUnitPrice(val);
+        }
       }
 
       const priceMatch = text.match(/(?:at|@|price|for)\s+(\d+(?:\.\d+)?)\b/i);
@@ -408,42 +576,39 @@ export function AutomationPage() {
       const costMatch = text.match(/cost\s+(\d+(?:\.\d+)?)/i);
       if (costMatch) setCostPrice(Number(costMatch[1]));
 
-      // 4. Extract email & phone
       const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
       if (emailMatch) setEntityEmail(emailMatch[0]);
 
       const phoneMatch = text.match(/(?:phone|tel|mobile)\s+([+\d\-\s]{7,18})/i);
       if (phoneMatch) setEntityPhone(phoneMatch[1].trim());
 
-      // 5. Extract vendor / reason for stock adjustment
       if (detected === 'inventory-adjustment') {
         const dec = lower.includes('decrease') || lower.includes('reduce') || lower.includes('remove') || lower.includes('deduct');
         setAdjustmentType(dec ? 'decrement' : 'increment');
         const fromMatch = text.match(/from\s+([a-zA-Z0-9\s.&'-]+?)(?:\s+vendor|\s+on|\s*$)/i);
-        const vendorLabel = matchedVendor
-          ? matchedVendor.displayName
-          : fromMatch
-            ? fromMatch[1].trim()
-            : '';
-        setReasonOrDesc(
-          vendorLabel
-            ? `Stock update from vendor: ${vendorLabel}`
-            : 'Automated inventory stock update',
-        );
+        const vendorLabel = matchedVendor ? matchedVendor.displayName : fromMatch ? fromMatch[1].trim() : '';
+        setReasonOrDesc(vendorLabel ? `Stock update from vendor: ${vendorLabel}` : 'Automated inventory stock update');
       }
 
-      // 6. Extract name for add-customer / add-vendor / add-item
-      if (detected === 'add-customer' || detected === 'add-vendor' || detected === 'add-item') {
+      if (detected === 'add-customer' || detected === 'add-vendor' || detected === 'add-item' || detected === 'add-category' || detected === 'add-warehouse' || detected === 'add-account' || detected === 'add-tax-rate') {
         const nameMatch = text.match(
-          /(?:add|create|new)\s+(?:customer|vendor|product|item)\s+([a-zA-Z0-9\s.&'-]+?)(?=\s+(?:email|phone|price|cost|inventory|service|$))/i,
+          /(?:add|create|new)\s+(?:customer|vendor|product|item|category|warehouse|account|tax rate)\s+([a-zA-Z0-9\s.&'-]+?)(?=\s+(?:email|phone|price|cost|inventory|service|type|\d|$))/i,
         );
         if (nameMatch) setEntityName(nameMatch[1].trim());
-        if (detected === 'add-item') {
-          setNewItemType(lower.includes('service') ? 'service' : 'inventory');
-        }
+        if (detected === 'add-item') setNewItemType(lower.includes('service') ? 'service' : 'inventory');
+        const typeMatch = text.match(/type\s+([a-zA-Z0-9_-]+)/i);
+        if (typeMatch && detected === 'add-account') setNewAccountType(typeMatch[1].toLowerCase());
       }
 
-      // 7. Extract document for send-email
+      if (detected === 'update-settings') {
+        const keyMatch = text.match(/key\s+([a-zA-Z0-9_.-]+)/i);
+        const valMatch = text.match(/value\s+([^\s]+(?:\s+[^\s]+)*?)(?=\s+group|\s*$)/i);
+        const grpMatch = text.match(/group\s+([a-zA-Z0-9_.-]+)/i);
+        if (keyMatch) setSettingKey(keyMatch[1].trim());
+        if (valMatch) setSettingValue(valMatch[1].trim());
+        if (grpMatch) setSettingGroup(grpMatch[1].trim());
+      }
+
       if (detected === 'send-email') {
         if (lower.includes('receipt')) setEmailDocType('receipt');
         else if (lower.includes('estimate')) setEmailDocType('estimate');
@@ -501,15 +666,12 @@ export function AutomationPage() {
           },
           { headers },
         );
-        const msg = `Updated stock (${adjustmentType} +${quantity}) for "${selectedItem?.name}"`;
+        const msg = `Updated stock (${adjustmentType} ${quantity}) for "${selectedItem?.name}"`;
         appendLog({ action: 'Update Inventory Stock', summary: msg, status: 'success', route: '/inventory-adjustments' });
         AppToaster.show({ intent: Intent.SUCCESS, message: msg });
       } else if (activePreset === 'create-receipt') {
         if (!selectedItemId || !selectedCustomerId) throw new Error('Select both a customer and a product.');
-        const depAcc =
-          accounts.find((a) => a.id === selectedAccountId) ||
-          accounts.find((a) => a.accountType === 'cash' || a.accountType === 'bank') ||
-          accounts[0];
+        const depAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
         const price = unitPrice || selectedItem?.sellPrice || 0;
         await axios.post(
           '/api/sale-receipts',
@@ -558,6 +720,24 @@ export function AutomationPage() {
         );
         const msg = `Created estimate for ${quantity} x "${selectedItem?.name}" (${selectedCust?.displayName})`;
         appendLog({ action: 'Create Estimate', summary: msg, status: 'success', route: '/estimates' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'receive-payment') {
+        const depAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
+        const amt = unitPrice || quantity || 0;
+        if (!selectedCustomerId || amt <= 0) throw new Error('Select customer and enter payment amount.');
+        await axios.post(
+          '/api/payments-received',
+          {
+            customer_id: selectedCustomerId,
+            payment_date: actionDate,
+            deposit_account_id: depAcc?.id,
+            amount: amt,
+            entries: selectedInvoiceId ? [{ invoice_id: selectedInvoiceId, payment_amount: amt }] : [],
+          },
+          { headers },
+        );
+        const msg = `Recorded payment received of ${amt} from "${selectedCust?.displayName}"`;
+        appendLog({ action: 'Receive Payment', summary: msg, status: 'success', route: '/payment-receives' });
         AppToaster.show({ intent: Intent.SUCCESS, message: msg });
       } else if (activePreset === 'send-email') {
         const docs = emailDocType === 'receipt' ? receipts : emailDocType === 'estimate' ? estimates : invoices;
@@ -639,6 +819,37 @@ export function AutomationPage() {
         const msg = `Added ${newItemType} product "${entityName.trim()}"`;
         appendLog({ action: 'Add Product', summary: msg, status: 'success', route: '/items' });
         AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'add-category') {
+        if (!entityName.trim()) throw new Error('Enter a category name.');
+        await axios.post('/api/item-categories', { name: entityName.trim() }, { headers });
+        const msg = `Created product category "${entityName.trim()}"`;
+        appendLog({ action: 'Add Category', summary: msg, status: 'success', route: '/items-categories' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'add-warehouse') {
+        if (!entityName.trim()) throw new Error('Enter a warehouse name.');
+        await axios.post(
+          '/api/warehouses',
+          { name: entityName.trim(), code: entityName.trim().slice(0, 6).toUpperCase().replace(/\s+/g, '') },
+          { headers },
+        );
+        const msg = `Created warehouse "${entityName.trim()}"`;
+        appendLog({ action: 'Create Warehouse', summary: msg, status: 'success', route: '/warehouses' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'warehouse-transfer') {
+        if (!fromWarehouseId || !toWarehouseId || !selectedItemId) throw new Error('Select warehouses and product.');
+        await axios.post(
+          '/api/warehouse-transfers',
+          {
+            date: actionDate,
+            from_warehouse_id: fromWarehouseId,
+            to_warehouse_id: toWarehouseId,
+            entries: [{ index: 1, item_id: selectedItemId, quantity }],
+          },
+          { headers },
+        );
+        const msg = `Transferred ${quantity} x "${selectedItem?.name}" between warehouses`;
+        appendLog({ action: 'Warehouse Transfer', summary: msg, status: 'success', route: '/warehouses-transfers' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
       } else if (activePreset === 'create-expense') {
         const payAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
         const expAcc = accounts.find((a) => a.id === selectedExpenseAccountId) || accounts[0];
@@ -685,6 +896,86 @@ export function AutomationPage() {
         const msg = `Created vendor bill from "${selectedVend?.displayName}" for ${quantity} x "${selectedItem?.name}"`;
         appendLog({ action: 'Create Bill', summary: msg, status: 'success', route: '/bills' });
         AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'pay-bill') {
+        const payAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
+        const amt = unitPrice || quantity || 0;
+        if (!selectedVendorId || amt <= 0) throw new Error('Select vendor and enter payment amount.');
+        await axios.post(
+          '/api/bill-payments',
+          {
+            vendor_id: selectedVendorId,
+            payment_date: actionDate,
+            payment_account_id: payAcc?.id,
+            amount: amt,
+            entries: selectedBillId ? [{ bill_id: selectedBillId, payment_amount: amt }] : [],
+          },
+          { headers },
+        );
+        const msg = `Paid vendor "${selectedVend?.displayName}" amount ${amt}`;
+        appendLog({ action: 'Pay Vendor Bill', summary: msg, status: 'success', route: '/payment-mades' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'add-account') {
+        if (!entityName.trim()) throw new Error('Enter an account name.');
+        await axios.post(
+          '/api/accounts',
+          {
+            name: entityName.trim(),
+            account_type: newAccountType,
+            active: true,
+          },
+          { headers },
+        );
+        const msg = `Created ${newAccountType} account "${entityName.trim()}"`;
+        appendLog({ action: 'Add Account', summary: msg, status: 'success', route: '/accounts' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'create-journal') {
+        const debitAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
+        const creditAcc = accounts.find((a) => a.id === selectedExpenseAccountId && a.id !== debitAcc?.id) || accounts[1] || accounts[0];
+        const amt = unitPrice || quantity || 0;
+        if (!debitAcc || !creditAcc || amt <= 0) throw new Error('Select debit/credit accounts and positive amount.');
+        await axios.post(
+          '/api/manual-journals',
+          {
+            date: actionDate,
+            publish: true,
+            description: reasonOrDesc || commandText,
+            entries: [
+              { index: 1, account_id: debitAcc.id, debit: amt, credit: 0 },
+              { index: 2, account_id: creditAcc.id, debit: 0, credit: amt },
+            ],
+          },
+          { headers },
+        );
+        const msg = `Posted manual journal entry of ${amt} (${debitAcc.name} → ${creditAcc.name})`;
+        appendLog({ action: 'Create Manual Journal', summary: msg, status: 'success', route: '/manual-journals' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'add-tax-rate') {
+        if (!entityName.trim()) throw new Error('Enter a tax rate name.');
+        await axios.post(
+          '/api/tax-rates',
+          {
+            name: entityName.trim(),
+            code: entityName.trim().slice(0, 6).toUpperCase().replace(/\s+/g, ''),
+            rate: taxRateValue,
+            active: true,
+          },
+          { headers },
+        );
+        const msg = `Added tax rate "${entityName.trim()}" (${taxRateValue}%)`;
+        appendLog({ action: 'Add Tax Rate', summary: msg, status: 'success', route: '/preferences/tax-rates' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+      } else if (activePreset === 'update-settings') {
+        if (!settingKey.trim() || !settingGroup.trim()) throw new Error('Specify setting group and key.');
+        await axios.put(
+          '/api/settings',
+          {
+            options: [{ group: settingGroup.trim(), key: settingKey.trim(), value: settingValue }],
+          },
+          { headers },
+        );
+        const msg = `Updated setting ${settingGroup}.${settingKey} = "${settingValue}"`;
+        appendLog({ action: 'Update Settings', summary: msg, status: 'success', route: '/preferences/general' });
+        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
       }
 
       await fetchEntities();
@@ -701,6 +992,11 @@ export function AutomationPage() {
     }
   };
 
+  const visiblePresets =
+    categoryFilter === 'All'
+      ? PRESETS
+      : PRESETS.filter((p) => p.category === categoryFilter);
+
   const docOptions =
     emailDocType === 'receipt' ? receipts : emailDocType === 'estimate' ? estimates : invoices;
 
@@ -716,7 +1012,7 @@ export function AutomationPage() {
             BorngreatAutomation
           </h2>
           <p style={{ margin: '4px 0 0', color: '#64748b' }}>
-            Type a command in plain English or pick a preset below to perform any accounting action automatically.
+            Type a command in plain English or pick any preset across Sales, Inventory, Accounting, and Settings.
           </p>
         </div>
         {loadingData && <Spinner size={22} />}
@@ -743,11 +1039,7 @@ export function AutomationPage() {
         </FormGroup>
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-          <Button
-            icon="refresh"
-            text="Parse Command"
-            onClick={() => parseCommand(commandText)}
-          />
+          <Button icon="refresh" text="Parse Command" onClick={() => parseCommand(commandText)} />
           <Button
             intent={Intent.PRIMARY}
             icon="play"
@@ -760,8 +1052,25 @@ export function AutomationPage() {
         </div>
       </Card>
 
-      {/* Presets Grid */}
-      <h4 style={{ margin: '0 0 10px' }}>Quick Presets (Click any preset, adjust fields, and run)</h4>
+      {/* Category Filter & Presets Grid */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+        <h4 style={{ margin: 0 }}>Presets ({visiblePresets.length})</h4>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {(['All', 'Sales', 'Inventory & Purchases', 'Accounting & Banking', 'Contacts & Settings'] as PresetCategory[]).map(
+            (cat) => (
+              <Button
+                key={cat}
+                small
+                intent={categoryFilter === cat ? Intent.PRIMARY : Intent.NONE}
+                minimal={categoryFilter !== cat}
+                text={cat}
+                onClick={() => setCategoryFilter(cat)}
+              />
+            ),
+          )}
+        </div>
+      </div>
+
       <div
         style={{
           display: 'grid',
@@ -770,7 +1079,7 @@ export function AutomationPage() {
           marginBottom: 20,
         }}
       >
-        {PRESETS.map((p) => {
+        {visiblePresets.map((p) => {
           const isSelected = activePreset === p.id;
           return (
             <Card
@@ -818,7 +1127,8 @@ export function AutomationPage() {
             activePreset === 'create-receipt' ||
             activePreset === 'create-invoice' ||
             activePreset === 'create-estimate' ||
-            activePreset === 'create-bill') && (
+            activePreset === 'create-bill' ||
+            activePreset === 'warehouse-transfer') && (
             <FormGroup label="Product / Item">
               <HTMLSelect
                 fill
@@ -844,7 +1154,8 @@ export function AutomationPage() {
 
           {(activePreset === 'create-receipt' ||
             activePreset === 'create-invoice' ||
-            activePreset === 'create-estimate') && (
+            activePreset === 'create-estimate' ||
+            activePreset === 'receive-payment') && (
             <FormGroup label="Customer">
               <HTMLSelect
                 fill
@@ -860,7 +1171,7 @@ export function AutomationPage() {
             </FormGroup>
           )}
 
-          {activePreset === 'create-bill' && (
+          {(activePreset === 'create-bill' || activePreset === 'pay-bill') && (
             <FormGroup label="Vendor">
               <HTMLSelect
                 fill
@@ -876,11 +1187,113 @@ export function AutomationPage() {
             </FormGroup>
           )}
 
+          {activePreset === 'receive-payment' && (
+            <FormGroup label="Apply to Invoice (Optional)">
+              <HTMLSelect
+                fill
+                value={selectedInvoiceId}
+                onChange={(e) => setSelectedInvoiceId(Number(e.target.value))}
+              >
+                <option value={0}>-- Unapplied / Account Payment --</option>
+                {invoices.map((inv) => (
+                  <option key={inv.id} value={inv.id}>
+                    {inv.number}
+                  </option>
+                ))}
+              </HTMLSelect>
+            </FormGroup>
+          )}
+
+          {activePreset === 'pay-bill' && (
+            <FormGroup label="Apply to Bill (Optional)">
+              <HTMLSelect
+                fill
+                value={selectedBillId}
+                onChange={(e) => setSelectedBillId(Number(e.target.value))}
+              >
+                <option value={0}>-- Unapplied Vendor Payment --</option>
+                {bills.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.number}
+                  </option>
+                ))}
+              </HTMLSelect>
+            </FormGroup>
+          )}
+
+          {activePreset === 'warehouse-transfer' && (
+            <>
+              <FormGroup label="From Warehouse">
+                <HTMLSelect
+                  fill
+                  value={fromWarehouseId}
+                  onChange={(e) => setFromWarehouseId(Number(e.target.value))}
+                >
+                  {warehouses.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))}
+                </HTMLSelect>
+              </FormGroup>
+              <FormGroup label="To Warehouse">
+                <HTMLSelect
+                  fill
+                  value={toWarehouseId}
+                  onChange={(e) => setToWarehouseId(Number(e.target.value))}
+                >
+                  {warehouses.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name}
+                    </option>
+                  ))}
+                </HTMLSelect>
+              </FormGroup>
+            </>
+          )}
+
+          {(activePreset === 'create-receipt' ||
+            activePreset === 'receive-payment' ||
+            activePreset === 'create-expense' ||
+            activePreset === 'pay-bill' ||
+            activePreset === 'create-journal') && (
+            <FormGroup label={activePreset === 'create-journal' ? 'Debit Account' : 'Deposit / Payment Account'}>
+              <HTMLSelect
+                fill
+                value={selectedAccountId}
+                onChange={(e) => setSelectedAccountId(Number(e.target.value))}
+              >
+                {accounts.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name} ({a.accountType})
+                  </option>
+                ))}
+              </HTMLSelect>
+            </FormGroup>
+          )}
+
+          {(activePreset === 'create-expense' || activePreset === 'create-journal') && (
+            <FormGroup label={activePreset === 'create-journal' ? 'Credit Account' : 'Expense Category Account'}>
+              <HTMLSelect
+                fill
+                value={selectedExpenseAccountId}
+                onChange={(e) => setSelectedExpenseAccountId(Number(e.target.value))}
+              >
+                {accounts.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name} ({a.accountType})
+                  </option>
+                ))}
+              </HTMLSelect>
+            </FormGroup>
+          )}
+
           {(activePreset === 'inventory-adjustment' ||
             activePreset === 'create-receipt' ||
             activePreset === 'create-invoice' ||
             activePreset === 'create-estimate' ||
-            activePreset === 'create-bill') && (
+            activePreset === 'create-bill' ||
+            activePreset === 'warehouse-transfer') && (
             <FormGroup label="Quantity">
               <NumericInput
                 fill
@@ -907,9 +1320,21 @@ export function AutomationPage() {
           {(activePreset === 'create-receipt' ||
             activePreset === 'create-invoice' ||
             activePreset === 'create-estimate' ||
+            activePreset === 'receive-payment' ||
+            activePreset === 'pay-bill' ||
             activePreset === 'add-item' ||
-            activePreset === 'create-expense') && (
-            <FormGroup label={activePreset === 'create-expense' ? 'Amount' : 'Unit Sell Price'}>
+            activePreset === 'create-expense' ||
+            activePreset === 'create-journal') && (
+            <FormGroup
+              label={
+                activePreset === 'create-expense' ||
+                activePreset === 'receive-payment' ||
+                activePreset === 'pay-bill' ||
+                activePreset === 'create-journal'
+                  ? 'Amount'
+                  : 'Unit Sell Price'
+              }
+            >
               <NumericInput
                 fill
                 min={0}
@@ -932,7 +1357,11 @@ export function AutomationPage() {
 
           {(activePreset === 'add-customer' ||
             activePreset === 'add-vendor' ||
-            activePreset === 'add-item') && (
+            activePreset === 'add-item' ||
+            activePreset === 'add-category' ||
+            activePreset === 'add-warehouse' ||
+            activePreset === 'add-account' ||
+            activePreset === 'add-tax-rate') && (
             <FormGroup label="Name">
               <InputGroup
                 fill
@@ -954,6 +1383,69 @@ export function AutomationPage() {
                 <option value="service">Service</option>
               </HTMLSelect>
             </FormGroup>
+          )}
+
+          {activePreset === 'add-account' && (
+            <FormGroup label="Account Type">
+              <HTMLSelect
+                fill
+                value={newAccountType}
+                onChange={(e) => setNewAccountType(e.target.value)}
+              >
+                <option value="cash">Cash</option>
+                <option value="bank">Bank</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+                <option value="other-current-asset">Other Current Asset</option>
+                <option value="other-current-liability">Other Current Liability</option>
+                <option value="equity">Equity</option>
+              </HTMLSelect>
+            </FormGroup>
+          )}
+
+          {activePreset === 'add-tax-rate' && (
+            <FormGroup label="Tax Rate (%)">
+              <NumericInput
+                fill
+                min={0}
+                value={taxRateValue}
+                onValueChange={(val) => setTaxRateValue(val || 0)}
+              />
+            </FormGroup>
+          )}
+
+          {activePreset === 'update-settings' && (
+            <>
+              <FormGroup label="Settings Group">
+                <HTMLSelect
+                  fill
+                  value={settingGroup}
+                  onChange={(e) => setSettingGroup(e.target.value)}
+                >
+                  <option value="sales_invoices">Sales Invoices (sales_invoices)</option>
+                  <option value="sale_receipts">Sale Receipts (sale_receipts)</option>
+                  <option value="sale_estimates">Sale Estimates (sale_estimates)</option>
+                  <option value="organization">Organization (organization)</option>
+                  <option value="items">Items / Inventory (items)</option>
+                </HTMLSelect>
+              </FormGroup>
+              <FormGroup label="Setting Key">
+                <InputGroup
+                  fill
+                  value={settingKey}
+                  onChange={(e) => setSettingKey(e.target.value)}
+                  placeholder="e.g. next_number, number_prefix, default_note"
+                />
+              </FormGroup>
+              <FormGroup label="Setting Value">
+                <InputGroup
+                  fill
+                  value={settingValue}
+                  onChange={(e) => setSettingValue(e.target.value)}
+                  placeholder="New value..."
+                />
+              </FormGroup>
+            </>
           )}
 
           {activePreset === 'send-email' && (
@@ -1013,8 +1505,12 @@ export function AutomationPage() {
             activePreset === 'create-receipt' ||
             activePreset === 'create-invoice' ||
             activePreset === 'create-estimate' ||
+            activePreset === 'receive-payment' ||
             activePreset === 'create-expense' ||
-            activePreset === 'create-bill') && (
+            activePreset === 'create-bill' ||
+            activePreset === 'pay-bill' ||
+            activePreset === 'warehouse-transfer' ||
+            activePreset === 'create-journal') && (
             <FormGroup label="Date">
               <InputGroup
                 fill
@@ -1025,7 +1521,9 @@ export function AutomationPage() {
             </FormGroup>
           )}
 
-          {(activePreset === 'inventory-adjustment' || activePreset === 'create-expense') && (
+          {(activePreset === 'inventory-adjustment' ||
+            activePreset === 'create-expense' ||
+            activePreset === 'create-journal') && (
             <FormGroup label="Reason / Description">
               <InputGroup
                 fill
@@ -1043,7 +1541,7 @@ export function AutomationPage() {
         <h4 style={{ margin: '0 0 10px' }}>Automation Activity Log</h4>
         {logs.length === 0 ? (
           <Callout intent={Intent.NONE}>
-            No automations executed yet in this session. Select a preset or type a command above and click{' '}
+            No automations executed yet in this session. Select any of the 19 presets or type a command above and click{' '}
             <strong>Run Automation</strong>.
           </Callout>
         ) : (
