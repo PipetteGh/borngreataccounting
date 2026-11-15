@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ItemFormFormik } from './ItemFormFormik';
 import { useItemFormContext, ItemFormProvider } from './ItemFormProvider';
 import type { ItemFormValues, ItemFormSubmitPayload } from './types';
@@ -49,6 +49,18 @@ interface ItemFormProps {
 export function ItemForm({ itemId }: ItemFormProps) {
   // History context.
   const history = useHistory();
+  const { search } = useLocation();
+
+  const initialValues = React.useMemo<
+    Partial<ItemFormValues> | undefined
+  >(() => {
+    if (itemId) return undefined;
+    const typeParam = new URLSearchParams(search).get('type');
+    if (typeParam === 'inventory' || typeParam === 'service') {
+      return { type: typeParam };
+    }
+    return undefined;
+  }, [itemId, search]);
 
   // Handle the form submit success.
   const handleSubmitSuccess = (
@@ -67,7 +79,10 @@ export function ItemForm({ itemId }: ItemFormProps) {
 
       <ItemFormPageLoading>
         <Box mx={'auto'} maxWidth={800}>
-          <ItemFormFormik onSubmitSuccess={handleSubmitSuccess} />
+          <ItemFormFormik
+            initialValues={initialValues}
+            onSubmitSuccess={handleSubmitSuccess}
+          />
         </Box>
       </ItemFormPageLoading>
     </ItemFormProvider>

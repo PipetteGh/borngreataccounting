@@ -126,7 +126,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
             children: [
               {
                 text: <T id={'sidebar.new_inventory_item'} />,
-                href: '/items/new',
+                href: '/items/new?type=inventory',
                 type: ISidebarMenuItemType.Link,
                 permission: {
                   subject: AbilitySubject.Item,
@@ -135,7 +135,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
               },
               {
                 text: <T id={'sidebar.new_service'} />,
-                href: '/items/new',
+                href: '/items/new?type=service',
                 type: ISidebarMenuItemType.Link,
                 permission: {
                   subject: AbilitySubject.Item,
