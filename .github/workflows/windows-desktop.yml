@@ -16,17 +16,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Windows Setup & Desktop Control Center EXE
+      - name: Setup Node.js & pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Enable Corepack & Install Dependencies
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path "dist\installers" | Out-Null
-          $csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-          & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-1.0.3.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"
-          Copy-Item "dist\installers\BorngreatAccounting-Setup-1.0.3.exe" "dist\installers\BorngreatAccounting-Setup.exe" -Force
-          $h1 = (Get-FileHash "dist\installers\BorngreatAccounting-Setup-1.0.3.exe" -Algorithm SHA256).Hash
-          $h2 = (Get-FileHash "dist\installers\BorngreatAccounting-Setup.exe" -Algorithm SHA256).Hash
-          Set-Content -Path "dist\installers\SHA256SUMS.txt" -Value "$h1  BorngreatAccounting-Setup-1.0.3.exe`r`n$h2  BorngreatAccounting-Setup.exe" -Encoding ASCII
-          & ".\dist\installers\BorngreatAccounting-Setup-1.0.3.exe" --verify
+          corepack enable
+          pnpm install --ignore-scripts
+
+      - name: Ensure Inno Setup 6
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y
+          }
+
+      - name: Build Windows Inno Setup Installer EXE
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.4" -ForceBuild
 
       - name: Upload Windows Installer Artifacts
         uses: actions/upload-artifact@v4
@@ -34,5 +45,5 @@ jobs:
           name: BorngreatAccounting-Windows-Installer
           path: |
             dist/installers/BorngreatAccounting-Setup.exe
-            dist/installers/BorngreatAccounting-Setup-1.0.3.exe
+            dist/installers/BorngreatAccounting-Setup-1.0.4.exe
             dist/installers/SHA256SUMS.txt

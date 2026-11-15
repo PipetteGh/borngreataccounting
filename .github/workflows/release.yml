@@ -18,15 +18,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile Windows Installer & Generate SHA256SUMS
+      - name: Setup Node.js & pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Enable Corepack & Install Dependencies
         shell: pwsh
         run: |
-          $version = "${GITHUB_REF_NAME}".TrimStart('v')
-          if ([string]::IsNullOrWhiteSpace($version)) { $version = "1.0.1" }
-          New-Item -ItemType Directory -Force -Path "dist\installers" | Out-Null
-          $csc = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-          & $csc /nologo /target:exe /optimize+ /win32icon:"assets\branding\borngreataccounting.ico" /r:System.Windows.Forms.dll /r:System.Drawing.dll /out:"dist\installers\BorngreatAccounting-Setup-$version.exe" "desktop\windows-installer\BorngreatAccountingSetup.cs"
-          Copy-Item "dist\installers\BorngreatAccounting-Setup-$version.exe" "dist\installers\BorngreatAccounting-Setup.exe" -Force
+          corepack enable
+          pnpm install --ignore-scripts
+
+      - name: Ensure Inno Setup 6
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y
+          }
+
+      - name: Build Windows Inno Setup Installer EXE & Generate SHA256SUMS
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          if ([string]::IsNullOrWhiteSpace($version)) { $version = "1.0.4" }
+          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version $version -ForceBuild
           Compress-Archive -Path "docker", "docker-compose.production.yml", ".env.production.example", "install.sh", "install.ps1", "backup.sh", "restore.sh", "backup.ps1", "restore.ps1", "upgrade.sh", "upgrade.ps1", "LICENSE", "DISCLAIMER", "NOTICE", "README.md" -DestinationPath "dist\installers\BorngreatAccounting-Docker-Deploy-$version.zip" -Force
           Get-ChildItem "dist\installers\*" -Exclude "SHA256SUMS.txt" | ForEach-Object {
             $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash

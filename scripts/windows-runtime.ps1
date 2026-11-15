@@ -225,28 +225,33 @@ function Ensure-Pnpm {
 }
 
 function Ensure-AppBuilt {
+    $hasNodeModules = Test-Path (Join-Path $RepoRoot "node_modules")
     $serverMain = Join-Path $RepoRoot "packages\server\dist\main.js"
     $serverCli = Join-Path $RepoRoot "packages\server\dist\cli.js"
     $webappIndex = Join-Path $RepoRoot "packages\webapp\dist\index.html"
-    if ((Test-Path $serverMain) -and (Test-Path $serverCli) -and (Test-Path $webappIndex)) {
-        Write-Step "Application build artifacts verified."
+    $hasDist = (Test-Path $serverMain) -and (Test-Path $serverCli) -and (Test-Path $webappIndex)
+
+    if ($hasNodeModules -and $hasDist) {
+        Write-Step "Application dependencies and build artifacts verified."
         return
     }
     Ensure-Pnpm
     Push-Location $RepoRoot
     try {
-        if (-not (Test-Path (Join-Path $RepoRoot "node_modules"))) {
-            Write-Step "Installing monorepo dependencies (pnpm install --ignore-scripts)..."
-            & pnpm install --ignore-scripts
+        if (-not $hasNodeModules) {
+            Write-Step "Installing production dependencies (pnpm install --prod --ignore-scripts)..."
+            & pnpm install --prod --ignore-scripts
         }
-        Write-Step "Building shared packages, API server, and Webapp..."
-        & pnpm run build:shared
-        & pnpm run build:server
-        & pnpm run build:webapp
+        if (-not $hasDist) {
+            Write-Step "Building shared packages, API server, and Webapp..."
+            & pnpm run build:shared
+            & pnpm run build:server
+            & pnpm run build:webapp
+        }
     } finally {
         Pop-Location
     }
-    Write-Step "Application build complete."
+    Write-Step "Application ready."
 }
 
 function Run-Migrations {
