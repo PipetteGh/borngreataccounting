@@ -1329,7 +1329,7 @@ namespace BorngreatAccounting.Setup
 
                 string appDir = Directory.Exists(Path.Combine(baseDir, "app")) ? Path.Combine(baseDir, "app") : baseDir;
                 string scriptPath = Path.Combine(appDir, "scripts", "windows-runtime.ps1");
-                if (!AppHelper.IsPortListening(4100) && File.Exists(scriptPath))
+                if ((!AppHelper.IsPortListening(4100) || !AppHelper.IsPortListening(3000)) && File.Exists(scriptPath))
                 {
                     AppHelper.RunPowerShell("-NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\" -Action start", appDir, null);
                 }

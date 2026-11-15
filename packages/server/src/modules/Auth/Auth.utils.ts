@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { createHash } from 'crypto';
 import { AuthApiKeyPrefix, AuthApiKeyPrefixLength } from './Auth.constants';
 

@@ -225,7 +225,7 @@ function Ensure-Pnpm {
 }
 
 function Ensure-AppBuilt {
-    $hasNodeModules = Test-Path (Join-Path $RepoRoot "node_modules")
+    $hasNodeModules = (Test-Path (Join-Path $RepoRoot "node_modules")) -and (Test-Path (Join-Path $RepoRoot "packages\server\node_modules"))
     $serverMain = Join-Path $RepoRoot "packages\server\dist\main.js"
     $serverCli = Join-Path $RepoRoot "packages\server\dist\cli.js"
     $webappIndex = Join-Path $RepoRoot "packages\webapp\dist\index.html"
@@ -239,8 +239,11 @@ function Ensure-AppBuilt {
     Push-Location $RepoRoot
     try {
         if (-not $hasNodeModules) {
-            Write-Step "Installing production dependencies (pnpm install --prod --ignore-scripts)..."
-            & pnpm install --prod --ignore-scripts
+            Write-Step "Installing production dependencies (pnpm install --prod --ignore-scripts --no-frozen-lockfile)..."
+            & pnpm install --prod --ignore-scripts --no-frozen-lockfile
+            if ($LASTEXITCODE -ne 0) {
+                throw "pnpm install --prod --ignore-scripts failed with exit code $LASTEXITCODE"
+            }
         }
         if (-not $hasDist) {
             Write-Step "Building shared packages, API server, and Webapp..."
@@ -297,14 +300,23 @@ function Start-AllServices {
     }
 
     # Wait for API readiness
-    for ($i = 0; $i -lt 25; $i++) {
+    $apiReady = $false
+    for ($i = 0; $i -lt 30; $i++) {
         try {
             $resp = Invoke-WebRequest -Uri "http://127.0.0.1:3000/api/system_db" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
             if ($resp.StatusCode -ge 200 -and $resp.StatusCode -lt 300) {
+                $apiReady = $true
                 break
             }
         } catch {
             Start-Sleep -Seconds 1
+        }
+    }
+    if (-not $apiReady) {
+        Write-Step "WARNING: API server on 127.0.0.1:3000 did not respond within 30s."
+        $apiErrPath = Join-Path $LogsDir "api-stderr.log"
+        if (Test-Path $apiErrPath) {
+            Get-Content -Path $apiErrPath -Tail 25 | ForEach-Object { Write-Output $_ }
         }
     }
 
