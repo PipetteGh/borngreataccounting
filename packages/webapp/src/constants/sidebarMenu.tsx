@@ -68,6 +68,13 @@ export const SidebarMenu: SidebarMenuItem[] = [
     disabled: false,
     href: '/pos',
   },
+  {
+    icon: 'flash',
+    text: 'Automation',
+    type: ISidebarMenuItemType.Link,
+    disabled: false,
+    href: '/automation',
+  },
   // ---------------
   // # Sales & Inventory
   // ---------------

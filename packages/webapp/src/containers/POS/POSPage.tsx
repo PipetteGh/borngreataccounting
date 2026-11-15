@@ -785,6 +785,8 @@ export function POSPage() {
     [gateways, paymentMethod],
   );
 
+  const completeSaleRef = useRef<() => void>(() => {});
+
   const completeSale = async () => {
     if (cart.length === 0) {
       AppToaster.show({
@@ -917,6 +919,22 @@ export function POSPage() {
       setSubmitting(false);
     }
   };
+
+  completeSaleRef.current = completeSale;
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (submitting || completedReceipt || cart.length === 0) return;
+      const isF9 = e.key === 'F9' && !e.ctrlKey && !e.metaKey && !e.altKey;
+      const isCtrlEnter = e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.altKey;
+      if (isF9 || isCtrlEnter) {
+        e.preventDefault();
+        completeSaleRef.current();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [cart.length, submitting, completedReceipt]);
 
   return (
     <div
@@ -1513,7 +1531,8 @@ export function POSPage() {
               icon="tick-circle"
               loading={submitting}
               disabled={cart.length === 0}
-              text={`Complete Sale (${formatMoney(grandTotal, baseCurrency)})`}
+              text={`Complete Sale (${formatMoney(grandTotal, baseCurrency)}) [F9]`}
+              title="Shortcut: Press F9 or Ctrl+Enter to complete sale"
               onClick={completeSale}
               data-testid="pos-complete-sale-btn"
             />

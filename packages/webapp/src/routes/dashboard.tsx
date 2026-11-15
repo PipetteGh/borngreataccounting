@@ -17,6 +17,17 @@ export const getDashboardRoutes = () => [
     pageTitle: 'Point of Sale (POS)',
     sidebarExpand: false,
   },
+  // Automation.
+  {
+    path: '/automation',
+    component: lazy(() =>
+      import('@/containers/Automation/AutomationPage').then((m) => ({
+        default: m.AutomationPage,
+      })),
+    ),
+    breadcrumb: 'Automation',
+    pageTitle: 'Automation',
+  },
   // Accounts.
   {
     path: '/accounts/import',
