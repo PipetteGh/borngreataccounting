@@ -1,9 +1,9 @@
-# Stripe Billing (Bigcapital Cloud)
+# Stripe Billing (BorngreatAccounting Cloud)
 
-Bigcapital Cloud uses Stripe Billing for organization subscriptions. Self-hosted
+BorngreatAccounting Cloud uses Stripe Billing for organization subscriptions. Self-hosted
 installations remain free and never call Stripe.
 
-A deployment is considered Bigcapital Cloud once the required Stripe Billing
+A deployment is considered BorngreatAccounting Cloud once the required Stripe Billing
 credentials (`STRIPE_BILLING_SECRET_KEY` and `STRIPE_BILLING_WEBHOOK_SECRET`)
 are configured. There is no separate Cloud deployment flag.
 

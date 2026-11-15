@@ -38,7 +38,7 @@ Contributions via pull requests are much appreciated. Once the approach is agree
 
 ## Contribute to Backend
 
-- Clone the `bigcapital` repository and `cd` into `bigcapital` directory.
+- Clone the `borngreataccounting` repository and `cd` into `borngreataccounting` directory.
 - Create `.env` file by copying `.env.example` file to `.env`. (The ``.env.example`` file has all the necessary values of variables to start development directly).
 
 ```
@@ -61,9 +61,9 @@ Wait some seconds, and hit `docker-compose ps` and you should see the same resul
 
 ```
 CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS        PORTS                               NAMES
-d974edfab9df   bigcapital-mysql   "docker-entrypoint.s…"   7 seconds ago   Up 1 second   0.0.0.0:3306->3306/tcp, 33060/tcp   bigcapital-mysql-1
-cefa73fe2881   bigcapital-redis   "docker-entrypoint.s…"   7 seconds ago   Up 1 second   6379/tcp                            bigcapital-redis-1
-1ea059198cb4   bigcapital-mongo   "docker-entrypoint.s…"   7 seconds ago   Up 1 second   0.0.0.0:27017->27017/tcp            bigcapital-mongo-1
+d974edfab9df   mariadb:10.11      "docker-entrypoint.s…"   7 seconds ago   Up 1 second   0.0.0.0:3306->3306/tcp              borngreataccounting-mariadb
+cefa73fe2881   redis:7-alpine     "docker-entrypoint.s…"   7 seconds ago   Up 1 second   0.0.0.0:6379->6379/tcp              borngreataccounting-redis
+1ea059198cb4   gotenberg/gotenberg "gotenberg"              7 seconds ago   Up 1 second   0.0.0.0:9000->3000/tcp              borngreataccounting-gotenberg
 ```
 
 - There're some CLI commands we should run before running the server like databaase migration, so we need to build the `server` app first.
@@ -129,11 +129,11 @@ There are many other ways to get involved with the community and to participate 
 - Use the product, submitting GitHub issues when a problem is found.
 - Help code review pull requests and participate in issue threads.
 - Submit a new feature request as an issue.
-- Help answer questions on forums such as Bigcapital Community Discord Channel.
-- Tell others about the project on Twitter, your blog, etc.
+- Help answer questions in [GitHub Issues](https://github.com/PipetteGh/borngreataccounting/issues) and community discussions.
+- Tell others about the project on social media, your blog, etc.
 
 **[`^top^`](#)**
 
-Again, Feel free to ping us on [`#contributing`](https://discord.com/invite/c8nPBJafeb) on our Discord community if you need any help on this :)
+Feel free to open an issue or discussion on [GitHub](https://github.com/PipetteGh/borngreataccounting/issues) if you need any help contributing! :)
 
 Thank You!

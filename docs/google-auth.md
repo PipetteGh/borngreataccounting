@@ -1,6 +1,6 @@
 # Google Sign-In Configuration
 
-Bigcapital supports signing in and signing up with Google through the
+BorngreatAccounting supports signing in and signing up with Google through the
 **Continue with Google** button shown on the login and registration pages.
 
 The integration is server-side (OAuth 2.0 authorization-code flow), so no Google
