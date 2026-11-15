@@ -15,6 +15,7 @@ export function ItemCategoriesImport() {
     <DashboardInsider name={'import-item-categories'}>
       <ImportView
         resource={'item_category'}
+        sampleFileName={'sample-product-categories'}
         onImportSuccess={handleImportSuccess}
         onCancelClick={handleCancelBtnClick}
         exampleTitle="Product Categories Example"

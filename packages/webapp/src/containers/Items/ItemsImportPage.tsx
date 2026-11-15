@@ -15,6 +15,7 @@ export function ItemsImportpage() {
     <DashboardInsider name={'import-items'}>
       <ImportView
         resource={'items'}
+        sampleFileName={'sample-products'}
         onImportSuccess={handleImportSuccess}
         onCancelClick={handleCancelBtnClick}
         exampleTitle="Products Example"

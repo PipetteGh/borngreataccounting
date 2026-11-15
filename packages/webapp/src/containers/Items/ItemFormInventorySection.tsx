@@ -40,21 +40,28 @@ export function ItemFormInventorySection() {
       </FFormGroup>
 
       {values.type === 'inventory' && (
-        /*------------- Reorder point ------------- */
-        <FFormGroup
-          label={intl.get('reorder_point')}
-          name={'reorderPoint'}
-          helperText={intl.get('reorder_point_hint')}
-          inline={true}
-        >
-          <FInputGroup
+        <>
+          {/*------------- Reorder point ------------- */}
+          <FFormGroup
+            label={intl.get('reorder_point')}
             name={'reorderPoint'}
-            type={'number'}
-            min={0}
-            step={0.001}
-            fill={true}
-          />
-        </FFormGroup>
+            helperText={intl.get('reorder_point_hint')}
+            inline={true}
+          >
+            <FInputGroup
+              name={'reorderPoint'}
+              type={'number'}
+              min={0}
+              step={0.001}
+              fill={true}
+            />
+          </FFormGroup>
+          <p className="bp5-text-muted" style={{ fontSize: 12, marginTop: 4 }}>
+            Initial stock quantity starts at 0. Add opening or incoming stock via{' '}
+            <strong>Products → Inventory Adjustments</strong> or{' '}
+            <strong>Purchases → Bills</strong>.
+          </p>
+        </>
       )}
     </Box>
   );
