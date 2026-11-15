@@ -24,7 +24,7 @@ namespace BorngreatAccounting.Setup
     internal static class AppHelper
     {
         public const string AppName = "BorngreatAccounting";
-        public const string AppVersion = "1.0.5";
+        public const string AppVersion = "1.0.6";
         public const string Publisher = "Borngreat (Peter Borngreat-Mensah)";
         public const string UninstallRegKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\BorngreatAccounting";
         public const string LatestReleaseUrl = "https://github.com/PipetteGh/borngreataccounting/releases/latest";

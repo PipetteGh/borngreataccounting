@@ -40,7 +40,7 @@ jobs:
       - name: Build Windows Inno Setup Installer EXE
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.5" -ForceBuild
+          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.6" -ForceBuild
 
       - name: Upload Windows Installer Artifacts
         uses: actions/upload-artifact@v4
@@ -48,5 +48,5 @@ jobs:
           name: BorngreatAccounting-Windows-Installer
           path: |
             dist/installers/BorngreatAccounting-Setup.exe
-            dist/installers/BorngreatAccounting-Setup-1.0.5.exe
+            dist/installers/BorngreatAccounting-Setup-1.0.6.exe
             dist/installers/SHA256SUMS.txt
