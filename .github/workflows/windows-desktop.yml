@@ -16,16 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js & pnpm
+      - name: Setup Node.js 18
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.20.4'
 
-      - name: Enable Corepack & Install Dependencies
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install Dependencies
         shell: pwsh
-        run: |
-          corepack enable
-          pnpm install --ignore-scripts
+        run: pnpm install --ignore-scripts
 
       - name: Ensure Inno Setup 6
         shell: pwsh
@@ -37,7 +40,7 @@ jobs:
       - name: Build Windows Inno Setup Installer EXE
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.4" -ForceBuild
+          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.5" -ForceBuild
 
       - name: Upload Windows Installer Artifacts
         uses: actions/upload-artifact@v4
@@ -45,5 +48,5 @@ jobs:
           name: BorngreatAccounting-Windows-Installer
           path: |
             dist/installers/BorngreatAccounting-Setup.exe
-            dist/installers/BorngreatAccounting-Setup-1.0.4.exe
+            dist/installers/BorngreatAccounting-Setup-1.0.5.exe
             dist/installers/SHA256SUMS.txt
