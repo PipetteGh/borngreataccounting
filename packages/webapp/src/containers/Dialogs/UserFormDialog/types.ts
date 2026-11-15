@@ -5,11 +5,15 @@ import type {
   User,
 } from '@borngreataccounting/sdk-ts';
 
+import type { CreateUserBody } from '@/hooks/query/users/queries';
+
 export interface UserFormValues {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   roleId: string;
+  active: boolean;
 }
 
 export type UserFormDialogPayload = {
@@ -22,6 +26,7 @@ export type UserFormContextValue = {
   userId: number | null;
   dialogName: string;
   user: User | undefined;
+  CreateUserMutate: (vars: CreateUserBody) => Promise<unknown>;
   // FIXME: capital `E` is inconsistent with peers; kept to avoid touching all
   // call sites.
   EditUserMutate: (vars: [number, EditUserBody]) => Promise<unknown>;

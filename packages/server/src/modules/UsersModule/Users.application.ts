@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ActivateUserService } from './commands/ActivateUser.service';
+import { CreateUserService } from './commands/CreateUser.service';
 import { DeleteUserService } from './commands/DeleteUser.service';
 import { EditUserService } from './commands/EditUser.service';
 import { InactivateUserService } from './commands/InactivateUser.service';
 import { GetUserService } from './queries/GetUser.service';
 import { AcceptInviteUserService } from './commands/AcceptInviteUser.service';
+import { CreateUserDto } from './dtos/CreateUser.dto';
 import { EditUserDto } from './dtos/EditUser.dto';
 import {
   InviteUserDto,
@@ -19,6 +21,7 @@ import { SendBulkInvitesService } from './commands/SendBulkInvites.service';
 export class UsersApplication {
   constructor(
     private readonly activateUserService: ActivateUserService,
+    private readonly createUserService: CreateUserService,
     private readonly deleteUserService: DeleteUserService,
     private readonly editUserService: EditUserService,
     private readonly inactivateUserService: InactivateUserService,
@@ -28,6 +31,13 @@ export class UsersApplication {
     private readonly inviteservice: InviteTenantUserService,
     private readonly sendBulkInvitesService: SendBulkInvitesService,
   ) {}
+
+  /**
+   * Directly creates a user with credentials, role, and active status.
+   */
+  async createUser(createUserDTO: CreateUserDto) {
+    return this.createUserService.createUser(createUserDTO);
+  }
 
   /**
    * Activates a user.

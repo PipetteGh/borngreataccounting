@@ -1,4 +1,4 @@
-import { Intent, Classes, Button } from '@blueprintjs/core';
+import { Intent, Classes, Button, HTMLSelect, Switch } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { Form, useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
@@ -29,8 +29,9 @@ function UserFormContentInner({
   calloutCode,
   closeDialog,
 }: UserFormContentProps): React.ReactElement {
-  const { isSubmitting } = useFormikContext<UserFormValues>();
-  const { dialogName, roles, isAuth } = useUserFormContext();
+  const { isSubmitting, values, setFieldValue } =
+    useFormikContext<UserFormValues>();
+  const { dialogName, roles, isAuth, isEditMode } = useUserFormContext();
 
   const handleClose = () => {
     closeDialog(dialogName);
@@ -68,6 +69,21 @@ function UserFormContentInner({
           <FInputGroup name={'lastName'} />
         </FFormGroup>
 
+        {/* ----------- Password (create mode) ----------- */}
+        {!isEditMode && (
+          <FFormGroup
+            name={'password'}
+            label={'Password'}
+            labelInfo={<FieldRequiredHint />}
+          >
+            <FInputGroup
+              name={'password'}
+              type="password"
+              placeholder="Minimum 6 characters"
+            />
+          </FFormGroup>
+        )}
+
         {/* ----------- Role name ----------- */}
         <FFormGroup
           name={'roleId'}
@@ -75,15 +91,32 @@ function UserFormContentInner({
           labelInfo={<FieldRequiredHint />}
           className={classNames(CLASSES.FILL, 'form-group--role_name')}
         >
-          <FSelect
+          <HTMLSelect
             name={'roleId'}
-            items={roles}
-            valueAccessor={'id'}
-            textAccessor={'name'}
-            popoverProps={{ minimal: true }}
+            fill
+            value={values.roleId || ''}
+            onChange={(e) => setFieldValue('roleId', e.target.value)}
             disabled={isAuth}
-          />
+          >
+            <option value="">Select a role...</option>
+            {(Array.isArray(roles) ? roles : []).map((role: any) => (
+              <option key={role.id} value={String(role.id)}>
+                {role.name}
+              </option>
+            ))}
+          </HTMLSelect>
         </FFormGroup>
+
+        {/* ----------- Active status (create mode) ----------- */}
+        {!isEditMode && (
+          <Switch
+            checked={Boolean(values.active)}
+            label="Active (user can sign in immediately)"
+            onChange={(e) =>
+              setFieldValue('active', (e.target as HTMLInputElement).checked)
+            }
+          />
+        )}
       </div>
 
       <div className={CLASSES.DIALOG_FOOTER}>

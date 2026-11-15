@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { UsersApplication } from './Users.application';
+import { CreateUserDto } from './dtos/CreateUser.dto';
 import { EditUserDto } from './dtos/EditUser.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { UserDto } from './dtos/UserResponse.dto';
@@ -29,6 +31,27 @@ import { SubscriptionFeature } from '@/modules/Subscription/SubscriptionFeatures
 @ApiCommonHeaders()
 export class UsersController {
   constructor(private readonly usersApplication: UsersApplication) {}
+
+  /**
+   * Directly creates a user with credentials, role, and active status.
+   */
+  @Post()
+  @ApiOperation({ summary: 'Create a new user directly without sending an invite.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been created successfully.',
+    schema: {
+      example: { id: 1, message: 'The user has been created successfully.' },
+    },
+  })
+  async createUser(@Body() createUserDTO: CreateUserDto) {
+    const user = await this.usersApplication.createUser(createUserDTO);
+
+    return {
+      id: user.id,
+      message: 'The user has been created successfully.',
+    };
+  }
 
   /**
    * Edit details of the given user.

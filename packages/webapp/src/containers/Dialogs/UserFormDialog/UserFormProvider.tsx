@@ -3,6 +3,7 @@ import type { UserFormContextValue } from './types';
 import { DialogContent } from '@/components';
 import {
   useAuthenticatedAccount,
+  useCreateUser,
   useEditUser,
   useRoles,
   useUser,
@@ -26,7 +27,8 @@ function UserFormProvider({
   dialogName,
   ...props
 }: UserFormProviderProps) {
-  //  edit user mutations.
+  // create & edit user mutations.
+  const { mutateAsync: CreateUserMutate } = useCreateUser();
   const { mutateAsync: EditUserMutate } = useEditUser();
 
   // fetch user detail.
@@ -43,7 +45,11 @@ function UserFormProvider({
   // FIXME: `isEditMode = userId` is a number (truthy) rather than a boolean.
   const isEditMode: number | boolean = userId ?? false;
 
-  const isAuth = user?.systemUserId === authAccountData?.id;
+  const isAuth = Boolean(
+    isEditMode &&
+      user?.systemUserId &&
+      user.systemUserId === authAccountData?.id,
+  );
 
   // Provider state.
   const provider: UserFormContextValue = {
@@ -52,6 +58,7 @@ function UserFormProvider({
     dialogName,
 
     user,
+    CreateUserMutate,
     EditUserMutate,
 
     isEditMode,

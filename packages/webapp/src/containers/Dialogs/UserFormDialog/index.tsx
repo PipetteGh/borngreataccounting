@@ -21,10 +21,12 @@ function UserFormDialog({
   payload = { action: '', userId: null },
   isOpen,
 }: UserFormDialogProps): React.ReactElement {
+  const isEdit = Boolean(payload?.userId || payload?.action === 'edit');
+
   return (
     <Dialog
       name={dialogName}
-      title={<T id={'edit_user'} />}
+      title={isEdit ? <T id={'edit_user'} /> : 'Add User'}
       className={'dialog--user-form'}
       autoFocus={true}
       canEscapeKeyClose={true}

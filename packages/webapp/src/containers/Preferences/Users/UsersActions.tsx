@@ -10,6 +10,9 @@ import {
 
 function UsersActionsInner({ openDialog }: WithDialogActionsProps) {
   const history = useHistory();
+  const onClickAddUser = () => {
+    openDialog('user-form', { action: 'new', userId: null });
+  };
   const onClickNewUser = () => {
     openDialog('invite-user');
   };
@@ -21,8 +24,16 @@ function UsersActionsInner({ openDialog }: WithDialogActionsProps) {
     <div className="preferences-actions">
       <Button
         icon={<Icon icon="plus" iconSize={12} />}
-        onClick={onClickNewUser}
+        onClick={onClickAddUser}
         intent={Intent.PRIMARY}
+        data-testid="add-user-btn"
+      >
+        Add User
+      </Button>
+
+      <Button
+        icon={<Icon icon="envelope" iconSize={12} />}
+        onClick={onClickNewUser}
       >
         <T id={'invite_user'} />
       </Button>

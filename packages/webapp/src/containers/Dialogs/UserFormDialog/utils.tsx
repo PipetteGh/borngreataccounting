@@ -15,6 +15,16 @@ export const transformErrors = (
   { setErrors, setCalloutCode }: TransformErrorsArgs,
 ) => {
   if (
+    errors.find(
+      (error) =>
+        error.type === 'EMAIL_ALREADY_EXISTS' || error.type === 'EMAIL_EXISTS',
+    )
+  ) {
+    setErrors({
+      email: 'A user with this email already exists.',
+    });
+  }
+  if (
     errors.find((error) => error.type === 'CANNOT_AUTHORIZED_USER_MUTATE_ROLE')
   ) {
     setCalloutCode([200]);

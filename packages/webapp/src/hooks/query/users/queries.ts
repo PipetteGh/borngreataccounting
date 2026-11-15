@@ -16,8 +16,9 @@ import {
   UseMutationOptions,
   UseQueryOptions,
 } from '@tanstack/react-query';
+import axios from 'axios';
 import { useEffect } from 'react';
-import { useSetAuthEmailConfirmed } from '../../state/authentication';
+import { useAuthOrganizationId, useAuthToken, useSetAuthEmailConfirmed } from '../../state/authentication';
 import { useApiFetcher } from '../../useRequest';
 import { usersKeys } from './query-keys';
 import type {
@@ -34,6 +35,48 @@ const commonInvalidateQueries = (
 ) => {
   queryClient.invalidateQueries({ queryKey: usersKeys.all() });
 };
+
+export interface CreateUserBody {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  roleId: number;
+  active?: boolean;
+}
+
+export function useCreateUser(
+  props?: UseMutationOptions<unknown, Error, CreateUserBody>,
+) {
+  const queryClient = useQueryClient();
+  const token = useAuthToken();
+  const organizationId = useAuthOrganizationId();
+
+  return useMutation({
+    ...props,
+    mutationFn: async (values: CreateUserBody) => {
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      if (organizationId) headers['organization-id'] = organizationId;
+      const res = await axios.post(
+        '/api/users',
+        {
+          first_name: values.firstName,
+          last_name: values.lastName,
+          email: values.email,
+          password: values.password,
+          role_id: Number(values.roleId),
+          active: values.active ?? true,
+        },
+        { headers },
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      commonInvalidateQueries(queryClient);
+    },
+  });
+}
 
 export function useCreateInviteUser(
   props?: UseMutationOptions<void, Error, InviteUserBody>,
