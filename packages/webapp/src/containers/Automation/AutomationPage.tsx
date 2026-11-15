@@ -980,11 +980,32 @@ export function AutomationPage() {
 
       await fetchEntities();
     } catch (err: any) {
-      const msg =
-        err?.response?.data?.errors?.[0]?.message ||
-        err?.response?.data?.message ||
-        err?.message ||
+      const raw =
+        err?.response?.data?.errors?.[0]?.message ??
+        err?.response?.data?.message ??
+        err?.message ??
         'Automation failed.';
+      const formatErr = (val: any): string => {
+        if (typeof val === 'string') return val;
+        if (Array.isArray(val)) {
+          return val
+            .map((item) => {
+              if (typeof item === 'string') return item;
+              if (item?.constraints) return Object.values(item.constraints).join(', ');
+              if (item?.message) return String(item.message);
+              return JSON.stringify(item);
+            })
+            .filter(Boolean)
+            .join('; ');
+        }
+        if (val && typeof val === 'object') {
+          if (val.constraints) return Object.values(val.constraints).join(', ');
+          if (val.message) return formatErr(val.message);
+          return JSON.stringify(val);
+        }
+        return String(val || 'Automation failed.');
+      };
+      const msg = formatErr(raw) || 'Automation failed.';
       appendLog({ action: activePreset, summary: msg, status: 'error' });
       AppToaster.show({ intent: Intent.DANGER, message: msg });
     } finally {
