@@ -10,6 +10,10 @@
   <a href="https://github.com/PipetteGh/borngreataccounting/actions"><img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-1E5EFF.svg" alt="CI/CD" /></a>
   <a href="docs/DOCKER-DEPLOYMENT.md"><img src="https://img.shields.io/badge/Docker-Self--Hosted%20Ready-0db7ed.svg" alt="Docker Ready" /></a>
   <a href="docs/WINDOWS-INSTALLATION.md"><img src="https://img.shields.io/badge/Windows-Desktop%20EXE-0078D6.svg" alt="Windows Desktop EXE" /></a>
+  <a href="https://github.com/sponsors/PipetteGh"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4%20Donate-ea4aaa.svg" alt="Donate / Sponsor" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+  <a href="#contributors"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="All Contributors" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 **BorngreatAccounting** (`BtAccounting`) is a full-featured, self-hosted, multi-tenant, double-entry accounting and financial management platform designed for small, medium, and enterprise businesses. Run it on your own Linux servers, Docker/Kubernetes infrastructure, cloud VMs, or Windows workstations with complete data sovereignty.
@@ -31,22 +35,40 @@
 
 ---
 
+## Application Overview
+
+![BorngreatAccounting Overview Tour](assets/screenshots/overview.gif)
+
+---
+
 ## Screenshots
 
 ### Workspace Dashboard
 ![BorngreatAccounting Dashboard](assets/screenshots/dashboard.png)
 
+### Products & Inventory
+![BorngreatAccounting Products](assets/screenshots/products.png)
+
 ### Point of Sale (POS) & Full-Screen Register
 ![BorngreatAccounting POS](assets/screenshots/pos.png)
 
-### Themes & Appearance (12 Light & Dark Themes)
-![BorngreatAccounting Themes Gallery](assets/screenshots/themes.png)
+### Sales & Invoices
+![BorngreatAccounting Sales Invoices](assets/screenshots/sales-invoices.png)
+
+### Financial Reports (Profit & Loss)
+![BorngreatAccounting Reports](assets/screenshots/reports.png)
 
 ### Payment Gateways (Stripe, Paystack, Flutterwave & Hubtel)
 ![BorngreatAccounting Payment Gateways](assets/screenshots/payment-methods.png)
 
+### Themes & Appearance (12 Light & Dark Themes)
+![BorngreatAccounting Themes Gallery](assets/screenshots/themes.png)
+
 ### Company Branding & Logo Upload
 ![BorngreatAccounting Branding](assets/screenshots/branding.png)
+
+### Organization Settings
+![BorngreatAccounting Settings](assets/screenshots/settings.png)
 
 ---
 
@@ -140,3 +162,39 @@ docker pull ghcr.io/pipettegh/borngreataccounting-worker:latest
 - **GitHub Organization / Account**: `soluotech`
 - **Official Source Repository**: [https://github.com/PipetteGh/borngreataccounting](https://github.com/PipetteGh/borngreataccounting)
 - **License**: [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)
+
+---
+
+## Support & Donate
+
+If **BorngreatAccounting** helps your business or saves you time, consider supporting ongoing development:
+
+<p>
+  <a href="https://github.com/sponsors/PipetteGh">
+    <img src="https://img.shields.io/badge/Donate%20%2F%20Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub" />
+  </a>
+</p>
+
+---
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PipetteGh"><img src="https://avatars.githubusercontent.com/PipetteGh?s=100" width="100px;" alt="Peter Borngreat-Mensah"/><br /><sub><b>Peter Borngreat-Mensah</b></sub></a><br /><a href="https://github.com/PipetteGh/borngreataccounting/commits?author=PipetteGh" title="Code">💻</a> <a href="#design-PipetteGh" title="Design">🎨</a> <a href="https://github.com/PipetteGh/borngreataccounting/commits?author=PipetteGh" title="Documentation">📖</a> <a href="#ideas-PipetteGh" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-PipetteGh" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-PipetteGh" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
