@@ -29,10 +29,23 @@ export class NewSubscriptionService {
     payload?: SubscriptionPayload,
   ): Promise<void> {
     const tenant = await this.tenancyContext.getTenant();
-    const plan = await this.planModel
-      .query()
-      .findOne('slug', planSlug)
-      .throwIfNotFound();
+    let plan = await this.planModel.query().findOne('slug', planSlug);
+    if (!plan && planSlug === 'free') {
+      plan = await this.planModel.query().insertAndFetch({
+        name: 'Free',
+        slug: 'free',
+        price: 0,
+        active: true,
+        currency: 'USD',
+        index: 0,
+      } as any);
+    }
+    if (!plan) {
+      plan = await this.planModel
+        .query()
+        .findOne('slug', planSlug)
+        .throwIfNotFound();
+    }
 
     const isFree = Number(plan.price) === 0;
 

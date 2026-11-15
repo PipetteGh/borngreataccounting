@@ -260,6 +260,7 @@ function Run-Migrations {
     Push-Location (Join-Path $RepoRoot "packages\server")
     try {
         & node dist/cli.js system:migrate:latest
+        & node dist/cli.js system:seed:latest
         & node dist/cli.js tenants:migrate:latest
     } finally {
         Pop-Location

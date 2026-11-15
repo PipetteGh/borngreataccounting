@@ -50,11 +50,15 @@ export function RegisterUserForm() {
         authLoginMutate({
           email: values.email,
           password: values.password,
-        }).catch(() => {
+        }).catch((loginErr: any) => {
           AppToaster.show({
-            message: intl.get('something_wentwrong'),
-            intent: Intent.SUCCESS,
+            message:
+              loginErr?.data?.message ||
+              loginErr?.message ||
+              intl.get('something_wentwrong'),
+            intent: Intent.DANGER,
           });
+          setSubmitting(false);
         });
       })
       .catch((response: ApiError) => {
@@ -64,9 +68,19 @@ export function RegisterUserForm() {
         const formErrors = transformRegisterErrorsToForm(errors);
         const toastMessages = transformRegisterToastMessages(errors);
 
-        toastMessages.forEach((toastMessage) => {
-          AppToaster.show(toastMessage);
-        });
+        if (toastMessages.length > 0) {
+          toastMessages.forEach((toastMessage) => {
+            AppToaster.show(toastMessage);
+          });
+        } else {
+          AppToaster.show({
+            message:
+              (response.data as any)?.message ||
+              (response as any)?.message ||
+              intl.get('something_wentwrong'),
+            intent: Intent.DANGER,
+          });
+        }
         setErrors(formErrors);
         setSubmitting(false);
       });
