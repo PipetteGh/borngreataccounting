@@ -3,6 +3,7 @@ import * as FF from 'fp-ts/function';
 import React, { useEffect } from 'react';
 import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { Icon, Stack } from '@/components';
+import { triggerAppUpdateCheck } from '@/components/AppUpdateChecker';
 import { BRAND_CONFIG } from '@/constants/brand';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 
@@ -173,6 +174,12 @@ function AboutPageRoot({ changePreferencesPageTitle }: AboutPageRootProps) {
         </div>
 
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            intent={Intent.SUCCESS}
+            icon="cloud-download"
+            text="Check for Updates"
+            onClick={() => triggerAppUpdateCheck()}
+          />
           <Button
             intent={Intent.PRIMARY}
             icon="git-repo"

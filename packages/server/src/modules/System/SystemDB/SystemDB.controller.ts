@@ -1,6 +1,9 @@
-import { Controller, Get, HttpCode, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
+import { spawn } from 'child_process';
 import * as fs from 'fs';
+import * as http from 'http';
 import * as https from 'https';
+import * as os from 'os';
 import * as path from 'path';
 import { PublicRoute } from '@/modules/Auth/guards/jwt.guard';
 
@@ -23,6 +26,89 @@ interface UpdateCheckResult {
 }
 
 let cachedUpdateCheck: { data: UpdateCheckResult; fetchedAt: number } | null = null;
+
+interface UpdateInstallStatus {
+  state: 'idle' | 'downloading' | 'installing' | 'restarting' | 'error' | 'manual';
+  progress: number;
+  message: string;
+}
+
+let updateInstallStatus: UpdateInstallStatus = {
+  state: 'idle',
+  progress: 0,
+  message: '',
+};
+
+function findRepoRoot(): string {
+  const candidates = [
+    process.cwd(),
+    path.resolve(process.cwd(), '../..'),
+    path.resolve(__dirname, '../../../../../../'),
+  ];
+  for (const dir of candidates) {
+    try {
+      if (fs.existsSync(path.join(dir, 'package.json'))) {
+        const pkg = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
+        if (pkg?.name === 'borngreataccounting-monorepo') {
+          return dir;
+        }
+      }
+    } catch {}
+  }
+  return process.cwd();
+}
+
+function downloadFileWithProgress(
+  url: string,
+  destPath: string,
+  onProgress: (pct: number) => void,
+  redirectsLeft = 5,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const client = url.startsWith('https://') ? https : http;
+    const req = client.get(
+      url,
+      { headers: { 'User-Agent': 'BorngreatAccounting-Updater/1.0' } },
+      (res) => {
+        const code = res.statusCode || 0;
+        if (code >= 300 && code < 400 && res.headers.location && redirectsLeft > 0) {
+          res.resume();
+          const nextUrl = new URL(res.headers.location, url).toString();
+          downloadFileWithProgress(nextUrl, destPath, onProgress, redirectsLeft - 1)
+            .then(resolve)
+            .catch(reject);
+          return;
+        }
+        if (code !== 200) {
+          res.resume();
+          reject(new Error(`Download failed with HTTP ${code}`));
+          return;
+        }
+        const total = Number(res.headers['content-length'] || 0);
+        let received = 0;
+        const file = fs.createWriteStream(destPath);
+        res.on('data', (chunk: Buffer) => {
+          received += chunk.length;
+          if (total > 0) {
+            onProgress(Math.min(99, Math.round((received / total) * 100)));
+          }
+        });
+        res.pipe(file);
+        file.on('finish', () => {
+          file.close(() => {
+            onProgress(100);
+            resolve();
+          });
+        });
+        file.on('error', (err) => {
+          fs.unlink(destPath, () => {});
+          reject(err);
+        });
+      },
+    );
+    req.on('error', reject);
+  });
+}
 
 function readCurrentVersion(): string {
   if (process.env.APP_VERSION) {
@@ -160,5 +246,110 @@ export class SystemDatabaseController {
 
     cachedUpdateCheck = { data: result, fetchedAt: now };
     return result;
+  }
+
+  @Get('update-status')
+  @HttpCode(200)
+  getUpdateStatus(): UpdateInstallStatus {
+    return updateInstallStatus;
+  }
+
+  @Post('update-install')
+  @HttpCode(200)
+  async installUpdate(): Promise<UpdateInstallStatus> {
+    if (
+      updateInstallStatus.state === 'downloading' ||
+      updateInstallStatus.state === 'installing' ||
+      updateInstallStatus.state === 'restarting'
+    ) {
+      return updateInstallStatus;
+    }
+
+    const repoRoot = findRepoRoot();
+
+    if (process.platform === 'win32') {
+      const installerUrl = `https://github.com/${REPO_SLUG}/releases/latest/download/BorngreatAccounting-Setup.exe`;
+      const tempInstaller = path.join(os.tmpdir(), 'BorngreatAccounting-Setup-Update.exe');
+      updateInstallStatus = {
+        state: 'downloading',
+        progress: 0,
+        message: 'Downloading latest BorngreatAccounting installer...',
+      };
+
+      void (async () => {
+        try {
+          await downloadFileWithProgress(installerUrl, tempInstaller, (pct) => {
+            updateInstallStatus = {
+              state: 'downloading',
+              progress: pct,
+              message: `Downloading update... ${pct}%`,
+            };
+          });
+
+          updateInstallStatus = {
+            state: 'installing',
+            progress: 100,
+            message: 'Installing update silently and preserving all data. App will restart automatically...',
+          };
+
+          const installDir = path.resolve(repoRoot, '..');
+          const launcherExe = path.join(installDir, 'BorngreatAccounting.exe');
+          const runtimeScript = path.join(repoRoot, 'scripts', 'windows-runtime.ps1');
+          const psScript = [
+            'Start-Sleep -Seconds 2',
+            `Start-Process -FilePath '${tempInstaller.replace(/'/g, "''")}' -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CLOSEAPPLICATIONS' -Wait`,
+            `if (Test-Path '${runtimeScript.replace(/'/g, "''")}') { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File '${runtimeScript.replace(/'/g, "''")}' -Action start }`,
+            `if (Test-Path '${launcherExe.replace(/'/g, "''")}') { Start-Process -FilePath '${launcherExe.replace(/'/g, "''")}' -ArgumentList '--launch' }`,
+          ].join('; ');
+
+          const child = spawn(
+            'powershell.exe',
+            ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-Command', psScript],
+            { detached: true, stdio: 'ignore', windowsHide: true },
+          );
+          child.unref();
+        } catch (err: any) {
+          updateInstallStatus = {
+            state: 'error',
+            progress: 0,
+            message: err?.message || 'Failed to download or launch update.',
+          };
+        }
+      })();
+
+      return updateInstallStatus;
+    }
+
+    if (fs.existsSync('/.dockerenv')) {
+      updateInstallStatus = {
+        state: 'manual',
+        progress: 0,
+        message: 'Docker container detected. Run on host: git pull && docker compose up -d --build',
+      };
+      return updateInstallStatus;
+    }
+
+    const upgradeScript = path.join(repoRoot, 'upgrade.sh');
+    if (fs.existsSync(upgradeScript)) {
+      updateInstallStatus = {
+        state: 'installing',
+        progress: 100,
+        message: 'Running upgrade.sh and restarting services (database & .env preserved)...',
+      };
+      const child = spawn('bash', [upgradeScript], {
+        cwd: repoRoot,
+        detached: true,
+        stdio: 'ignore',
+      });
+      child.unref();
+      return updateInstallStatus;
+    }
+
+    updateInstallStatus = {
+      state: 'manual',
+      progress: 0,
+      message: 'Run git pull && docker compose up -d --build (or ./upgrade.sh) to update.',
+    };
+    return updateInstallStatus;
   }
 }
