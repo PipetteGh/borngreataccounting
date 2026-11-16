@@ -40,7 +40,7 @@ jobs:
       - name: Build Windows Inno Setup Installer EXE
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.6" -ForceBuild
+          powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build-windows-installer.ps1" -Version "1.0.7" -ForceBuild
 
       - name: Upload Windows Installer Artifacts
         uses: actions/upload-artifact@v4
