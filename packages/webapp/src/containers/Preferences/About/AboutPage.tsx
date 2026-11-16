@@ -1,6 +1,6 @@
 import { Card, Elevation, Tag, Intent, Button } from '@blueprintjs/core';
 import * as FF from 'fp-ts/function';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { Icon, Stack } from '@/components';
 import { triggerAppUpdateCheck } from '@/components/AppUpdateChecker';
@@ -13,9 +13,28 @@ type AboutPageRootProps = Pick<
 >;
 
 function AboutPageRoot({ changePreferencesPageTitle }: AboutPageRootProps) {
+  const [installedVersion, setInstalledVersion] = useState<string>(
+    BRAND_CONFIG.version,
+  );
+
   useEffect(() => {
     changePreferencesPageTitle(`About ${BRAND_CONFIG.productName}`);
   }, [changePreferencesPageTitle]);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/system_db/update-check')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data?.currentVersion) {
+          setInstalledVersion(String(data.currentVersion));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <Stack
@@ -65,7 +84,7 @@ function AboutPageRoot({ changePreferencesPageTitle }: AboutPageRootProps) {
 
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <Tag intent={Intent.PRIMARY} large minimal>
-              v{BRAND_CONFIG.version}
+              v{installedVersion}
             </Tag>
             <Tag intent={Intent.SUCCESS} large minimal>
               Self-Hosted Ready

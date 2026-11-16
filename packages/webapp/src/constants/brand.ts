@@ -33,7 +33,7 @@ export const BRAND = {
     (import.meta as any).env?.VITE_COMMUNITY_URL ||
     'https://github.com/PipetteGh/borngreataccounting/issues',
   releasesUrl: 'https://github.com/PipetteGh/borngreataccounting/releases',
-  version: (import.meta as any).env?.VITE_APP_VERSION || '1.0.0',
+  version: (import.meta as any).env?.VITE_APP_VERSION || '1.0.6',
   license: 'GNU Affero General Public License v3.0 (AGPL-3.0)',
   licenseUrl:
     'https://github.com/PipetteGh/borngreataccounting/blob/main/LICENSE',
