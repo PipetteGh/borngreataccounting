@@ -329,6 +329,9 @@ export const SettingsOptions = {
     },
   },
   'sms-integration': {
+    sms_provider: {
+      type: 'string',
+    },
     twilio_account_sid: {
       type: 'string',
     },
@@ -336,6 +339,21 @@ export const SettingsOptions = {
       type: 'string',
     },
     twilio_from_number: {
+      type: 'string',
+    },
+    hubtel_client_id: {
+      type: 'string',
+    },
+    hubtel_client_secret: {
+      type: 'string',
+    },
+    hubtel_sender_id: {
+      type: 'string',
+    },
+    smsonlinegh_api_key: {
+      type: 'string',
+    },
+    smsonlinegh_sender_id: {
       type: 'string',
     },
   },

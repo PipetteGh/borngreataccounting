@@ -37,10 +37,6 @@ export const BRAND = {
   license: 'GNU Affero General Public License v3.0 (AGPL-3.0)',
   licenseUrl:
     'https://github.com/PipetteGh/borngreataccounting/blob/main/LICENSE',
-  upstreamProjectName: 'Bigcapital',
-  upstreamRepositoryUrl: 'https://github.com/bigcapitalhq/bigcapital',
-  upstreamAttribution:
-    'Derived from the open-source Bigcapital project (https://github.com/bigcapitalhq/bigcapital)',
   copyrightNotice:
     '© 2026 Peter Borngreat-Mensah (Borngreat). All rights reserved under GNU AGPL-3.0.',
   recoveryCodesFilename: 'borngreataccounting-recovery-codes.txt',

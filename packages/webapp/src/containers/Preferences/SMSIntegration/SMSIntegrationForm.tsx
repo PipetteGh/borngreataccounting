@@ -1,4 +1,4 @@
-import { Intent, Button, Callout } from '@blueprintjs/core';
+import { Intent, Button, Callout, FormGroup, HTMLSelect } from '@blueprintjs/core';
 import { flatten, unflatten } from 'flat';
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
@@ -6,7 +6,7 @@ import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { SMSIntegrationFormSchema } from './SMSIntegrationForm.schema';
 import { useSMSIntegrationContext } from './SMSIntegrationProvider';
-import type { SMSIntegrationFormValues } from './types';
+import type { SMSIntegrationFormValues, SmsProviderType } from './types';
 import {
   AppToaster,
   CardFooterActions,
@@ -18,9 +18,15 @@ import { transformToForm } from '@/utils';
 
 const defaultFormValues: SMSIntegrationFormValues = {
   smsIntegration: {
+    smsProvider: 'twilio',
     twilioAccountSid: '',
     twilioAuthToken: '',
     twilioFromNumber: '',
+    hubtelClientId: '',
+    hubtelClientSecret: '',
+    hubtelSenderId: '',
+    smsonlineghApiKey: '',
+    smsonlineghSenderId: '',
     isEnvCredentialsActive: false,
   },
 };
@@ -51,6 +57,11 @@ export function SMSIntegrationForm(): React.ReactElement {
     const options = [
       {
         group: 'sms-integration',
+        key: 'sms_provider',
+        value: values.smsIntegration.smsProvider ?? 'twilio',
+      },
+      {
+        group: 'sms-integration',
         key: 'twilio_account_sid',
         value: values.smsIntegration.twilioAccountSid ?? '',
       },
@@ -63,6 +74,31 @@ export function SMSIntegrationForm(): React.ReactElement {
         group: 'sms-integration',
         key: 'twilio_from_number',
         value: values.smsIntegration.twilioFromNumber ?? '',
+      },
+      {
+        group: 'sms-integration',
+        key: 'hubtel_client_id',
+        value: values.smsIntegration.hubtelClientId ?? '',
+      },
+      {
+        group: 'sms-integration',
+        key: 'hubtel_client_secret',
+        value: values.smsIntegration.hubtelClientSecret ?? '',
+      },
+      {
+        group: 'sms-integration',
+        key: 'hubtel_sender_id',
+        value: values.smsIntegration.hubtelSenderId ?? '',
+      },
+      {
+        group: 'sms-integration',
+        key: 'smsonlinegh_api_key',
+        value: values.smsIntegration.smsonlineghApiKey ?? '',
+      },
+      {
+        group: 'sms-integration',
+        key: 'smsonlinegh_sender_id',
+        value: values.smsIntegration.smsonlineghSenderId ?? '',
       },
     ];
     setSubmitting(true);
@@ -87,7 +123,9 @@ export function SMSIntegrationForm(): React.ReactElement {
       onSubmit={handleFormSubmit}
       enableReinitialize={true}
     >
-      {({ isSubmitting, values }) => (
+      {({ isSubmitting, values, setFieldValue }) => {
+        const provider = (values.smsIntegration.smsProvider || 'twilio') as SmsProviderType;
+        return (
         <FormRoot>
           {values.smsIntegration.isEnvCredentialsActive && (
             <Callout intent={Intent.SUCCESS}>
@@ -95,29 +133,107 @@ export function SMSIntegrationForm(): React.ReactElement {
             </Callout>
           )}
 
-          <FFormGroup
-            name={'smsIntegration.twilioAccountSid'}
-            label={intl.get('sms_integration.twilio_account_sid')}
-          >
-            <FInputGroup name={'smsIntegration.twilioAccountSid'} />
-          </FFormGroup>
+          <FormGroup label="SMS Provider">
+            <HTMLSelect
+              fill
+              value={provider}
+              onChange={(e) =>
+                setFieldValue('smsIntegration.smsProvider', e.target.value)
+              }
+            >
+              <option value="twilio">Twilio</option>
+              <option value="hubtel">Hubtel SMS (Ghana)</option>
+              <option value="smsonlinegh">SMSOnlineGH (Ghana)</option>
+            </HTMLSelect>
+          </FormGroup>
 
-          <FFormGroup
-            name={'smsIntegration.twilioAuthToken'}
-            label={intl.get('sms_integration.twilio_auth_token')}
-          >
-            <FInputGroup
-              name={'smsIntegration.twilioAuthToken'}
-              type={'password'}
-            />
-          </FFormGroup>
+          {provider === 'twilio' && (
+            <>
+              <FFormGroup
+                name={'smsIntegration.twilioAccountSid'}
+                label={intl.get('sms_integration.twilio_account_sid')}
+              >
+                <FInputGroup name={'smsIntegration.twilioAccountSid'} />
+              </FFormGroup>
 
-          <FFormGroup
-            name={'smsIntegration.twilioFromNumber'}
-            label={intl.get('sms_integration.twilio_from_number')}
-          >
-            <FInputGroup name={'smsIntegration.twilioFromNumber'} />
-          </FFormGroup>
+              <FFormGroup
+                name={'smsIntegration.twilioAuthToken'}
+                label={intl.get('sms_integration.twilio_auth_token')}
+              >
+                <FInputGroup
+                  name={'smsIntegration.twilioAuthToken'}
+                  type={'password'}
+                />
+              </FFormGroup>
+
+              <FFormGroup
+                name={'smsIntegration.twilioFromNumber'}
+                label={intl.get('sms_integration.twilio_from_number')}
+              >
+                <FInputGroup name={'smsIntegration.twilioFromNumber'} />
+              </FFormGroup>
+            </>
+          )}
+
+          {provider === 'hubtel' && (
+            <>
+              <FFormGroup
+                name={'smsIntegration.hubtelClientId'}
+                label="Hubtel Client ID"
+              >
+                <FInputGroup
+                  name={'smsIntegration.hubtelClientId'}
+                  placeholder="Enter Hubtel Client ID"
+                />
+              </FFormGroup>
+
+              <FFormGroup
+                name={'smsIntegration.hubtelClientSecret'}
+                label="Hubtel Client Secret"
+              >
+                <FInputGroup
+                  name={'smsIntegration.hubtelClientSecret'}
+                  type={'password'}
+                  placeholder="Enter Hubtel Client Secret"
+                />
+              </FFormGroup>
+
+              <FFormGroup
+                name={'smsIntegration.hubtelSenderId'}
+                label="Hubtel Sender ID"
+              >
+                <FInputGroup
+                  name={'smsIntegration.hubtelSenderId'}
+                  placeholder="e.g. YourCompany (max 11 chars)"
+                />
+              </FFormGroup>
+            </>
+          )}
+
+          {provider === 'smsonlinegh' && (
+            <>
+              <FFormGroup
+                name={'smsIntegration.smsonlineghApiKey'}
+                label="SMSOnlineGH API Key"
+              >
+                <FInputGroup
+                  name={'smsIntegration.smsonlineghApiKey'}
+                  type={'password'}
+                  placeholder="Enter SMSOnlineGH API Key"
+                />
+              </FFormGroup>
+
+              <FFormGroup
+                name={'smsIntegration.smsonlineghSenderId'}
+                label="SMSOnlineGH Sender ID"
+              >
+                <FInputGroup
+                  name={'smsIntegration.smsonlineghSenderId'}
+                  placeholder="Approved Sender Name (e.g. Borngreat)"
+                />
+              </FFormGroup>
+            </>
+          )}
 
           <CardFooterActions>
             <Button
@@ -129,7 +245,8 @@ export function SMSIntegrationForm(): React.ReactElement {
             </Button>
           </CardFooterActions>
         </FormRoot>
-      )}
+        );
+      }}
     </Formik>
   );
 }

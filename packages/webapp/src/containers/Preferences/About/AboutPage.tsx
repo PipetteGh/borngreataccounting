@@ -174,7 +174,7 @@ function AboutPageRoot({ changePreferencesPageTitle }: AboutPageRootProps) {
 
         <div style={{ marginBottom: 20 }}>
           <h4 style={{ margin: '0 0 8px', fontSize: 14 }}>
-            Open-Source Attribution
+            Licensing &amp; Copyright
           </h4>
           <p
             style={{
@@ -184,11 +184,13 @@ function AboutPageRoot({ changePreferencesPageTitle }: AboutPageRootProps) {
               lineHeight: 1.5,
             }}
           >
-            {BRAND_CONFIG.upstreamAttribution}. Modifications, rebranding,
-            production Docker orchestration, Windows Desktop Runtime Manager,
-            and global tax/currency presets are maintained by{' '}
-            <strong>{BRAND_CONFIG.developerName}</strong> and released under the{' '}
-            <strong>{BRAND_CONFIG.license}</strong> license.
+            <strong>{BRAND_CONFIG.productName}</strong> ({BRAND_CONFIG.shortName})
+            is developed and maintained by{' '}
+            <strong>{BRAND_CONFIG.developerName}</strong> ({BRAND_CONFIG.publisherName})
+            with production Docker orchestration, Windows Desktop Runtime
+            Manager, POS, and global tax/currency presets, and is released under
+            the <strong>{BRAND_CONFIG.license}</strong> license.{' '}
+            {BRAND_CONFIG.copyrightNotice}
           </p>
         </div>
 
