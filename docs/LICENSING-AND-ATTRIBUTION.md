@@ -11,10 +11,6 @@
 ---
 
 ## Upstream Attribution
-
-BorngreatAccounting is a derivative work based on the open-source **Bigcapital** core accounting software:
-- **Upstream Project**: Bigcapital ([https://github.com/bigcapitalhq/bigcapital](https://github.com/bigcapitalhq/bigcapital))
-- **Upstream Copyright**: Copyright (c) 2022–present Bigcapital Technology, Inc. and contributors
 - **Upstream License**: GNU Affero General Public License v3.0 (AGPL-3.0)
 
 ---

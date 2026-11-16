@@ -19,8 +19,6 @@ export const SERVER_BRAND_CONFIG = {
     'https://github.com/PipetteGh/borngreataccounting',
   version: process.env.APP_VERSION || '1.0.0',
   license: 'AGPL-3.0',
-  upstreamAttribution:
-    'Derived from the open-source Bigcapital project (https://github.com/bigcapitalhq/bigcapital)',
 };
 
 export const SERVER_BRAND = SERVER_BRAND_CONFIG;
