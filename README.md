@@ -3,7 +3,8 @@
 </p>
 
 <h1 align="center">BorngreatAccounting (BtAccounting)</h1>
-<p align="center"><strong>Your Accounting. Your Servers. Your Control. (Quickbooks Alternative)</strong></p>
+<p align="center"><strong>Independent financial accounting with intelligent reporting, alternative to Quickbooks, Xero, Wave</strong></p>
+<p align="center">Your Accounting. Your Servers. Your Control.</p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0" /></a>
