@@ -2,8 +2,8 @@
 export const queryConfig = {
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: true,
-      staleTime: 30000,
+      refetchOnWindowFocus: false,
+      staleTime: 60000,
     },
   },
 };

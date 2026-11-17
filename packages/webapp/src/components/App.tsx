@@ -75,15 +75,15 @@ function AppInsider({ history }: { history: History }) {
   );
 }
 
+// Persistent QueryClient across App renders so cache is preserved.
+const queryClient = new QueryClient(queryConfig);
+
 /**
  * Core application.
  */
 export default function App() {
   // Browser history.
   const history = createBrowserHistory();
-
-  // Query client.
-  const queryClient = new QueryClient(queryConfig);
 
   return (
     <QueryClientProvider client={queryClient}>

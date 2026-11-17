@@ -1,20 +1,43 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useCashFlowStatementContext } from './CashFlowStatementProvider';
 import { CashFlowStatementTable } from './CashFlowStatementTable';
+import { BarChartCard } from '@/components/Charts/FinancialCharts';
+import { extractCashFlowChartData } from '@/components/Charts/extractReportChartData';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
-import { useCurrentOrganizationName } from '@/hooks/query';
+import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
 
 function CashFlowStatementBodyJSX() {
   const organizationName = useCurrentOrganizationName();
-  const { isCashFlowLoading } = useCashFlowStatementContext();
+  const { data: org } = useCurrentOrganization();
+  const currencyCode = (org as any)?.baseCurrency || '';
+  const { isCashFlowLoading, cashFlowStatement } = useCashFlowStatementContext();
+
+  const chartData = useMemo(
+    () => extractCashFlowChartData(cashFlowStatement?.table?.rows ?? []),
+    [cashFlowStatement],
+  );
 
   return (
     <FinancialReportBody>
       {isCashFlowLoading ? (
         <FinancialSheetSkeleton />
       ) : (
-        <CashFlowStatementTable companyName={organizationName} />
+        <>
+          {chartData.bars.some((b) => Math.abs(b.value) > 0) && (
+            <div style={{ marginBottom: 16 }}>
+              <BarChartCard
+                title="Cash Flow Activities"
+                subtitle={cashFlowStatement?.meta?.formattedDateRange}
+                data={chartData.bars}
+                primaryLabel="Cash Flow"
+                currencyCode={currencyCode}
+                height={190}
+              />
+            </div>
+          )}
+          <CashFlowStatementTable companyName={organizationName} />
+        </>
       )}
     </FinancialReportBody>
   );

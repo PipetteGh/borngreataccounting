@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useBalanceSheetContext } from './BalanceSheetProvider';
 import { BalanceSheetTable } from './BalanceSheetTable';
 import { FinancialSheetSkeleton } from '@/components';
-import { useCurrentOrganizationName } from '@/hooks/query';
+import {
+  DonutChartCard,
+  HorizontalBarListCard,
+} from '@/components/Charts/FinancialCharts';
+import { extractBalanceSheetChartData } from '@/components/Charts/extractReportChartData';
+import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
 
 function BalanceSheetBodyJSX() {
   const organizationName = useCurrentOrganizationName();
+  const { data: org } = useCurrentOrganization();
+  const currencyCode = (org as any)?.baseCurrency || '';
   const { isLoading, balanceSheet } = useBalanceSheetContext();
+
+  const chartData = useMemo(
+    () => extractBalanceSheetChartData(balanceSheet?.table?.rows ?? []),
+    [balanceSheet],
+  );
 
   // Shows the skeleton only on the initial load. Refetches (e.g. sorting)
   // keep the current report rendered while the request is in flight.
@@ -18,7 +30,36 @@ function BalanceSheetBodyJSX() {
       {isInitialLoading ? (
         <FinancialSheetSkeleton />
       ) : (
-        <BalanceSheetTable companyName={organizationName} />
+        <>
+          {chartData.mixData.length > 0 && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 14,
+                marginBottom: 16,
+              }}
+            >
+              <DonutChartCard
+                title="Balance Sheet Composition"
+                subtitle={
+                  balanceSheet?.meta?.formattedDateRange ??
+                  balanceSheet?.meta?.formattedAsDate
+                }
+                data={chartData.mixData}
+                currencyCode={currencyCode}
+                centerLabel="Position"
+              />
+              <HorizontalBarListCard
+                title="Asset Distribution"
+                subtitle="Major asset groups"
+                data={chartData.topAssets}
+                currencyCode={currencyCode}
+              />
+            </div>
+          )}
+          <BalanceSheetTable companyName={organizationName} />
+        </>
       )}
     </FinancialReportBody>
   );

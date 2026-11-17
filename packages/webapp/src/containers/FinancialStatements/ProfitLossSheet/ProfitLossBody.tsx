@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FinancialReportBody } from '../FinancialReportPage';
 import { useProfitLossSheetContext } from './ProfitLossProvider';
 import { ProfitLossSheetTable } from './ProfitLossSheetTable';
 import { FinancialSheetSkeleton } from '@/components';
-import { useCurrentOrganizationName } from '@/hooks/query';
+import { BarChartCard, DonutChartCard } from '@/components/Charts/FinancialCharts';
+import { extractProfitLossChartData } from '@/components/Charts/extractReportChartData';
+import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
 
 function ProfitLossBodyJSX() {
   const organizationName = useCurrentOrganizationName();
+  const { data: org } = useCurrentOrganization();
+  const currencyCode = (org as any)?.baseCurrency || '';
   const { isLoading, profitLossSheet } = useProfitLossSheetContext();
+
+  const chartData = useMemo(
+    () => extractProfitLossChartData(profitLossSheet?.table?.rows ?? []),
+    [profitLossSheet],
+  );
 
   // Shows the skeleton only on the initial load. Refetches (e.g. sorting)
   // keep the current report rendered while the request is in flight.
@@ -18,7 +27,35 @@ function ProfitLossBodyJSX() {
       {isInitialLoading ? (
         <FinancialSheetSkeleton />
       ) : (
-        <ProfitLossSheetTable companyName={organizationName} />
+        <>
+          {(chartData.totalIncome > 0 || chartData.totalExpenses > 0) && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 14,
+                marginBottom: 16,
+              }}
+            >
+              <BarChartCard
+                title="Profit & Loss Summary"
+                subtitle={profitLossSheet?.meta?.formattedDateRange}
+                data={chartData.summaryBars}
+                primaryLabel="Amount"
+                currencyCode={currencyCode}
+                height={190}
+              />
+              <DonutChartCard
+                title="Expense Breakdown"
+                subtitle="Top operating expense categories"
+                data={chartData.expenseBreakdown}
+                currencyCode={currencyCode}
+                centerLabel="Expenses"
+              />
+            </div>
+          )}
+          <ProfitLossSheetTable companyName={organizationName} />
+        </>
       )}
     </FinancialReportBody>
   );

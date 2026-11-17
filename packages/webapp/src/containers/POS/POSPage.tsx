@@ -317,6 +317,15 @@ export function POSPage() {
   }, [soundEnabled]);
 
   const [items, setItems] = useState<PosItem[]>([]);
+  const [salesCounts, setSalesCounts] = useState<Record<number, number>>(() => {
+    try {
+      const raw = localStorage.getItem('bga_pos_sales_counts');
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [showAllItems, setShowAllItems] = useState(false);
   const [customers, setCustomers] = useState<PosCustomer[]>([]);
   const [accounts, setAccounts] = useState<PosAccount[]>([]);
   const [taxRates, setTaxRates] = useState<PosTaxRate[]>([]);
@@ -399,7 +408,7 @@ export function POSPage() {
         branchesRes,
         warehousesRes,
       ] = await Promise.allSettled([
-        api.get('/items', { params: { page_size: 250, page: 1 } }),
+        api.get('/items', { params: { page_size: 1000, page: 1 } }),
         api.get('/customers', { params: { page_size: 100, page: 1 } }),
         api.get('/accounts'),
         api.get('/tax_rates'),
@@ -612,9 +621,21 @@ export function POSPage() {
     return ['all', ...Array.from(names).sort()];
   }, [items]);
 
+  const skuMap = useMemo(() => {
+    const map = new Map<string, PosItem>();
+    for (const it of items) {
+      const code = (it.code || '').trim().toLowerCase();
+      if (code) map.set(code, it);
+    }
+    return map;
+  }, [items]);
+
+  const isDefaultTopView =
+    !searchQuery.trim() && selectedCategory === 'all' && !showAllItems;
+
   const filteredItems = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return items.filter((it) => {
+    const matched = items.filter((it) => {
       if (
         inStockOnly &&
         it.type === 'inventory' &&
@@ -634,7 +655,27 @@ export function POSPage() {
         (it.code || '').toLowerCase().includes(q)
       );
     });
-  }, [items, searchQuery, selectedCategory, inStockOnly]);
+
+    if (isDefaultTopView) {
+      return [...matched]
+        .sort((a, b) => {
+          const sa = salesCounts[a.id] || 0;
+          const sb = salesCounts[b.id] || 0;
+          if (sb !== sa) return sb - sa;
+          return Number(b.quantityOnHand ?? 0) - Number(a.quantityOnHand ?? 0);
+        })
+        .slice(0, 10);
+    }
+
+    return matched.slice(0, 60);
+  }, [
+    items,
+    searchQuery,
+    selectedCategory,
+    inStockOnly,
+    isDefaultTopView,
+    salesCounts,
+  ]);
 
   const addToCart = (item: PosItem) => {
     const stock = Number(item.quantityOnHand ?? 0);
@@ -705,15 +746,33 @@ export function POSPage() {
     );
   };
 
+  // Auto-add to cart when a unique barcode/SKU is scanned even without trailing Enter
+  useEffect(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (q.length < 3) return;
+    const exactSkuItem = skuMap.get(q);
+    if (!exactSkuItem) return;
+    const hasLongerPrefix = items.some((it) => {
+      const c = (it.code || '').trim().toLowerCase();
+      return c.length > q.length && c.startsWith(q);
+    });
+    if (hasLongerPrefix) return;
+
+    const timer = window.setTimeout(() => {
+      addToCart(exactSkuItem);
+      setSearchQuery('');
+      searchRef.current?.focus();
+    }, 100);
+    return () => window.clearTimeout(timer);
+  }, [searchQuery, skuMap, items]);
+
   const handleBarcodeEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return;
     const q = searchQuery.trim().toLowerCase();
     if (!q) return;
-    const exactMatch = items.find(
-      (it) =>
-        (it.code || '').toLowerCase() === q ||
-        (it.name || '').toLowerCase() === q,
-    );
+    const exactMatch =
+      skuMap.get(q) ||
+      items.find((it) => (it.name || '').trim().toLowerCase() === q);
     if (exactMatch) {
       addToCart(exactMatch);
       setSearchQuery('');
@@ -900,6 +959,30 @@ export function POSPage() {
         changeDue,
         checkoutUrl,
       });
+
+      // Track purchase counts & update local stock immediately for fast POS UX
+      setSalesCounts((prev) => {
+        const next = { ...prev };
+        for (const line of cartSnapshot) {
+          next[line.item.id] = (next[line.item.id] || 0) + line.quantity;
+        }
+        try {
+          localStorage.setItem('bga_pos_sales_counts', JSON.stringify(next));
+        } catch {
+          // ignore storage quota errors
+        }
+        return next;
+      });
+      setItems((prev) =>
+        prev.map((it) => {
+          const sold = cartSnapshot.find((l) => l.item.id === it.id);
+          if (!sold || it.type !== 'inventory') return it;
+          return {
+            ...it,
+            quantityOnHand: Math.max(0, Number(it.quantityOnHand ?? 0) - sold.quantity),
+          };
+        }),
+      );
 
       setCart([]);
       setDiscountPercent(0);
@@ -1126,7 +1209,30 @@ export function POSPage() {
               text="In Stock Only"
               onClick={() => setInStockOnly((v) => !v)}
             />
+            <Button
+              small
+              active={!isDefaultTopView && showAllItems}
+              text={showAllItems ? 'Top 10 Most Purchased' : `Show All (${items.length})`}
+              onClick={() => setShowAllItems((v) => !v)}
+            />
           </Card>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '0 2px',
+              fontSize: 12,
+              color: '#64748b',
+            }}
+          >
+            <span>
+              {isDefaultTopView
+                ? `Showing Top ${filteredItems.length} Most Purchased Items (scan barcode or type to search all ${items.length})`
+                : `Showing ${filteredItems.length} matching item(s)`}
+            </span>
+          </div>
 
           <div
             style={{

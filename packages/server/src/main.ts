@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClsMiddleware } from 'nestjs-cls';
 import * as path from 'path';
+import * as zlib from 'zlib';
 import './utils/moment-mysql';
 import { AppModule } from './modules/App/App.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -20,6 +21,32 @@ async function bootstrap() {
 
   // create and mount the middleware manually here
   app.use(new ClsMiddleware({}).use);
+
+  // Lightweight gzip compression for JSON & text API responses (> 1 KB)
+  app.use((req: any, res: any, next: () => void) => {
+    const acceptEncoding = String(req.headers?.['accept-encoding'] || '');
+    if (!/\bgzip\b/i.test(acceptEncoding)) {
+      return next();
+    }
+    const origJson = res.json.bind(res);
+    res.json = (body: any) => {
+      try {
+        const raw = Buffer.from(JSON.stringify(body), 'utf8');
+        if (raw.length < 1024 || res.headersSent) {
+          return origJson(body);
+        }
+        const gz = zlib.gzipSync(raw);
+        res.setHeader('Content-Encoding', 'gzip');
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('Vary', 'Accept-Encoding');
+        res.removeHeader('Content-Length');
+        return res.send(gz);
+      } catch {
+        return origJson(body);
+      }
+    };
+    next();
+  });
 
   const config = new DocumentBuilder()
     .setTitle('BorngreatAccounting')

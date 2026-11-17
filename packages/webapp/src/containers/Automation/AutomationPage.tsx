@@ -307,6 +307,8 @@ export function AutomationPage() {
 
   // Structured automation parameters
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
+  const [matchedItemIds, setMatchedItemIds] = useState<number[]>([]);
+  const [matchedKeyword, setMatchedKeyword] = useState<string>('');
   const [selectedCustomerId, setSelectedCustomerId] = useState<number>(0);
   const [selectedVendorId, setSelectedVendorId] = useState<number>(0);
   const [selectedAccountId, setSelectedAccountId] = useState<number>(0);
@@ -353,7 +355,7 @@ export function AutomationPage() {
         estRes,
         billRes,
       ] = await Promise.allSettled([
-        axios.get('/api/items?page=1&page_size=500', { headers }),
+        axios.get('/api/items?page=1&page_size=2000', { headers }),
         axios.get('/api/customers?page=1&page_size=200', { headers }),
         axios.get('/api/vendors?page=1&page_size=200', { headers }),
         axios.get('/api/accounts', { headers }),
@@ -532,7 +534,14 @@ export function AutomationPage() {
         lower.includes('new item')
       ) {
         detected = 'add-item';
-      } else if (lower.includes('inventory') || lower.includes('stock') || lower.includes('adjust')) {
+      } else if (
+        lower.includes('inventory') ||
+        lower.includes('stock') ||
+        lower.includes('adjust') ||
+        lower.includes('restock') ||
+        ((lower.includes('update') || lower.includes('change') || lower.includes('set') || lower.includes('increase') || lower.includes('reduce') || lower.includes('decrease')) &&
+          (lower.includes('quantity') || lower.includes('quantities') || lower.includes('qty') || lower.includes('product') || lower.includes('item')))
+      ) {
         detected = 'inventory-adjustment';
       } else if (lower.includes('send email') || (lower.includes('email ') && !lower.startsWith('add '))) {
         detected = 'send-email';
@@ -555,11 +564,49 @@ export function AutomationPage() {
       setActivePreset(detected);
       setActionDate(extractDateFromText(text));
 
-      const matchedItem = items.find((i) => lower.includes(i.name.toLowerCase()));
-      if (matchedItem) {
-        setSelectedItemId(matchedItem.id);
-        setUnitPrice(Number(matchedItem.sellPrice || 0));
-        setCostPrice(Number(matchedItem.costPrice || 0));
+      // Smart multi-item matching: exact full-name match OR keyword/token match across all items
+      const fullNameMatches = items.filter((i) =>
+        lower.includes(i.name.toLowerCase()),
+      );
+
+      let resolvedMatches: SimpleItem[] = fullNameMatches;
+      let extractedKeyword = '';
+
+      if (resolvedMatches.length === 0) {
+        const cleaned = lower
+          .replace(/from\s+[a-z0-9\s.&'-]+(?:\s+vendor|\s+on|\s*$)/gi, ' ')
+          .replace(/\b\d{4}-\d{2}-\d{2}\b/g, ' ')
+          .replace(/\b\d+(?:\.\d+)?%?\b/g, ' ')
+          .replace(
+            /\b(update|adjust|restock|set|change|add|remove|reduce|deduct|decrease|increase|sell|create|new|make|inventory|stock|product|products|item|items|all|every|each|the|for|with|to|by|of|at|on|in|and|quantity|quantities|qty|units|pcs|pieces|bottles|packs|today|yesterday|tomorrow|vendor|customer|invoice|receipt|estimate|bill)\b/gi,
+            ' ',
+          )
+          .replace(/[^a-z0-9\s-]/gi, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const tokens = cleaned.split(' ').filter((t) => t.length >= 2);
+        if (tokens.length > 0) {
+          extractedKeyword = tokens.join(' ');
+          resolvedMatches = items.filter((i) => {
+            const hay = `${i.name} ${i.code || ''}`.toLowerCase();
+            return tokens.every((t) => hay.includes(t));
+          });
+        }
+      } else if (resolvedMatches.length === 1) {
+        extractedKeyword = resolvedMatches[0].name;
+      }
+
+      if (resolvedMatches.length > 0) {
+        const first = resolvedMatches[0];
+        setSelectedItemId(first.id);
+        setMatchedItemIds(resolvedMatches.map((m) => m.id));
+        setMatchedKeyword(extractedKeyword);
+        setUnitPrice(Number(first.sellPrice || 0));
+        setCostPrice(Number(first.costPrice || 0));
+      } else {
+        setMatchedItemIds([]);
+        setMatchedKeyword('');
       }
 
       const matchedCust = customers.find((c) => lower.includes(c.displayName.toLowerCase()));
@@ -665,7 +712,15 @@ export function AutomationPage() {
       const selectedVend = vendors.find((v) => v.id === selectedVendorId);
 
       if (activePreset === 'inventory-adjustment') {
-        if (!selectedItemId) throw new Error('Select a product to update inventory stock.');
+        const targetIds =
+          matchedItemIds.length > 1
+            ? matchedItemIds
+            : selectedItemId
+              ? [selectedItemId]
+              : [];
+        if (targetIds.length === 0) {
+          throw new Error('Select a product to update inventory stock.');
+        }
         const adjAcc =
           accounts.find((a) => a.slug === 'inventory-adjustment') ||
           accounts.find((a) => a.accountType === 'cost-of-goods-sold') ||
@@ -673,24 +728,51 @@ export function AutomationPage() {
           accounts[0];
         if (!adjAcc) throw new Error('No adjustment account found.');
 
-        await axios.post(
-          '/api/inventory-adjustments/quick',
-          {
-            date: actionDate,
-            type: adjustmentType,
-            adjustment_account_id: adjAcc.id,
-            reason: reasonOrDesc || 'Automated stock update',
-            description: commandText,
-            item_id: selectedItemId,
-            quantity,
-            cost: costPrice || selectedItem?.costPrice || 0,
-            publish: true,
-          },
-          { headers },
-        );
-        const msg = `Updated stock (${adjustmentType} ${quantity}) for "${selectedItem?.name}"`;
-        appendLog({ action: 'Update Inventory Stock', summary: msg, status: 'success', route: '/inventory-adjustments' });
-        AppToaster.show({ intent: Intent.SUCCESS, message: msg });
+        let successCount = 0;
+        let failCount = 0;
+        const chunkSize = 10;
+        for (let i = 0; i < targetIds.length; i += chunkSize) {
+          const chunk = targetIds.slice(i, i + chunkSize);
+          const results = await Promise.allSettled(
+            chunk.map((itemId) => {
+              const targetItem = items.find((it) => it.id === itemId);
+              return axios.post(
+                '/api/inventory-adjustments/quick',
+                {
+                  date: actionDate,
+                  type: adjustmentType,
+                  adjustment_account_id: adjAcc.id,
+                  reason: reasonOrDesc || 'Automated stock update',
+                  description: commandText,
+                  item_id: itemId,
+                  quantity,
+                  cost: costPrice || targetItem?.costPrice || 0,
+                  publish: true,
+                },
+                { headers },
+              );
+            }),
+          );
+          for (const r of results) {
+            if (r.status === 'fulfilled') successCount++;
+            else failCount++;
+          }
+        }
+
+        const msg =
+          targetIds.length === 1
+            ? `Updated stock (${adjustmentType} ${quantity}) for "${selectedItem?.name}"`
+            : `Bulk updated ${successCount} of ${targetIds.length} products${matchedKeyword ? ` matching "${matchedKeyword}"` : ''} (${adjustmentType} ${quantity})${failCount > 0 ? `, ${failCount} failed` : ''}`;
+        appendLog({
+          action: 'Update Inventory Stock',
+          summary: msg,
+          status: successCount > 0 ? 'success' : 'error',
+          route: '/inventory-adjustments',
+        });
+        AppToaster.show({
+          intent: failCount > 0 && successCount === 0 ? Intent.DANGER : Intent.SUCCESS,
+          message: msg,
+        });
       } else if (activePreset === 'create-receipt') {
         if (!selectedItemId || !selectedCustomerId) throw new Error('Select both a customer and a product.');
         const depAcc = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
@@ -1108,6 +1190,27 @@ export function AutomationPage() {
             placeholder="Describe what you want BorngreatAccounting to do..."
           />
         </FormGroup>
+
+        {activePreset === 'inventory-adjustment' && matchedItemIds.length > 1 && (
+          <Callout
+            intent={Intent.PRIMARY}
+            icon="layers"
+            style={{ marginBottom: 12 }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span>
+                Matched <strong>{matchedItemIds.length}</strong> products
+                {matchedKeyword ? ` for "${matchedKeyword}"` : ''} — running automation will update all {matchedItemIds.length} items.
+              </span>
+              <Button
+                small
+                minimal
+                text="Update single item only"
+                onClick={() => setMatchedItemIds(selectedItemId ? [selectedItemId] : [])}
+              />
+            </div>
+          </Callout>
+        )}
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
           <Button icon="refresh" text="Parse Command" onClick={() => parseCommand(commandText)} />
