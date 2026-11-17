@@ -13,7 +13,11 @@ function CashFlowStatementBodyJSX() {
   const { isCashFlowLoading, cashFlowStatement } = useCashFlowStatementContext();
 
   const chartData = useMemo(
-    () => extractCashFlowChartData(cashFlowStatement?.table?.rows ?? []),
+    () =>
+      extractCashFlowChartData(
+        cashFlowStatement?.table?.rows ?? [],
+        cashFlowStatement?.table?.columns ?? [],
+      ),
     [cashFlowStatement],
   );
 

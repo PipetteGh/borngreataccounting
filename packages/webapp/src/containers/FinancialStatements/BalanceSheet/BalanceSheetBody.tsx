@@ -16,7 +16,11 @@ function BalanceSheetBodyJSX() {
   const { isLoading, balanceSheet } = useBalanceSheetContext();
 
   const chartData = useMemo(
-    () => extractBalanceSheetChartData(balanceSheet?.table?.rows ?? []),
+    () =>
+      extractBalanceSheetChartData(
+        balanceSheet?.table?.rows ?? [],
+        balanceSheet?.table?.columns ?? [],
+      ),
     [balanceSheet],
   );
 

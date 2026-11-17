@@ -13,7 +13,11 @@ function ProfitLossBodyJSX() {
   const { isLoading, profitLossSheet } = useProfitLossSheetContext();
 
   const chartData = useMemo(
-    () => extractProfitLossChartData(profitLossSheet?.table?.rows ?? []),
+    () =>
+      extractProfitLossChartData(
+        profitLossSheet?.table?.rows ?? [],
+        profitLossSheet?.table?.columns ?? [],
+      ),
     [profitLossSheet],
   );
 

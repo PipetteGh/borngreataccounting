@@ -67,6 +67,15 @@ function HomepageInsightsInner() {
   const [openReceivables, setOpenReceivables] = useState(0);
   const [overdueCount, setOverdueCount] = useState(0);
   const [openPayables, setOpenPayables] = useState(0);
+  const [entityCounts, setEntityCounts] = useState({
+    items: 0,
+    inventoryItems: 0,
+    customers: 0,
+    vendors: 0,
+    invoices: 0,
+    bills: 0,
+    accounts: 0,
+  });
   const [lowStockItems, setLowStockItems] = useState<
     Array<{ id: number; name: string; quantityOnHand: number }>
   >([]);
@@ -86,12 +95,24 @@ function HomepageInsightsInner() {
     Promise.allSettled([
       axios.get('/api/sale-invoices?page=1&page_size=50', { headers }),
       axios.get('/api/bills?page=1&page_size=50', { headers }),
-      axios.get('/api/items?page=1&page_size=150', { headers }),
-    ]).then(([invRes, billRes, itemRes]) => {
+      axios.get('/api/items?page=1&page_size=500', { headers }),
+      axios.get('/api/customers?page=1&page_size=1', { headers }),
+      axios.get('/api/vendors?page=1&page_size=1', { headers }),
+      axios.get('/api/accounts', { headers }),
+    ]).then(([invRes, billRes, itemRes, custRes, vendRes, accRes]) => {
       if (!active) return;
+      let totalInvoices = 0;
+      let totalBills = 0;
+      let totalItems = 0;
+      let totalInventoryItems = 0;
+      let totalCustomers = 0;
+      let totalVendors = 0;
+      let totalAccounts = 0;
+
       if (invRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(invRes.value.data);
         const list = Array.isArray(raw?.salesInvoices) ? raw.salesInvoices : [];
+        totalInvoices = Number(raw?.pagination?.total ?? list.length) || list.length;
         let arTotal = 0;
         let overdue = 0;
         const today = new Date().toISOString().slice(0, 10);
@@ -110,6 +131,7 @@ function HomepageInsightsInner() {
       if (billRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(billRes.value.data);
         const list = Array.isArray(raw?.bills) ? raw.bills : [];
+        totalBills = Number(raw?.pagination?.total ?? list.length) || list.length;
         const apTotal = list.reduce(
           (sum: number, b: any) => sum + Math.max(0, Number(b.dueAmount ?? b.balance ?? 0)),
           0,
@@ -123,6 +145,8 @@ function HomepageInsightsInner() {
           : Array.isArray(raw?.data)
             ? raw.data
             : [];
+        totalItems = Number(raw?.pagination?.total ?? list.length) || list.length;
+        totalInventoryItems = list.filter((it: any) => it.type === 'inventory').length;
         const low = list
           .filter(
             (it: any) =>
@@ -142,6 +166,35 @@ function HomepageInsightsInner() {
           }));
         setLowStockItems(low);
       }
+      if (custRes.status === 'fulfilled') {
+        const raw: any = transformToCamelCase(custRes.value.data);
+        const list = Array.isArray(raw?.customers) ? raw.customers : [];
+        totalCustomers = Number(raw?.pagination?.total ?? list.length) || list.length;
+      }
+      if (vendRes.status === 'fulfilled') {
+        const raw: any = transformToCamelCase(vendRes.value.data);
+        const list = Array.isArray(raw?.vendors) ? raw.vendors : [];
+        totalVendors = Number(raw?.pagination?.total ?? list.length) || list.length;
+      }
+      if (accRes.status === 'fulfilled') {
+        const raw: any = transformToCamelCase(accRes.value.data);
+        const list = Array.isArray(raw?.accounts)
+          ? raw.accounts
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : [];
+        totalAccounts = list.length;
+      }
+
+      setEntityCounts({
+        items: totalItems,
+        inventoryItems: totalInventoryItems,
+        customers: totalCustomers,
+        vendors: totalVendors,
+        invoices: totalInvoices,
+        bills: totalBills,
+        accounts: totalAccounts,
+      });
     });
     return () => {
       active = false;
@@ -149,12 +202,20 @@ function HomepageInsightsInner() {
   }, [token, organizationId]);
 
   const plData = useMemo(
-    () => extractProfitLossChartData(profitLoss?.table?.rows ?? []),
+    () =>
+      extractProfitLossChartData(
+        profitLoss?.table?.rows ?? [],
+        profitLoss?.table?.columns ?? [],
+      ),
     [profitLoss],
   );
 
   const bsData = useMemo(
-    () => extractBalanceSheetChartData(balanceSheet?.table?.rows ?? []),
+    () =>
+      extractBalanceSheetChartData(
+        balanceSheet?.table?.rows ?? [],
+        balanceSheet?.table?.columns ?? [],
+      ),
     [balanceSheet],
   );
 
@@ -278,10 +339,72 @@ function HomepageInsightsInner() {
             <KpiMetricCard
               title="Total Assets"
               value={formatCompactCurrency(bsData.totalAssets, currencyCode)}
-              subtitle={`Equity: ${formatCompactCurrency(bsData.totalEquity, currencyCode)}`}
+              subtitle={`Cash: ${formatCompactCurrency(bsData.cashBalance, currencyCode)} | Equity: ${formatCompactCurrency(bsData.totalEquity, currencyCode)}`}
               icon="bank-account"
               accentColor="#8B5CF6"
             />
+          </div>
+
+          {/* Business Entity Statistics Strip */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: 10,
+              marginBottom: 16,
+            }}
+          >
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Inventory Items
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.inventoryItems.toLocaleString()}
+                <span style={{ fontSize: 12, fontWeight: 400, color: '#64748b', marginLeft: 6 }}>
+                  ({entityCounts.items} total)
+                </span>
+              </div>
+            </Card>
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Customers
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.customers.toLocaleString()}
+              </div>
+            </Card>
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Vendors
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.vendors.toLocaleString()}
+              </div>
+            </Card>
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Sales Invoices
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.invoices.toLocaleString()}
+              </div>
+            </Card>
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Vendor Bills
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.bills.toLocaleString()}
+              </div>
+            </Card>
+            <Card style={{ padding: '12px 14px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, color: '#64748b', textTransform: 'uppercase' }}>
+                Ledger Accounts
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginTop: 2 }}>
+                {entityCounts.accounts.toLocaleString()}
+              </div>
+            </Card>
           </div>
 
           {/* Visualization Charts */}
@@ -345,9 +468,9 @@ function HomepageInsightsInner() {
                   <strong>{profitMargin}%</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b' }}>Open Receivables (AR)</span>
+                  <span style={{ color: '#64748b' }}>Accounts Receivable (AR)</span>
                   <strong>
-                    {formatExactCurrency(openReceivables, currencyCode)}{' '}
+                    {formatExactCurrency(bsData.accountsReceivable || openReceivables, currencyCode)}{' '}
                     {overdueCount > 0 && (
                       <Tag minimal intent={Intent.DANGER} style={{ marginLeft: 4 }}>
                         {overdueCount} overdue
