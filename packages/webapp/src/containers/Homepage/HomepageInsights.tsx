@@ -25,19 +25,40 @@ import {
 } from '@/components/Charts/extractReportChartData';
 import {
   useBalanceSheet,
-  useCurrentOrganization,
+  useCurrentOrganizationBaseCurrency,
   useProfitLossSheet,
   useSalesByItems,
 } from '@/hooks/query';
 import { useAuthOrganizationId, useAuthToken } from '@/hooks/state';
 import { transformToCamelCase } from '@/utils';
 
-export function HomepageInsights() {
+class InsightsErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.error('[HomepageInsights] Render error:', error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
+
+function HomepageInsightsInner() {
   const history = useHistory();
   const token = useAuthToken();
   const organizationId = useAuthOrganizationId();
-  const { data: org } = useCurrentOrganization();
-  const currencyCode = (org as any)?.baseCurrency || '';
+  const currencyCode = useCurrentOrganizationBaseCurrency() || '';
 
   const { data: profitLoss, isLoading: plLoading } = useProfitLossSheet({});
   const { data: balanceSheet, isLoading: bsLoading } = useBalanceSheet({});
@@ -138,19 +159,25 @@ export function HomepageInsights() {
   );
 
   const topSellingItems = useMemo(() => {
-    const rawItems: any[] =
-      (salesByItems as any)?.items ||
-      (salesByItems as any)?.data ||
-      (Array.isArray(salesByItems) ? salesByItems : []);
+    const sbi: any = salesByItems;
+    const rawItems: any[] = Array.isArray(sbi?.items)
+      ? sbi.items
+      : Array.isArray(sbi?.data)
+        ? sbi.data
+        : Array.isArray(sbi?.data?.items)
+          ? sbi.data.items
+          : Array.isArray(sbi)
+            ? sbi
+            : [];
 
     return rawItems
       .map((item: any) => ({
-        label: item.name || item.itemName || 'Item',
+        label: String(item?.name || item?.itemName || 'Item'),
         value: Number(
-          item.amount ?? item.total ?? item.totalAmount ?? item.quantitySold ?? 0,
-        ),
+          item?.amount ?? item?.total ?? item?.totalAmount ?? item?.quantitySold ?? 0,
+        ) || 0,
       }))
-      .filter((d) => d.value > 0)
+      .filter((d) => Number.isFinite(d.value) && d.value > 0)
       .sort((a, b) => b.value - a.value)
       .slice(0, 6);
   }, [salesByItems]);
@@ -444,5 +471,13 @@ export function HomepageInsights() {
         </>
       )}
     </div>
+  );
+}
+
+export function HomepageInsights() {
+  return (
+    <InsightsErrorBoundary>
+      <HomepageInsightsInner />
+    </InsightsErrorBoundary>
   );
 }

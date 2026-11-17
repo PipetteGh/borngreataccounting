@@ -8,12 +8,11 @@ import {
   HorizontalBarListCard,
 } from '@/components/Charts/FinancialCharts';
 import { extractBalanceSheetChartData } from '@/components/Charts/extractReportChartData';
-import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
+import { useCurrentOrganizationBaseCurrency, useCurrentOrganizationName } from '@/hooks/query';
 
 function BalanceSheetBodyJSX() {
   const organizationName = useCurrentOrganizationName();
-  const { data: org } = useCurrentOrganization();
-  const currencyCode = (org as any)?.baseCurrency || '';
+  const currencyCode = useCurrentOrganizationBaseCurrency() || '';
   const { isLoading, balanceSheet } = useBalanceSheetContext();
 
   const chartData = useMemo(

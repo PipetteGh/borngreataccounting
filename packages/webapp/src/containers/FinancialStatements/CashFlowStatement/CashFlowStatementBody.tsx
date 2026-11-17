@@ -5,12 +5,11 @@ import { CashFlowStatementTable } from './CashFlowStatementTable';
 import { BarChartCard } from '@/components/Charts/FinancialCharts';
 import { extractCashFlowChartData } from '@/components/Charts/extractReportChartData';
 import { FinancialSheetSkeleton } from '@/components/FinancialSheet';
-import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
+import { useCurrentOrganizationBaseCurrency, useCurrentOrganizationName } from '@/hooks/query';
 
 function CashFlowStatementBodyJSX() {
   const organizationName = useCurrentOrganizationName();
-  const { data: org } = useCurrentOrganization();
-  const currencyCode = (org as any)?.baseCurrency || '';
+  const currencyCode = useCurrentOrganizationBaseCurrency() || '';
   const { isCashFlowLoading, cashFlowStatement } = useCashFlowStatementContext();
 
   const chartData = useMemo(

@@ -5,12 +5,11 @@ import { ProfitLossSheetTable } from './ProfitLossSheetTable';
 import { FinancialSheetSkeleton } from '@/components';
 import { BarChartCard, DonutChartCard } from '@/components/Charts/FinancialCharts';
 import { extractProfitLossChartData } from '@/components/Charts/extractReportChartData';
-import { useCurrentOrganization, useCurrentOrganizationName } from '@/hooks/query';
+import { useCurrentOrganizationBaseCurrency, useCurrentOrganizationName } from '@/hooks/query';
 
 function ProfitLossBodyJSX() {
   const organizationName = useCurrentOrganizationName();
-  const { data: org } = useCurrentOrganization();
-  const currencyCode = (org as any)?.baseCurrency || '';
+  const currencyCode = useCurrentOrganizationBaseCurrency() || '';
   const { isLoading, profitLossSheet } = useProfitLossSheetContext();
 
   const chartData = useMemo(
