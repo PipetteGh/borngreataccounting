@@ -28,3 +28,7 @@
 - Synchronized `HomepageInsights.tsx` with `transformFilterFormToQuery(getDefaultProfitLossQuery())` and `getDefaultBalanceSheetQuery()` (`Cash Basis` default + interactive `Cash Basis` / `Accrual Basis` toggle) so Home Page figures match the Profit & Loss and Balance Sheet report pages 100%.
 - Reconciled Profit & Loss KPI math (`Total Income - Total Costs & Expenses [COGS + OpEx] === Net Income`) and replaced Balance Sheet double-counted donut (`Assets + Liabilities + Equity`) with a `Balance Sheet Position` bar chart (`Assets = Liabilities + Equity`).
 - Fixed `extractListFromResponse` for `/api/sale-invoices`, `/api/bills`, `/api/items`, `/api/customers`, `/api/vendors`, and `/api/accounts` (`raw.data` & top-level array handling) and added `ReportChartExtraction.spec.ts`.
+
+## Iteration 7 — POS `F9` Complete Sale Fix (`BUG-018`)
+- Fixed `ReferenceError: cartSnapshot is not defined` inside `completeSale()` in `POSPage.tsx` which caused `F9` / `Complete Sale` to show `'Failed to complete POS sale.'` after posting the receipt.
+- Added automatic `'Walk-in Customer'` fallback/creation and deposit account fallback when `F9` is pressed, capture-phase `F9` / `Ctrl+Enter` keyboard handling, and silent background `loadPosData(true)` refresh.

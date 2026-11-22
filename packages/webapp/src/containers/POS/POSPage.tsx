@@ -395,9 +395,9 @@ export function POSPage() {
   const [completedReceipt, setCompletedReceipt] =
     useState<CompletedReceipt | null>(null);
 
-  const loadPosData = useCallback(async () => {
+  const loadPosData = useCallback(async (silent: boolean | unknown = false) => {
     try {
-      setLoading(true);
+      if (silent !== true) setLoading(true);
       const [
         itemsRes,
         customersRes,
@@ -850,6 +850,7 @@ export function POSPage() {
   const completeSaleRef = useRef<() => void>(() => {});
 
   const completeSale = async () => {
+    if (submitting) return;
     if (cart.length === 0) {
       AppToaster.show({
         intent: Intent.WARNING,
@@ -857,23 +858,51 @@ export function POSPage() {
       });
       return;
     }
-    if (!selectedCustomerId) {
-      AppToaster.show({
-        intent: Intent.WARNING,
-        message: 'Select a customer (or click + Walk-in Customer).',
-      });
-      return;
-    }
-    if (!depositAccountId) {
-      AppToaster.show({
-        intent: Intent.WARNING,
-        message: 'Select a Cash/Bank deposit account.',
-      });
-      return;
-    }
+
+    const cartSnapshot = [...cart];
 
     try {
       setSubmitting(true);
+
+      let effectiveCustomerId = Number(selectedCustomerId || 0);
+      if (!effectiveCustomerId && customers.length > 0) {
+        effectiveCustomerId = Number(customers[0].id);
+        setSelectedCustomerId(effectiveCustomerId);
+      }
+      if (!effectiveCustomerId) {
+        const custRes = await api.post('/customers', {
+          customer_type: 'individual',
+          display_name: 'Walk-in Customer',
+        });
+        const createdCust = transformToCamelCase(custRes.data);
+        effectiveCustomerId = Number(
+          createdCust?.customer?.id || createdCust?.data?.id || createdCust?.id || 0,
+        );
+        if (effectiveCustomerId) {
+          setSelectedCustomerId(effectiveCustomerId);
+        }
+      }
+      if (!effectiveCustomerId) {
+        AppToaster.show({
+          intent: Intent.WARNING,
+          message: 'Select a customer (or click + Walk-in Customer).',
+        });
+        return;
+      }
+
+      let effectiveDepositAccountId = Number(depositAccountId || 0);
+      if (!effectiveDepositAccountId && accounts.length > 0) {
+        effectiveDepositAccountId = Number(accounts[0].id);
+        setDepositAccountId(effectiveDepositAccountId);
+      }
+      if (!effectiveDepositAccountId) {
+        AppToaster.show({
+          intent: Intent.WARNING,
+          message: 'Select a Cash/Bank deposit account.',
+        });
+        return;
+      }
+
       const today = new Date().toISOString().slice(0, 10);
       const paymentLabels: Record<string, string> = {
         cash: 'Cash',
@@ -885,8 +914,8 @@ export function POSPage() {
       };
 
       const receiptPayload = {
-        customer_id: Number(selectedCustomerId),
-        deposit_account_id: Number(depositAccountId),
+        customer_id: effectiveCustomerId,
+        deposit_account_id: effectiveDepositAccountId,
         ...(selectedBranchId ? { branch_id: Number(selectedBranchId) } : {}),
         ...(selectedWarehouseId
           ? { warehouse_id: Number(selectedWarehouseId) }
@@ -898,7 +927,7 @@ export function POSPage() {
         receipt_message: `POS Sale (${paymentLabels[paymentMethod]})`,
         discount: discountPercent > 0 ? discountPercent : undefined,
         discount_type: discountPercent > 0 ? 'percentage' : undefined,
-        entries: cart.map((line, idx) => ({
+        entries: cartSnapshot.map((line, idx) => ({
           index: idx + 1,
           item_id: line.item.id,
           quantity: line.quantity,
@@ -919,7 +948,7 @@ export function POSPage() {
       ) {
         try {
           const customerObj = customers.find(
-            (c) => c.id === Number(selectedCustomerId),
+            (c) => c.id === effectiveCustomerId,
           );
           const gwRes = await api.post(
             `/payment-services/gateways/${paymentMethod}/checkout`,
@@ -934,23 +963,30 @@ export function POSPage() {
             },
           );
           checkoutUrl =
-            gwRes.data?.authorization_url || gwRes.data?.authorizationUrl;
+            gwRes.data?.authorization_url ||
+            gwRes.data?.authorizationUrl ||
+            gwRes.data?.checkoutUrl ||
+            gwRes.data?.checkout_url;
         } catch {
           // Receipt was still recorded in accounting & inventory
         }
       }
 
       const customerName =
-        customers.find((c) => c.id === Number(selectedCustomerId))
-          ?.displayName || 'Customer';
+        customers.find((c) => c.id === effectiveCustomerId)?.displayName ||
+        'Walk-in Customer';
 
       setCompletedReceipt({
-        id: created?.id,
-        receiptNumber: created?.receiptNumber || receiptPayload.reference_no,
+        id: created?.saleReceipt?.id || created?.data?.id || created?.id,
+        receiptNumber:
+          created?.saleReceipt?.receiptNumber ||
+          created?.data?.receiptNumber ||
+          created?.receiptNumber ||
+          receiptPayload.reference_no,
         receiptDate: today,
         customerName,
         paymentMethodLabel: paymentLabels[paymentMethod],
-        lines: [...cart],
+        lines: cartSnapshot,
         subtotal,
         discountAmount,
         taxAmount,
@@ -979,7 +1015,10 @@ export function POSPage() {
           if (!sold || it.type !== 'inventory') return it;
           return {
             ...it,
-            quantityOnHand: Math.max(0, Number(it.quantityOnHand ?? 0) - sold.quantity),
+            quantityOnHand: Math.max(
+              0,
+              Number(it.quantityOnHand ?? 0) - sold.quantity,
+            ),
           };
         }),
       );
@@ -987,7 +1026,7 @@ export function POSPage() {
       setCart([]);
       setDiscountPercent(0);
       setReferenceNo('');
-      await loadPosData();
+      loadPosData(true).catch(() => {});
 
       AppToaster.show({
         intent: Intent.SUCCESS,
@@ -999,6 +1038,7 @@ export function POSPage() {
         message:
           err?.response?.data?.message ||
           err?.response?.data?.errors?.[0]?.message ||
+          err?.message ||
           'Failed to complete POS sale.',
       });
     } finally {
@@ -1011,15 +1051,21 @@ export function POSPage() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (submitting || completedReceipt || cart.length === 0) return;
-      const isF9 = e.key === 'F9' && !e.ctrlKey && !e.metaKey && !e.altKey;
-      const isCtrlEnter = e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.altKey;
+      const isF9 =
+        (e.key === 'F9' || e.code === 'F9') &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey;
+      const isCtrlEnter =
+        e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.altKey;
       if (isF9 || isCtrlEnter) {
         e.preventDefault();
+        e.stopPropagation();
         completeSaleRef.current();
       }
     };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
   }, [cart.length, submitting, completedReceipt]);
 
   useEffect(() => {
