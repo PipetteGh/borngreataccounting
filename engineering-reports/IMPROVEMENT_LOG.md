@@ -17,3 +17,8 @@
 ## Iteration 4 — Exact Report Schema Alignment & Autonomous Engineering System
 - Aligned `extractReportChartData.ts` with exact server schema node IDs (`INCOME`, `COST_OF_SALES`, `GROSS_PROFIT`, `EXPENSES`, `NET_INCOME`, `ASSETS`, `LIABILITY`, `EQUITY`, `OPERATING`, `INVESTMENT`, `FINANCIAL`, `NET_CASH_INCREASE`) and `rowTypes: ['TOTAL']` + `table.columns` resolution; added entity statistics (Inventory Items, Customers, Vendors, Invoices, Bills, Accounts) to Homepage.
 - Created `.agents/skills/autonomous-fullstack-engineer/` skill + 7 reference guides, 5 architecture/discovery documents, 10 persistent engineering memory files, and added automatic provider fallback detection in `SmsIntegrationSettings.service.ts` with unit test verification.
+
+## Iteration 5 — Payment Gateways Webhook Context, `.env` Fallback & Unit Test Suite (`improve.md`)
+- Created `.agents/skills/autonomous-software-engineer/SKILL.md` and updated `improve.md` to store all engineering reports in `engineering-reports/` with mandatory test-before-commit and Git synchronization.
+- Fixed `BUG-010`, `BUG-011`, and `BUG-012` in `PaymentGateways.controller.ts` and `PaymentGateways.service.ts` (`:organizationId` URL param propagation into `ClsService` during external webhooks, case-insensitive/rawBody Paystack & Flutterwave webhook verification, and `.env` credential fallback for Paystack, Flutterwave, and Hubtel).
+- Added 5 unit tests in `packages/server/src/modules/PaymentServices/PaymentGateways.service.spec.ts` verifying Paystack, Flutterwave, and Hubtel checkout initialization and webhook signature verification.

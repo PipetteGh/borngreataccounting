@@ -3,8 +3,8 @@
 ## Latest Execution Summary (2026-11-22)
 
 ### 1. Backend Unit Tests (Jest)
-- **Command**: `cd packages/server; pnpm exec jest src/modules/SMS/SmsService.spec.ts src/common/config/brand.spec.ts`
-- **Status**: **PASSED** (`2/2` suites, `5/5` tests passing including the new `SmsIntegrationSettingsService` auto-fallback test)
+- **Command**: `cd packages/server; pnpm exec jest src/modules/PaymentServices/PaymentGateways.service.spec.ts src/modules/SMS/SmsService.spec.ts src/common/config/brand.spec.ts`
+- **Status**: **PASSED** (`3/3` suites, `10/10` tests passing — covering Paystack, Flutterwave, Hubtel checkout & webhooks, Twilio/Hubtel/SMSOnlineGH SMS & auto-fallback, and Brand config)
 
 ### 2. Full-Stack Production Builds
 - **Server & Shared Packages (`pnpm run build:server`)**: **PASSED** (`exit code 0` across `@borngreataccounting/utils`, `@borngreataccounting/pdf-templates`, `@borngreataccounting/email-components`, `@borngreataccounting/server`)

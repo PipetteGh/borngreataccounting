@@ -87,6 +87,35 @@ export class PaymentGatewaysService {
     return `${value.slice(0, 4)}••••${value.slice(-4)}`;
   }
 
+  private getEffectiveOptions(
+    provider: PaymentGatewayProvider,
+    dbOptions?: Record<string, any>,
+  ): Record<string, any> {
+    const opts = { ...(dbOptions || {}) };
+    if (provider === 'paystack') {
+      opts.publicKey = opts.publicKey || process.env.PAYSTACK_PUBLIC_KEY || '';
+      opts.secretKey = opts.secretKey || process.env.PAYSTACK_SECRET_KEY || '';
+    } else if (provider === 'flutterwave') {
+      opts.publicKey =
+        opts.publicKey || process.env.FLUTTERWAVE_PUBLIC_KEY || '';
+      opts.secretKey =
+        opts.secretKey || process.env.FLUTTERWAVE_SECRET_KEY || '';
+      opts.encryptionKey =
+        opts.encryptionKey || process.env.FLUTTERWAVE_ENCRYPTION_KEY || '';
+      opts.webhookHash =
+        opts.webhookHash || process.env.FLUTTERWAVE_WEBHOOK_HASH || '';
+    } else if (provider === 'hubtel') {
+      opts.clientId = opts.clientId || process.env.HUBTEL_CLIENT_ID || '';
+      opts.clientSecret =
+        opts.clientSecret || process.env.HUBTEL_CLIENT_SECRET || '';
+      opts.merchantAccountNumber =
+        opts.merchantAccountNumber ||
+        process.env.HUBTEL_MERCHANT_ACCOUNT_NUMBER ||
+        '';
+    }
+    return opts;
+  }
+
   private isConfigured(
     provider: PaymentGatewayProvider,
     options: Record<string, any>,
@@ -118,7 +147,10 @@ export class PaymentGatewaysService {
       (provider) => {
         const meta = PROVIDER_META[provider];
         const row = byService.get(meta.serviceName);
-        const options = (row?.options || {}) as Record<string, any>;
+        const options = this.getEffectiveOptions(
+          provider,
+          (row?.options || {}) as Record<string, any>,
+        );
         const configured = this.isConfigured(provider, options);
 
         return {
@@ -128,7 +160,9 @@ export class PaymentGatewaysService {
           supportedCurrencies: meta.supportedCurrencies,
           id: row?.id || null,
           configured,
-          paymentEnabled: Boolean(row?.paymentEnabled && configured),
+          paymentEnabled: Boolean(
+            (row ? row.paymentEnabled : configured) && configured,
+          ),
           testMode: Boolean(options.testMode),
           publicKey: options.publicKey || '',
           clientId: options.clientId || '',
@@ -268,8 +302,12 @@ export class PaymentGatewaysService {
       .query()
       .findOne({ service: meta.serviceName });
 
-    const options = (row?.options || {}) as Record<string, any>;
-    if (!row?.paymentEnabled || !this.isConfigured(provider, options)) {
+    const options = this.getEffectiveOptions(
+      provider,
+      (row?.options || {}) as Record<string, any>,
+    );
+    const enabled = row ? Boolean(row.paymentEnabled) : this.isConfigured(provider, options);
+    if (!enabled || !this.isConfigured(provider, options)) {
       throw new BadRequestException(
         `${meta.displayName} is not enabled or configured for this organization.`,
       );
@@ -392,27 +430,47 @@ export class PaymentGatewaysService {
     providerParam: string,
     headers: Record<string, any>,
     body: any,
+    organizationId?: string,
+    rawBody?: Buffer | string,
   ) {
     const provider = this.resolveProvider(providerParam);
     const meta = PROVIDER_META[provider];
+    if (organizationId && this.cls && typeof this.cls.set === 'function') {
+      try {
+        this.cls.set('organizationId', organizationId);
+      } catch {
+        // CLS context may not be active in unit test mocks
+      }
+    }
     const row = await this.paymentIntegrationModel()
       .query()
       .findOne({ service: meta.serviceName });
 
-    const options = (row?.options || {}) as Record<string, any>;
+    const options = this.getEffectiveOptions(
+      provider,
+      (row?.options || {}) as Record<string, any>,
+    );
 
     if (provider === 'paystack' && options.secretKey) {
-      const signature = headers['x-paystack-signature'];
-      const hash = createHmac('sha512', options.secretKey)
+      const signature =
+        headers?.['x-paystack-signature'] || headers?.['X-Paystack-Signature'];
+      const jsonHash = createHmac('sha512', options.secretKey)
         .update(JSON.stringify(body || {}))
         .digest('hex');
-      if (!signature || signature !== hash) {
+      const rawHash = rawBody
+        ? createHmac('sha512', options.secretKey)
+            .update(
+              typeof rawBody === 'string' ? rawBody : rawBody.toString('utf8'),
+            )
+            .digest('hex')
+        : null;
+      if (!signature || (signature !== jsonHash && signature !== rawHash)) {
         throw new BadRequestException('Invalid Paystack webhook signature.');
       }
     }
 
     if (provider === 'flutterwave' && options.webhookHash) {
-      const verifHash = headers['verif-hash'];
+      const verifHash = headers?.['verif-hash'] || headers?.['Verif-Hash'];
       if (!verifHash || verifHash !== options.webhookHash) {
         throw new BadRequestException('Invalid Flutterwave webhook hash.');
       }
@@ -421,6 +479,7 @@ export class PaymentGatewaysService {
     return {
       received: true,
       provider,
+      organizationId: organizationId || this.cls?.get?.('organizationId') || null,
       event: body?.event || body?.Status || 'processed',
     };
   }

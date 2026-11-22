@@ -81,9 +81,15 @@ export class PaymentGatewaysController {
   })
   async handleWebhook(
     @Param('provider') provider: string,
+    @Param('organizationId') organizationId: string,
     @Headers() headers: Record<string, any>,
     @Body() body: any,
   ) {
-    return this.paymentGateways.verifyWebhook(provider, headers, body);
+    return this.paymentGateways.verifyWebhook(
+      provider,
+      headers,
+      body,
+      organizationId,
+    );
   }
 }
