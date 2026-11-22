@@ -32,3 +32,13 @@
 ## Iteration 7 — POS `F9` Complete Sale Fix (`BUG-018`)
 - Fixed `ReferenceError: cartSnapshot is not defined` inside `completeSale()` in `POSPage.tsx` which caused `F9` / `Complete Sale` to show `'Failed to complete POS sale.'` after posting the receipt.
 - Added automatic `'Walk-in Customer'` fallback/creation and deposit account fallback when `F9` is pressed, capture-phase `F9` / `Ctrl+Enter` keyboard handling, and silent background `loadPosData(true)` refresh.
+
+## Iteration 8 — Real Chromium Browser E2E Verification & Walk-in Customer `currency_code` Fix (`BUG-019`)
+- Ran full Playwright Chromium E2E verification against live NestJS + production Webapp (`http://127.0.0.1:4100`) on a freshly provisioned tenant (`global-setup.ts`).
+- Caught and fixed `BUG-019` in `POSPage.tsx`: `completeSale()` was omitting `currency_code` when auto-creating `'Walk-in Customer'` (`POST /api/customers` returned HTTP 400 on tenants without prior customers). Extracted shared `createDefaultWalkInCustomer()` passing `currency_code: baseCurrency || 'GHS'`.
+- Expanded `e2e/record-features-demo.spec.ts` to assert zero error boundaries, Homepage KPIs & entity counts (`Total Income`, `Total Costs & Expenses`, `Net Income (Profit)`, `Total Assets`, `Inventory Items`, `Customers`, `Vendors`), `Accrual Basis` / `Cash Basis` switching, P&L & Balance Sheet charts, and POS `F9` -> `[data-testid="thermal-receipt-preview"]` (`1 passed` in `40.4s`).
+
+## Iteration 9 — Zero-Liability Balance Sheet Fix, Bar Chart Spacing & Updated README Showcase + 17-Frame Overview GIF (`BUG-020`)
+- Fixed `BUG-020` in `extractReportChartData.ts` (`excludePatterns: ['equity']` on `liabilitiesRow` lookup) and `FinancialCharts.tsx` (wider bar spacing, zero-height rendering for zero values), verified with a new unit test in `ReportChartExtraction.spec.ts` (`4/4` suites, `14/14` tests passing).
+- Updated `e2e/record-features-demo.spec.ts` to seed rich transactions, capture `13` fresh high-res screenshots in `assets/screenshots/`, and assemble a new 17-frame `1200×750` animated navigation & feature tour GIF (`assets/screenshots/overview.gif`, `1,642,077` bytes).
+- Updated `README.md` `## Screenshots` gallery to reflect the reconciled Workspace Dashboard, POS `F9` Thermal Receipt, BorngreatAutomation, Financial Reports, SMS Integration, Payment Gateways, Themes, Branding, and Settings.

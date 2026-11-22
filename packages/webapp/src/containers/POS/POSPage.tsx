@@ -782,16 +782,23 @@ export function POSPage() {
     }
   };
 
+  /**
+   * Creates a default Walk-in Customer using the organization's base currency.
+   */
+  const createDefaultWalkInCustomer = async (): Promise<number> => {
+    const res = await api.post('/customers', {
+      customer_type: 'individual',
+      display_name: 'Walk-in Customer',
+      currency_code: baseCurrency || 'GHS',
+    });
+    const created = transformToCamelCase(res.data);
+    return Number(created?.customer?.id || created?.data?.id || created?.id || 0);
+  };
+
   const createWalkInCustomer = async () => {
     try {
-      const res = await api.post('/customers', {
-        customer_type: 'individual',
-        display_name: 'Walk-in Customer',
-        currency_code: baseCurrency || 'GHS',
-      });
-      const created = transformToCamelCase(res.data);
-      const id = created?.id || created?.data?.id;
-      await loadPosData();
+      const id = await createDefaultWalkInCustomer();
+      await loadPosData(true);
       if (id) setSelectedCustomerId(id);
       AppToaster.show({
         intent: Intent.SUCCESS,
@@ -870,14 +877,7 @@ export function POSPage() {
         setSelectedCustomerId(effectiveCustomerId);
       }
       if (!effectiveCustomerId) {
-        const custRes = await api.post('/customers', {
-          customer_type: 'individual',
-          display_name: 'Walk-in Customer',
-        });
-        const createdCust = transformToCamelCase(custRes.data);
-        effectiveCustomerId = Number(
-          createdCust?.customer?.id || createdCust?.data?.id || createdCust?.id || 0,
-        );
+        effectiveCustomerId = await createDefaultWalkInCustomer();
         if (effectiveCustomerId) {
           setSelectedCustomerId(effectiveCustomerId);
         }

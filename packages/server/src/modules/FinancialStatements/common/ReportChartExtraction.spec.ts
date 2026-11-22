@@ -197,6 +197,62 @@ describe('Financial Report & Dashboard Chart Data Reconciliation', () => {
     expect(bs.totalLiabilities + bs.totalEquity).toBe(bs.totalAssets);
   });
 
+  it('returns totalLiabilities = 0 when LIABILITY node is omitted and only Total Liabilities and Equity exists', () => {
+    const rows = [
+      {
+        id: 'ASSETS',
+        rowTypes: ['AGGREGATE'],
+        cells: [{ key: 'name', value: 'Assets' }],
+        children: [
+          {
+            id: 'ASSETS',
+            rowTypes: ['TOTAL'],
+            cells: [
+              { key: 'name', value: 'Total Assets' },
+              { key: 'total', value: 'AED 200,000.00' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'LIABILITY_EQUITY',
+        rowTypes: ['AGGREGATE'],
+        cells: [{ key: 'name', value: 'Liabilities and Equity' }],
+        children: [
+          {
+            id: 'EQUITY',
+            rowTypes: ['AGGREGATE'],
+            cells: [{ key: 'name', value: 'Equity' }],
+            children: [
+              {
+                id: 'EQUITY',
+                rowTypes: ['TOTAL'],
+                cells: [
+                  { key: 'name', value: 'Total Equity' },
+                  { key: 'total', value: 'AED 200,000.00' },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'LIABILITY_EQUITY',
+            rowTypes: ['TOTAL'],
+            cells: [
+              { key: 'name', value: 'Total Liabilities and Equity' },
+              { key: 'total', value: 'AED 200,000.00' },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const bs = extractBalanceSheetChartData(rows);
+    expect(bs.totalAssets).toBe(200000);
+    expect(bs.totalLiabilities).toBe(0);
+    expect(bs.totalEquity).toBe(200000);
+    expect(bs.totalLiabilities + bs.totalEquity).toBe(bs.totalAssets);
+  });
+
   it('reconciles Cash Flow Statement sections when CashFlowTable appends TOTAL child without id', () => {
     const rows = [
       {

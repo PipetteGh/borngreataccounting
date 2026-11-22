@@ -46,23 +46,35 @@
 
 ## Screenshots
 
-### Workspace Dashboard
+### Workspace Dashboard (Reconciled KPIs, Basis Switcher, Charts & Financial Health Ratios)
 ![BorngreatAccounting Dashboard](assets/screenshots/dashboard.png)
+
+### Point of Sale (POS) Register
+![BorngreatAccounting POS](assets/screenshots/pos.png)
+
+### Instant POS Thermal Receipt (`F9` / `Ctrl+Enter` Checkout)
+![BorngreatAccounting POS Thermal Receipt](assets/screenshots/pos-receipt.png)
+
+### BorngreatAutomation (Natural-Language & 19 Quick Presets)
+![BorngreatAccounting Automation](assets/screenshots/automation.png)
 
 ### Products & Inventory
 ![BorngreatAccounting Products](assets/screenshots/products.png)
 
-### Point of Sale (POS) & Full-Screen Register
-![BorngreatAccounting POS](assets/screenshots/pos.png)
-
 ### Sales & Invoices
 ![BorngreatAccounting Sales Invoices](assets/screenshots/sales-invoices.png)
 
-### Financial Reports (Profit & Loss)
-![BorngreatAccounting Reports](assets/screenshots/reports.png)
+### Financial Reports — Profit & Loss Statement with Visual Charts
+![BorngreatAccounting Profit and Loss](assets/screenshots/reports.png)
+
+### Financial Reports — Balance Sheet (`Assets = Liabilities + Equity`)
+![BorngreatAccounting Balance Sheet](assets/screenshots/balance-sheet.png)
 
 ### Payment Gateways (Stripe, Paystack, Flutterwave & Hubtel)
 ![BorngreatAccounting Payment Gateways](assets/screenshots/payment-methods.png)
+
+### SMS Notifications (Twilio, Hubtel & SMSOnlineGH)
+![BorngreatAccounting SMS Integration](assets/screenshots/sms-integration.png)
 
 ### Themes & Appearance (12 Light & Dark Themes)
 ![BorngreatAccounting Themes Gallery](assets/screenshots/themes.png)

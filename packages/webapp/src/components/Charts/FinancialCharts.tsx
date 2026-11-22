@@ -164,7 +164,7 @@ export function BarChartCard({
     ]),
   );
 
-  const svgWidth = Math.max(360, data.length * 64);
+  const svgWidth = Math.max(400, data.length * 76);
   const svgHeight = height;
   const padLeft = 56;
   const padRight = 16;
@@ -313,7 +313,7 @@ export function BarChartCard({
                     x={startX}
                     y={y1}
                     width={barW}
-                    height={Math.max(2, h1)}
+                    height={v1 > 0 ? Math.max(2, h1) : 0}
                     fill={d.color || primaryColor}
                     rx={3}
                     opacity={hoveredIdx === null || isHovered ? 1 : 0.6}
@@ -327,7 +327,7 @@ export function BarChartCard({
                       x={startX + barW + barGap}
                       y={y2}
                       width={barW}
-                      height={Math.max(2, h2)}
+                      height={v2 > 0 ? Math.max(2, h2) : 0}
                       fill={secondaryColor}
                       rx={3}
                       opacity={hoveredIdx === null || isHovered ? 1 : 0.6}
@@ -341,10 +341,10 @@ export function BarChartCard({
                     x={gx + groupW / 2}
                     y={svgHeight - 10}
                     textAnchor="middle"
-                    fontSize="10.5"
+                    fontSize="10"
                     fill="#475569"
                   >
-                    {d.label.length > 12 ? `${d.label.slice(0, 11)}…` : d.label}
+                    {d.label.length > 14 ? `${d.label.slice(0, 13)}…` : d.label}
                   </text>
                 </g>
               );

@@ -206,19 +206,26 @@ export function findRowByLabel(
   rows: any[],
   patterns: string[],
   columns?: any[],
+  options?: { exact?: boolean; excludePatterns?: string[] },
 ): any | null {
   if (!Array.isArray(rows)) return null;
   const lowerPatterns = patterns.map((p) => p.toLowerCase());
+  const exclude = (options?.excludePatterns ?? []).map((p) => p.toLowerCase());
 
   let totalMatch: any = null;
   let nonAggregateMatch: any = null;
 
   const walk = (list: any[]) => {
     for (const row of list) {
-      const label = getRowLabel(row).toLowerCase();
+      const label = getRowLabel(row).toLowerCase().trim();
       const rowTypes = getRowTypes(row);
 
-      if (lowerPatterns.some((p) => label.includes(p))) {
+      const matchesInclude = options?.exact
+        ? lowerPatterns.some((p) => label === p)
+        : lowerPatterns.some((p) => label.includes(p));
+      const matchesExclude = exclude.some((p) => label.includes(p));
+
+      if (matchesInclude && !matchesExclude) {
         if (rowTypes.includes('TOTAL') && hasNonEmptyTotalCell(row, columns)) {
           totalMatch = row;
         } else if (
@@ -378,7 +385,7 @@ export function extractProfitLossChartData(rows: any[], columns?: any[]) {
     { label: 'COGS', value: totalCogs, color: '#F59E0B' },
     { label: 'Gross Profit', value: grossProfit, color: '#06B6D4' },
     {
-      label: 'Op. Expenses',
+      label: 'OpEx',
       value: operatingExpenses + otherExpenses,
       color: '#EF4444',
     },
@@ -433,7 +440,9 @@ export function extractBalanceSheetChartData(rows: any[], columns?: any[]) {
     findRowByLabel(rows, ['total fixed assets', 'fixed assets'], columns);
   const liabilitiesRow =
     findRowById(rows, ['LIABILITY'], columns) ||
-    findRowByLabel(rows, ['total liabilities'], columns);
+    findRowByLabel(rows, ['total liabilities', 'liabilities'], columns, {
+      excludePatterns: ['equity'],
+    });
   const equityRow =
     findRowById(rows, ['EQUITY'], columns) ||
     findRowByLabel(rows, ['total equity'], columns);
@@ -468,9 +477,9 @@ export function extractBalanceSheetChartData(rows: any[], columns?: any[]) {
 
   // Bar comparison: Assets vs Liabilities vs Equity (never summed into 2x Assets!)
   const mixData: ChartDatum[] = [
-    { label: 'Total Assets', value: totalAssets, color: '#1E5EFF' },
-    { label: 'Total Liabilities', value: totalLiabilities, color: '#F59E0B' },
-    { label: 'Total Equity', value: totalEquity, color: '#10B981' },
+    { label: 'Assets', value: totalAssets, color: '#1E5EFF' },
+    { label: 'Liabilities', value: totalLiabilities, color: '#F59E0B' },
+    { label: 'Equity', value: totalEquity, color: '#10B981' },
   ];
 
   // Asset composition donut whose slices sum to Total Assets
