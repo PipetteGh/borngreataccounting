@@ -1,6 +1,7 @@
 import { SmsService } from './SmsService';
+import { SmsIntegrationSettingsService } from './SmsIntegrationSettings.service';
 
-describe('SmsService', () => {
+describe('SmsService & SmsIntegrationSettingsService', () => {
   const originalFetch = global.fetch;
 
   afterEach(() => {
@@ -72,6 +73,33 @@ describe('SmsService', () => {
       type: 0,
       sender: 'Borngreat',
       destinations: ['233501234567'],
+    });
+  });
+
+  it('auto-detects Hubtel or SMSOnlineGH credentials when default provider is twilio but only Ghana provider is configured', async () => {
+    const fakeStore = {
+      get: jest.fn(({ key }: { group: string; key: string }) => {
+        if (key === 'hubtel_client_id') return 'auto-hubtel-id';
+        if (key === 'hubtel_client_secret') return 'auto-hubtel-secret';
+        if (key === 'hubtel_sender_id') return 'AutoSender';
+        return null;
+      }),
+    };
+    const fakeConfig = {
+      get: jest.fn((k: string) => (k === 'sms.provider' ? 'twilio' : undefined)),
+    };
+
+    const settingsService = new SmsIntegrationSettingsService(
+      (() => fakeStore) as any,
+      fakeConfig as any,
+    );
+
+    const creds = await settingsService.getCredentials();
+    expect(creds).toEqual({
+      provider: 'hubtel',
+      clientId: 'auto-hubtel-id',
+      clientSecret: 'auto-hubtel-secret',
+      senderId: 'AutoSender',
     });
   });
 });

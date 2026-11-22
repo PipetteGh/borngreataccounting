@@ -21,13 +21,13 @@ export class SmsIntegrationSettingsService {
   public async getCredentials(): Promise<SmsCredentials | null> {
     const store = await this.settingsStore();
 
-    const rawProvider = (
+    const explicitProvider = (
       this.getSetting(store, 'sms-integration', 'sms_provider') ||
       this.config.get<string>('sms.provider') ||
-      'twilio'
+      ''
     ).toLowerCase() as SmsProvider;
 
-    if (rawProvider === 'hubtel') {
+    const resolveHubtel = (): SmsCredentials | null => {
       const clientId =
         this.getSetting(store, 'sms-integration', 'hubtel_client_id') ||
         this.config.get<string>('sms.hubtelClientId');
@@ -37,44 +37,46 @@ export class SmsIntegrationSettingsService {
       const senderId =
         this.getSetting(store, 'sms-integration', 'hubtel_sender_id') ||
         this.config.get<string>('sms.hubtelSenderId');
-
-      if (!clientId || !clientSecret || !senderId) {
-        return null;
-      }
+      if (!clientId || !clientSecret || !senderId) return null;
       return { provider: 'hubtel', clientId, clientSecret, senderId };
-    }
+    };
 
-    if (rawProvider === 'smsonlinegh') {
+    const resolveSmsOnlineGh = (): SmsCredentials | null => {
       const apiKey =
         this.getSetting(store, 'sms-integration', 'smsonlinegh_api_key') ||
         this.config.get<string>('sms.smsonlineghApiKey');
       const senderId =
         this.getSetting(store, 'sms-integration', 'smsonlinegh_sender_id') ||
         this.config.get<string>('sms.smsonlineghSenderId');
-
-      if (!apiKey || !senderId) {
-        return null;
-      }
+      if (!apiKey || !senderId) return null;
       return { provider: 'smsonlinegh', apiKey, senderId };
+    };
+
+    const resolveTwilio = (): SmsCredentials | null => {
+      const accountSid =
+        this.getSetting(store, 'sms-integration', 'twilio_account_sid') ||
+        this.config.get<string>('sms.accountSid');
+      const authToken =
+        this.getSetting(store, 'sms-integration', 'twilio_auth_token') ||
+        this.config.get<string>('sms.authToken');
+      const fromNumber =
+        this.getSetting(store, 'sms-integration', 'twilio_from_number') ||
+        this.config.get<string>('sms.fromNumber');
+      if (!accountSid || !authToken || !fromNumber) return null;
+      return { provider: 'twilio', accountSid, authToken, fromNumber };
+    };
+
+    if (explicitProvider === 'hubtel') {
+      return resolveHubtel();
+    }
+    if (explicitProvider === 'smsonlinegh') {
+      return resolveSmsOnlineGh();
+    }
+    if (explicitProvider === 'twilio') {
+      return resolveTwilio() || resolveHubtel() || resolveSmsOnlineGh();
     }
 
-    const accountSid =
-      this.getSetting(store, 'sms-integration', 'twilio_account_sid') ||
-      this.config.get<string>('sms.accountSid');
-
-    const authToken =
-      this.getSetting(store, 'sms-integration', 'twilio_auth_token') ||
-      this.config.get<string>('sms.authToken');
-
-    const fromNumber =
-      this.getSetting(store, 'sms-integration', 'twilio_from_number') ||
-      this.config.get<string>('sms.fromNumber');
-
-    if (!accountSid || !authToken || !fromNumber) {
-      return null;
-    }
-
-    return { provider: 'twilio', accountSid, authToken, fromNumber };
+    return resolveTwilio() || resolveHubtel() || resolveSmsOnlineGh();
   }
 
   /**
