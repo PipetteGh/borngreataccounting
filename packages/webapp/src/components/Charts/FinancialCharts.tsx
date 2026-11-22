@@ -1,12 +1,8 @@
 import { Card, Icon, Tag, Intent } from '@blueprintjs/core';
 import React, { useState } from 'react';
+import type { ChartDatum } from './extractReportChartData';
 
-export interface ChartDatum {
-  label: string;
-  value: number;
-  secondaryValue?: number;
-  color?: string;
-}
+export type { ChartDatum };
 
 const DEFAULT_PALETTE = [
   '#1E5EFF',

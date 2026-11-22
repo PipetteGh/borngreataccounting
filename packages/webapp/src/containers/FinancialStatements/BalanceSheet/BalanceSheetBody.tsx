@@ -4,7 +4,7 @@ import { useBalanceSheetContext } from './BalanceSheetProvider';
 import { BalanceSheetTable } from './BalanceSheetTable';
 import { FinancialSheetSkeleton } from '@/components';
 import {
-  DonutChartCard,
+  BarChartCard,
   HorizontalBarListCard,
 } from '@/components/Charts/FinancialCharts';
 import { extractBalanceSheetChartData } from '@/components/Charts/extractReportChartData';
@@ -34,7 +34,7 @@ function BalanceSheetBodyJSX() {
         <FinancialSheetSkeleton />
       ) : (
         <>
-          {chartData.mixData.length > 0 && (
+          {chartData.mixData.some((d) => Math.abs(d.value) > 0) && (
             <div
               style={{
                 display: 'grid',
@@ -43,15 +43,16 @@ function BalanceSheetBodyJSX() {
                 marginBottom: 16,
               }}
             >
-              <DonutChartCard
-                title="Balance Sheet Composition"
+              <BarChartCard
+                title="Balance Sheet Position (Assets = Liabilities + Equity)"
                 subtitle={
                   balanceSheet?.meta?.formattedDateRange ??
                   balanceSheet?.meta?.formattedAsDate
                 }
                 data={chartData.mixData}
+                primaryLabel="Balance"
                 currencyCode={currencyCode}
-                centerLabel="Position"
+                height={190}
               />
               <HorizontalBarListCard
                 title="Asset Distribution"

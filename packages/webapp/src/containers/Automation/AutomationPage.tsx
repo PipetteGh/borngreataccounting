@@ -413,7 +413,9 @@ export function AutomationPage() {
           ? raw.accounts
           : Array.isArray(raw?.data)
             ? raw.data
-            : [];
+            : Array.isArray(raw)
+              ? raw
+              : [];
         setAccounts(list);
         const cashAcc =
           list.find((a) => a.accountType === 'cash' || a.accountType === 'bank') || list[0];
@@ -441,7 +443,11 @@ export function AutomationPage() {
 
       if (invRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(invRes.value.data);
-        const list = Array.isArray(raw?.salesInvoices) ? raw.salesInvoices : [];
+        const list = Array.isArray(raw?.salesInvoices)
+          ? raw.salesInvoices
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : [];
         const mapped = list.map((d: any) => ({
           id: d.id,
           number: d.invoiceNo || `INV-${d.id}`,
@@ -454,7 +460,11 @@ export function AutomationPage() {
 
       if (recRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(recRes.value.data);
-        const list = Array.isArray(raw?.salesReceipts) ? raw.salesReceipts : [];
+        const list = Array.isArray(raw?.salesReceipts)
+          ? raw.salesReceipts
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : [];
         setReceipts(
           list.map((d: any) => ({
             id: d.id,
@@ -465,7 +475,11 @@ export function AutomationPage() {
 
       if (estRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(estRes.value.data);
-        const list = Array.isArray(raw?.salesEstimates) ? raw.salesEstimates : [];
+        const list = Array.isArray(raw?.salesEstimates)
+          ? raw.salesEstimates
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : [];
         setEstimates(
           list.map((d: any) => ({
             id: d.id,
@@ -476,7 +490,11 @@ export function AutomationPage() {
 
       if (billRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(billRes.value.data);
-        const list = Array.isArray(raw?.bills) ? raw.bills : [];
+        const list = Array.isArray(raw?.bills)
+          ? raw.bills
+          : Array.isArray(raw?.data)
+            ? raw.data
+            : [];
         const mapped = list.map((d: any) => ({
           id: d.id,
           number: d.billNumber || `BILL-${d.id}`,
