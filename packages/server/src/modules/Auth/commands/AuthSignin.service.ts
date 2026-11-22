@@ -12,8 +12,15 @@ import { UserNotFoundException } from '../exceptions/UserNotFound.exception';
 import { NoActiveWorkspaceException } from '../exceptions/NoActiveWorkspace.exception';
 import { AuthSigninResponseDto } from '../dtos/AuthSigninResponse.dto';
 
+const VERIFIED_USER_CACHE_TTL_MS = 15 * 1000;
+
 @Injectable()
 export class AuthSigninService {
+  private readonly verifiedUserCache = new Map<
+    number,
+    { user: SystemUser; at: number }
+  >();
+
   constructor(
     @Inject(SystemUser.name)
     private readonly systemUserModel: typeof SystemUser,
@@ -65,14 +72,30 @@ export class AuthSigninService {
     if (payload.iss !== JWT_ISSUER || payload.aud !== JWT_AUDIENCE) {
       throw new UnauthorizedException('Invalid token claims.');
     }
+    const userId = Number(payload.sub);
+    const cached = this.verifiedUserCache.get(userId);
+    if (cached && Date.now() - cached.at < VERIFIED_USER_CACHE_TTL_MS) {
+      this.clsService.set('userId', cached.user.id);
+      this.clsService.set('systemUser', cached.user);
+      return payload;
+    }
+
     let user: SystemUser;
     try {
       user = await this.systemUserModel
         .query()
-        .findOne({ id: Number(payload.sub) })
+        .findOne({ id: userId })
         .throwIfNotFound();
 
       this.clsService.set('userId', user.id);
+      this.clsService.set('systemUser', user);
+
+      if (user.verified) {
+        if (this.verifiedUserCache.size > 10000) {
+          this.verifiedUserCache.clear();
+        }
+        this.verifiedUserCache.set(userId, { user, at: Date.now() });
+      }
     } catch (_error) {
       throw new UserNotFoundException(String(payload.sub));
     }

@@ -17,8 +17,19 @@ export const IS_TENANT_AGNOSTIC = 'IS_TENANT_AGNOSTIC';
 
 export const TenantAgnosticRoute = () => SetMetadata(IS_TENANT_AGNOSTIC, true);
 
+const TENANCY_CACHE_TTL_MS = 15 * 1000;
+
 @Injectable()
 export class TenancyGlobalGuard implements CanActivate {
+  private readonly tenantCache = new Map<
+    string,
+    { tenant: TenantModel; at: number }
+  >();
+  private readonly membershipCache = new Map<
+    string,
+    { valid: boolean; at: number }
+  >();
+
   constructor(
     @Inject(UserTenant.name)
     private readonly userTenantModel: typeof UserTenant,
@@ -57,10 +68,28 @@ export class TenancyGlobalGuard implements CanActivate {
     }
     // Validate that the authenticated user is a member of the requested organization.
     const userId = this.clsService.get<number>('userId');
+    const now = Date.now();
 
-    const tenant = await this.tenantModel.query().findOne({ organizationId });
-    if (!tenant) {
-      throw new UnauthorizedException('Organization not found.');
+    let tenant: TenantModel | undefined;
+    const cachedTenant = this.tenantCache.get(organizationId);
+    if (cachedTenant && now - cachedTenant.at < TENANCY_CACHE_TTL_MS) {
+      tenant = cachedTenant.tenant;
+    } else {
+      tenant = await this.tenantModel.query().findOne({ organizationId });
+      if (!tenant) {
+        throw new UnauthorizedException('Organization not found.');
+      }
+      if (tenant.initializedAt && tenant.seededAt) {
+        if (this.tenantCache.size > 10000) this.tenantCache.clear();
+        this.tenantCache.set(organizationId, { tenant, at: now });
+      }
+    }
+    this.clsService.set('tenant', tenant);
+
+    const memberKey = `${userId}:${tenant.id}`;
+    const cachedMember = this.membershipCache.get(memberKey);
+    if (cachedMember && now - cachedMember.at < TENANCY_CACHE_TTL_MS) {
+      return cachedMember.valid;
     }
 
     const membership = await this.userTenantModel
@@ -72,6 +101,8 @@ export class TenancyGlobalGuard implements CanActivate {
         'You do not have access to this organization.',
       );
     }
+    if (this.membershipCache.size > 10000) this.membershipCache.clear();
+    this.membershipCache.set(memberKey, { valid: true, at: now });
     return true;
   }
 }

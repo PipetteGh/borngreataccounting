@@ -1,5 +1,4 @@
 import react from '@vitejs/plugin-react';
-import legacy from '@vitejs/plugin-legacy';
 import path from 'node:path';
 import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import fixReactVirtualized from 'esbuild-plugin-react-virtualized';
@@ -56,10 +55,6 @@ export default defineConfig(({ mode }) => {
   const plugins: PluginOption[] = [
     browserExternalShimPlugin,
     react(),
-    legacy({
-      targets: ['defaults', 'not IE 11'],
-      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
-    }),
   ];
 
   return {
@@ -103,6 +98,26 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': [
+              'react',
+              'react-dom',
+              'react-router-dom',
+              'redux',
+              'react-redux',
+            ],
+            'vendor-blueprint': [
+              '@blueprintjs/core',
+              '@blueprintjs/select',
+              '@blueprintjs/datetime',
+              '@blueprintjs/popover2',
+            ],
+            'vendor-utils': ['lodash', 'moment'],
+          },
+        },
+      },
     },
     optimizeDeps: {
       esbuildOptions: {

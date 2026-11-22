@@ -2,26 +2,20 @@
 
 ## Latest Execution Summary (2026-11-22)
 
-### 1. Backend & Report Reconciliation Unit Tests (Jest)
-- **Command**: `cd packages/server; pnpm exec jest src/modules/FinancialStatements/common/ReportChartExtraction.spec.ts src/modules/PaymentServices/PaymentGateways.service.spec.ts src/modules/SMS/SmsService.spec.ts src/common/config/brand.spec.ts`
-- **Status**: **PASSED** (`4/4` suites, `14/14` tests passing — covering Profit & Loss / Balance Sheet (including zero-liability `'Total Liabilities and Equity'` guard) / Cash Flow reconciliation, Paystack/Flutterwave/Hubtel checkout & webhooks, Twilio/Hubtel/SMSOnlineGH SMS & auto-fallback, and Brand config)
+### 1. Backend, Auth & Report Reconciliation Unit Tests (Jest)
+- **Command**: `cd packages/server; pnpm exec jest src/modules/FinancialStatements/common/ReportChartExtraction.spec.ts src/modules/PaymentServices/PaymentGateways.service.spec.ts src/modules/SMS/SmsService.spec.ts src/common/config/brand.spec.ts src/modules/Auth/commands/AuthSignin.service.spec.ts`
+- **Status**: **PASSED** (`5/5` suites, `19/19` tests passing — covering Profit & Loss / Balance Sheet (including zero-liability `'Total Liabilities and Equity'` guard) / Cash Flow reconciliation, Auth JWT payload verification & caching, Paystack/Flutterwave/Hubtel checkout & webhooks, Twilio/Hubtel/SMSOnlineGH SMS & auto-fallback, and Brand config)
 
 ### 2. Full-Stack Production Builds
-- **Server & Shared Packages (`pnpm run build:server`)**: **PASSED** (`exit code 0` across `@borngreataccounting/utils`, `@borngreataccounting/pdf-templates`, `@borngreataccounting/email-components`, `@borngreataccounting/server`)
-- **Webapp Production Bundle (`pnpm --filter @borngreataccounting/webapp build`)**: **PASSED** (`exit code 0`, `6600 modules transformed`)
-- **Windows Desktop Installer (`scripts/build-windows-installer.ps1 -Version "1.0.7"`)**: **PASSED** (`exit code 0`, generated `dist/installers/BorngreatAccounting-Setup-1.0.7.exe` and `dist/installers/BorngreatAccounting-Setup.exe`)
+- **Server & Shared Packages (`pnpm run build:server` + `@borngreataccounting/server build`)**: **PASSED** (`exit code 0` across `@borngreataccounting/utils`, `@borngreataccounting/pdf-templates`, `@borngreataccounting/email-components`, `@borngreataccounting/server`)
+- **Webapp Production Bundle (`pnpm --filter @borngreataccounting/webapp build`)**: **PASSED** (`exit code 0`, `6600 modules transformed` in **`1m 11s`** vs `3m 6s` baseline, main entry chunk reduced to `1,495.56 kB` / `409.95 kB` gzip)
 
-### 3. Real Browser E2E Verification, Live Screenshots & Overview GIF (Playwright Chromium)
-- **Command**: `$env:PLAYWRIGHT_TEST_BASE_URL="http://127.0.0.1:4100"; pnpm exec playwright test --config=playwright.demo.config.ts`
-- **Global Setup (`Frankie_Hermann93@gmail.com` / `Alison's Org`)**:
-  - `POST /api/auth/signup`: `200 OK` (`636ms`)
-  - `POST /api/auth/signin`: `200 OK` (`241ms`)
-  - `POST /api/organization/build`: `200 OK` (`99ms`)
-  - Tenant DB migration & seed job (`job_id=6`): Completed (`14,218ms`)
-- **Chromium Browser Walkthrough (`e2e/record-features-demo.spec.ts`)**: **PASSED** (`1 passed`, `1.4m` test / `1.9m` total)
-  - Seeded full opening balances, 5 inventory/service items, 3 customers, 2 vendors, 4 opened bills, 4 delivered invoices, 5 closed sale receipts, and 3 paid expenses, then waited for inventory cost-compute completion before captures.
-  - Visually verified Homepage (`/`) KPIs (`AED 10,970.00` Income, `AED 6,030.00` Costs & Expenses, `AED 4,940.00` Net Income, `AED 204,940.00` Assets, `Liab: AED 0.00`), Cash/Accrual Basis toggles, Entity Counts, Reconciled Charts, Ratios, and Margin Calculator.
-  - Verified `/items`, `/pos` + **`F9`** -> `[data-testid="thermal-receipt-preview"]`, `/automation`, `/invoices`, `/financial-reports/profit-loss-sheet`, `/financial-reports/balance-sheet`, `/preferences/payment-methods`, `/preferences/sms-message?tab=overview`, `/preferences/themes`, `/preferences/branding`, `/preferences/general`, and `/preferences/about`.
+### 3. Before vs. After Performance Benchmark & Real Browser E2E Verification
+- **Live Server Benchmark (`benchmark_perf.js` vs `http://127.0.0.1:4100`)**: **PASSED**
+  - `SerializeInterceptor` 500-row roundtrip: `265.75 ms` → **`4.92 ms`** (`54.0x` faster)
+  - Main JS bundle transfer: `2,611,997 B` → **`409,947 B`** (`gzip`, `1.50 ms` warm / `1.07 ms` `304`)
+  - Dashboard 9-endpoint parallel burst: `319.84 ms` → **`170.65 ms`** (`min 126.74 ms`, `1.87x` faster)
+- **Playwright Chromium Walkthrough (`e2e/record-features-demo.spec.ts`)**: **PASSED** (`1 passed`, `1.6m` test / `2.2m` total; Chromium `load dashboard` dropped from `14,917ms` to **`5,175ms`**)
+  - Verified Homepage (`/`), `/items`, `/pos` + `F9` thermal receipt, `/automation`, `/invoices`, `/financial-reports/profit-loss-sheet`, `/financial-reports/balance-sheet`, `/preferences/payment-methods`, `/preferences/sms-message?tab=overview`, `/preferences/themes`, `/preferences/branding`, `/preferences/general`, and `/preferences/about`.
 - **Artifacts**:
-  - Updated `13` live screenshots in `assets/screenshots/*.png` + `assets/screenshots/overview.gif` (`1,642,077` bytes across `17` frames)
-  - `dist/recordings/borngreataccounting-features-demo.webm` (`5,568,344` bytes)
+  - Updated `13` live screenshots in `assets/screenshots/*.png` + `assets/screenshots/overview.gif` (`1,643,162` bytes across `17` frames)

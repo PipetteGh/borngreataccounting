@@ -516,12 +516,29 @@ export const toSafeNumber = (number) => {
   return _.toNumber(_.defaultTo(number, 0));
 };
 
+const camelCaseKeyCache = new Map<string, string>();
+const snakeCaseKeyCache = new Map<string, string>();
+
 export const transformToCamelCase = (object) => {
-  return deepMapKeys(object, (key) => _.camelCase(key));
+  return deepMapKeys(object, (key) => {
+    const hit = camelCaseKeyCache.get(key);
+    if (hit !== undefined) return hit;
+    const converted = _.camelCase(key);
+    if (camelCaseKeyCache.size > 10000) camelCaseKeyCache.clear();
+    camelCaseKeyCache.set(key, converted);
+    return converted;
+  });
 };
 
 export const transfromToSnakeCase = (object: Record<string, any>) => {
-  return deepMapKeys<any>(object, (key) => _.snakeCase(key));
+  return deepMapKeys<any>(object, (key) => {
+    const hit = snakeCaseKeyCache.get(key);
+    if (hit !== undefined) return hit;
+    const converted = _.snakeCase(key);
+    if (snakeCaseKeyCache.size > 10000) snakeCaseKeyCache.clear();
+    snakeCaseKeyCache.set(key, converted);
+    return converted;
+  });
 };
 
 export const transformTableQueryToParams = (object) => {

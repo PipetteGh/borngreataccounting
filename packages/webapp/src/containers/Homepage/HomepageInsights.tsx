@@ -59,6 +59,26 @@ class InsightsErrorBoundary extends React.Component<
   }
 }
 
+const homepageSummaryCache = new Map<
+  string,
+  {
+    openReceivables: number;
+    overdueCount: number;
+    openPayables: number;
+    entityCounts: {
+      items: number;
+      inventoryItems: number;
+      serviceItems: number;
+      customers: number;
+      vendors: number;
+      invoices: number;
+      bills: number;
+      accounts: number;
+    };
+    lowStockItems: Array<{ id: number; name: string; quantityOnHand: number }>;
+  }
+>();
+
 function extractListFromResponse(raw: any, namedKey?: string): any[] {
   if (Array.isArray(raw)) return raw;
   if (namedKey && Array.isArray(raw?.[namedKey])) return raw[namedKey];
@@ -115,22 +135,33 @@ function HomepageInsightsInner() {
     useBalanceSheet(bsHttpQuery);
   const { data: salesByItems } = useSalesByItems(salesByItemsQuery);
 
-  const [openReceivables, setOpenReceivables] = useState(0);
-  const [overdueCount, setOverdueCount] = useState(0);
-  const [openPayables, setOpenPayables] = useState(0);
-  const [entityCounts, setEntityCounts] = useState({
-    items: 0,
-    inventoryItems: 0,
-    serviceItems: 0,
-    customers: 0,
-    vendors: 0,
-    invoices: 0,
-    bills: 0,
-    accounts: 0,
-  });
+  const cachedSummary = homepageSummaryCache.get(organizationId || '');
+
+  const [openReceivables, setOpenReceivables] = useState(
+    () => cachedSummary?.openReceivables ?? 0,
+  );
+  const [overdueCount, setOverdueCount] = useState(
+    () => cachedSummary?.overdueCount ?? 0,
+  );
+  const [openPayables, setOpenPayables] = useState(
+    () => cachedSummary?.openPayables ?? 0,
+  );
+  const [entityCounts, setEntityCounts] = useState(
+    () =>
+      cachedSummary?.entityCounts ?? {
+        items: 0,
+        inventoryItems: 0,
+        serviceItems: 0,
+        customers: 0,
+        vendors: 0,
+        invoices: 0,
+        bills: 0,
+        accounts: 0,
+      },
+  );
   const [lowStockItems, setLowStockItems] = useState<
     Array<{ id: number; name: string; quantityOnHand: number }>
-  >([]);
+  >(() => cachedSummary?.lowStockItems ?? []);
 
   // Quick Margin & Tax Calculator state
   const [calcCost, setCalcCost] = useState<number>(100);
@@ -139,6 +170,14 @@ function HomepageInsightsInner() {
 
   useEffect(() => {
     if (!token || !organizationId) return;
+    const warm = homepageSummaryCache.get(organizationId);
+    if (warm) {
+      setOpenReceivables(warm.openReceivables);
+      setOverdueCount(warm.overdueCount);
+      setOpenPayables(warm.openPayables);
+      setEntityCounts(warm.entityCounts);
+      setLowStockItems(warm.lowStockItems);
+    }
     let active = true;
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -147,7 +186,7 @@ function HomepageInsightsInner() {
     Promise.allSettled([
       axios.get('/api/sale-invoices?page=1&page_size=200', { headers }),
       axios.get('/api/bills?page=1&page_size=200', { headers }),
-      axios.get('/api/items?page=1&page_size=2000', { headers }),
+      axios.get('/api/items?page=1&page_size=250', { headers }),
       axios.get('/api/customers?page=1&page_size=1', { headers }),
       axios.get('/api/vendors?page=1&page_size=1', { headers }),
       axios.get('/api/accounts', { headers }),
@@ -161,6 +200,14 @@ function HomepageInsightsInner() {
       let totalCustomers = 0;
       let totalVendors = 0;
       let totalAccounts = 0;
+      let nextOpenReceivables = 0;
+      let nextOverdueCount = 0;
+      let nextOpenPayables = 0;
+      let nextLowStockItems: Array<{
+        id: number;
+        name: string;
+        quantityOnHand: number;
+      }> = [];
 
       if (invRes.status === 'fulfilled') {
         const raw: any = transformToCamelCase(invRes.value.data);
@@ -171,20 +218,18 @@ function HomepageInsightsInner() {
               raw?.filterMeta?.pagination?.total ??
               list.length,
           ) || list.length;
-        let arTotal = 0;
-        let overdue = 0;
         const today = new Date().toISOString().slice(0, 10);
         for (const inv of list) {
           const due = Number(inv.dueAmount ?? inv.balance ?? 0);
           if (due > 0) {
-            arTotal += due;
+            nextOpenReceivables += due;
             if (inv.dueDate && String(inv.dueDate).slice(0, 10) < today) {
-              overdue++;
+              nextOverdueCount++;
             }
           }
         }
-        setOpenReceivables(arTotal);
-        setOverdueCount(overdue);
+        setOpenReceivables(nextOpenReceivables);
+        setOverdueCount(nextOverdueCount);
       }
 
       if (billRes.status === 'fulfilled') {
@@ -196,12 +241,12 @@ function HomepageInsightsInner() {
               raw?.filterMeta?.pagination?.total ??
               list.length,
           ) || list.length;
-        const apTotal = list.reduce(
+        nextOpenPayables = list.reduce(
           (sum: number, b: any) =>
             sum + Math.max(0, Number(b.dueAmount ?? b.balance ?? 0)),
           0,
         );
-        setOpenPayables(apTotal);
+        setOpenPayables(nextOpenPayables);
       }
 
       if (itemRes.status === 'fulfilled') {
@@ -219,7 +264,7 @@ function HomepageInsightsInner() {
         totalServiceItems = list.filter(
           (it: any) => it.type !== 'inventory',
         ).length;
-        const low = list
+        nextLowStockItems = list
           .filter(
             (it: any) =>
               it.type === 'inventory' &&
@@ -236,7 +281,7 @@ function HomepageInsightsInner() {
             name: it.name,
             quantityOnHand: Number(it.quantityOnHand ?? 0),
           }));
-        setLowStockItems(low);
+        setLowStockItems(nextLowStockItems);
       }
 
       if (custRes.status === 'fulfilled') {
@@ -268,7 +313,7 @@ function HomepageInsightsInner() {
           Number(raw?.pagination?.total ?? list.length) || list.length;
       }
 
-      setEntityCounts({
+      const nextCounts = {
         items: totalItems,
         inventoryItems: totalInventoryItems,
         serviceItems: totalServiceItems,
@@ -277,6 +322,16 @@ function HomepageInsightsInner() {
         invoices: totalInvoices,
         bills: totalBills,
         accounts: totalAccounts,
+      };
+      setEntityCounts(nextCounts);
+
+      if (homepageSummaryCache.size > 100) homepageSummaryCache.clear();
+      homepageSummaryCache.set(organizationId, {
+        openReceivables: nextOpenReceivables,
+        overdueCount: nextOverdueCount,
+        openPayables: nextOpenPayables,
+        entityCounts: nextCounts,
+        lowStockItems: nextLowStockItems,
       });
     });
     return () => {

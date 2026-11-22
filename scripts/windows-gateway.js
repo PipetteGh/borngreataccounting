@@ -5,6 +5,24 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
+
+const backendAgent = new http.Agent({
+  keepAlive: true,
+  maxSockets: 128,
+  keepAliveMsecs: 30000,
+});
+
+const MAX_CACHE_FILE_BYTES = 5 * 1024 * 1024;
+const COMPRESSIBLE_EXTS = new Set([
+  '.html',
+  '.js',
+  '.mjs',
+  '.css',
+  '.json',
+  '.svg',
+]);
+const staticAssetCache = new Map();
 
 function readEnvValue(key) {
   try {
@@ -55,6 +73,7 @@ function proxyToBackend(req, res) {
     port: API_PORT,
     path: req.url,
     method: req.method,
+    agent: backendAgent,
     headers: {
       ...req.headers,
       host: `${API_HOST}:${API_PORT}`,
@@ -85,6 +104,83 @@ function proxyToBackend(req, res) {
   req.pipe(proxyReq, { end: true });
 }
 
+function sendCachedFile(req, res, targetFile, stats, isImmutableAsset) {
+  const ext = path.extname(targetFile).toLowerCase();
+  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+  const cacheControl = isImmutableAsset
+    ? 'public, max-age=31536000, immutable'
+    : 'no-cache';
+
+  const existing = staticAssetCache.get(targetFile);
+  if (existing && existing.mtimeMs === stats.mtimeMs) {
+    if (req.headers['if-none-match'] === existing.etag) {
+      res.writeHead(304, {
+        ETag: existing.etag,
+        'Cache-Control': cacheControl,
+      });
+      return res.end();
+    }
+    const acceptGzip = /\bgzip\b/i.test(String(req.headers['accept-encoding'] || ''));
+    const body = acceptGzip && existing.gzip ? existing.gzip : existing.raw;
+    const headers = {
+      'Content-Type': existing.contentType,
+      'Cache-Control': cacheControl,
+      ETag: existing.etag,
+      Vary: 'Accept-Encoding',
+      'Content-Length': body.length,
+    };
+    if (acceptGzip && existing.gzip) {
+      headers['Content-Encoding'] = 'gzip';
+    }
+    res.writeHead(200, headers);
+    return res.end(body);
+  }
+
+  fs.readFile(targetFile, (readErr, raw) => {
+    if (readErr) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      return res.end('Failed to read static asset.');
+    }
+    const etag = `"${stats.size}-${Math.floor(stats.mtimeMs)}"`;
+    const gzip = COMPRESSIBLE_EXTS.has(ext)
+      ? zlib.gzipSync(raw, { level: 6 })
+      : null;
+    if (staticAssetCache.size > 500) {
+      staticAssetCache.clear();
+    }
+    staticAssetCache.set(targetFile, {
+      raw,
+      gzip,
+      etag,
+      mtimeMs: stats.mtimeMs,
+      contentType,
+      isImmutable: isImmutableAsset,
+    });
+
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, {
+        ETag: etag,
+        'Cache-Control': cacheControl,
+      });
+      return res.end();
+    }
+    const acceptGzip = /\bgzip\b/i.test(String(req.headers['accept-encoding'] || ''));
+    const body = acceptGzip && gzip ? gzip : raw;
+    const headers = {
+      'Content-Type': contentType,
+      'Cache-Control': cacheControl,
+      ETag: etag,
+      Vary: 'Accept-Encoding',
+      'Content-Length': body.length,
+    };
+    if (acceptGzip && gzip) {
+      headers['Content-Encoding'] = 'gzip';
+    }
+    res.writeHead(200, headers);
+    return res.end(body);
+  });
+}
+
 const server = http.createServer((req, res) => {
   const urlPath = (req.url || '/').split('?')[0];
 
@@ -109,22 +205,30 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (!err && stats.isFile()) {
+      const isImmutable = urlPath.startsWith('/assets/');
+      if (stats.size <= MAX_CACHE_FILE_BYTES) {
+        return sendCachedFile(req, res, filePath, stats, isImmutable);
+      }
       const ext = path.extname(filePath).toLowerCase();
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': contentType });
-      fs.createReadStream(filePath).pipe(res);
-    } else {
-      // SPA fallback to index.html
-      const indexFile = path.join(DIST_DIR, 'index.html');
-      fs.readFile(indexFile, (readErr, content) => {
-        if (readErr) {
-          res.writeHead(500, { 'Content-Type': 'text/plain' });
-          return res.end('BorngreatAccounting Webapp dist/index.html not found.');
-        }
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(content);
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        'Cache-Control': isImmutable
+          ? 'public, max-age=31536000, immutable'
+          : 'no-cache',
       });
+      return fs.createReadStream(filePath).pipe(res);
     }
+
+    // SPA fallback to index.html
+    const indexFile = path.join(DIST_DIR, 'index.html');
+    fs.stat(indexFile, (idxErr, idxStats) => {
+      if (idxErr || !idxStats.isFile()) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        return res.end('BorngreatAccounting Webapp dist/index.html not found.');
+      }
+      return sendCachedFile(req, res, indexFile, idxStats, false);
+    });
   });
 });
 

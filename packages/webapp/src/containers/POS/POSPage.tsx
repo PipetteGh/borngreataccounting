@@ -265,10 +265,33 @@ function printThermalReceipt(
   }, 150);
 }
 
+interface CachedPosState {
+  items: PosItem[];
+  customers: PosCustomer[];
+  accounts: PosAccount[];
+  taxRates: PosTaxRate[];
+  gateways: PosGateway[];
+  baseCurrency: string;
+  orgInfo: {
+    name: string;
+    phone?: string;
+    address?: string;
+    logoUri?: string;
+    taxNumber?: string;
+  };
+  selectedCustomerId: number | '';
+  depositAccountId: number | '';
+  selectedBranchId: number | '';
+  selectedWarehouseId: number | '';
+}
+
+const posDataCache = new Map<string, CachedPosState>();
+
 export function POSPage() {
   const history = useHistory();
   const token = useAuthToken();
   const organizationId = useAuthOrganizationId();
+  const cachedPos = posDataCache.get(organizationId || '');
   const rootRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -279,7 +302,7 @@ export function POSPage() {
     return axios.create({ baseURL: '/api', headers });
   }, [token, organizationId]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!cachedPos);
   const [submitting, setSubmitting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [workspaceHeight, setWorkspaceHeight] = useState<string>('calc(100vh - 96px)');
@@ -316,7 +339,7 @@ export function POSPage() {
     }
   }, [soundEnabled]);
 
-  const [items, setItems] = useState<PosItem[]>([]);
+  const [items, setItems] = useState<PosItem[]>(() => cachedPos?.items ?? []);
   const [salesCounts, setSalesCounts] = useState<Record<number, number>>(() => {
     try {
       const raw = localStorage.getItem('bga_pos_sales_counts');
@@ -326,18 +349,28 @@ export function POSPage() {
     }
   });
   const [showAllItems, setShowAllItems] = useState(false);
-  const [customers, setCustomers] = useState<PosCustomer[]>([]);
-  const [accounts, setAccounts] = useState<PosAccount[]>([]);
-  const [taxRates, setTaxRates] = useState<PosTaxRate[]>([]);
-  const [gateways, setGateways] = useState<PosGateway[]>([]);
-  const [baseCurrency, setBaseCurrency] = useState('GHS');
+  const [customers, setCustomers] = useState<PosCustomer[]>(
+    () => cachedPos?.customers ?? [],
+  );
+  const [accounts, setAccounts] = useState<PosAccount[]>(
+    () => cachedPos?.accounts ?? [],
+  );
+  const [taxRates, setTaxRates] = useState<PosTaxRate[]>(
+    () => cachedPos?.taxRates ?? [],
+  );
+  const [gateways, setGateways] = useState<PosGateway[]>(
+    () => cachedPos?.gateways ?? [],
+  );
+  const [baseCurrency, setBaseCurrency] = useState(
+    () => cachedPos?.baseCurrency ?? 'GHS',
+  );
   const [orgInfo, setOrgInfo] = useState<{
     name: string;
     phone?: string;
     address?: string;
     logoUri?: string;
     taxNumber?: string;
-  }>({ name: 'BorngreatAccounting' });
+  }>(() => cachedPos?.orgInfo ?? { name: 'BorngreatAccounting' });
   const [paperWidth, setPaperWidth] = useState<'80mm' | '58mm'>('80mm');
   const { data: receiptSettings } = useSettingsReceipts();
 
@@ -378,11 +411,17 @@ export function POSPage() {
   const [inStockOnly, setInStockOnly] = useState(false);
 
   const [cart, setCart] = useState<CartLine[]>([]);
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | ''>('');
-  const [depositAccountId, setDepositAccountId] = useState<number | ''>('');
-  const [selectedBranchId, setSelectedBranchId] = useState<number | ''>('');
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | ''>(
+    () => cachedPos?.selectedCustomerId ?? '',
+  );
+  const [depositAccountId, setDepositAccountId] = useState<number | ''>(
+    () => cachedPos?.depositAccountId ?? '',
+  );
+  const [selectedBranchId, setSelectedBranchId] = useState<number | ''>(
+    () => cachedPos?.selectedBranchId ?? '',
+  );
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | ''>(
-    '',
+    () => cachedPos?.selectedWarehouseId ?? '',
   );
   const [paymentMethod, setPaymentMethod] = useState<
     'cash' | 'card' | 'mobile_money' | 'paystack' | 'flutterwave' | 'hubtel'
@@ -395,193 +434,245 @@ export function POSPage() {
   const [completedReceipt, setCompletedReceipt] =
     useState<CompletedReceipt | null>(null);
 
-  const loadPosData = useCallback(async (silent: boolean | unknown = false) => {
-    try {
-      if (silent !== true) setLoading(true);
-      const [
-        itemsRes,
-        customersRes,
-        accountsRes,
-        taxRes,
-        gatewaysRes,
-        orgRes,
-        branchesRes,
-        warehousesRes,
-      ] = await Promise.allSettled([
-        api.get('/items', { params: { page_size: 1000, page: 1 } }),
-        api.get('/customers', { params: { page_size: 100, page: 1 } }),
-        api.get('/accounts'),
-        api.get('/tax_rates'),
-        api.get('/payment-services/gateways'),
-        api.get('/organization/current'),
-        api.get('/branches'),
-        api.get('/warehouses'),
-      ]);
-
-      let primaryBranch: any = null;
-      if (branchesRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(branchesRes.value.data);
-        const list = Array.isArray(raw?.branches)
-          ? raw.branches
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        primaryBranch = list.find((b: any) => b.primary) || list[0] || null;
-        if (primaryBranch?.id)
-          setSelectedBranchId((prev) => prev || primaryBranch.id);
-      }
-
-      if (warehousesRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(warehousesRes.value.data);
-        const list = Array.isArray(raw?.warehouses)
-          ? raw.warehouses
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        const primary = list.find((w: any) => w.primary) || list[0];
-        if (primary?.id) setSelectedWarehouseId((prev) => prev || primary.id);
-      }
-
-      if (itemsRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(itemsRes.value.data);
-        const list = Array.isArray(raw?.items)
-          ? raw.items
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        setItems(
-          list.filter(
-            (it: PosItem) => it.active !== false && it.sellable !== false,
-          ),
+  const loadPosData = useCallback(
+    async (silent: boolean | unknown = false) => {
+      try {
+        const hasCache = Boolean(
+          organizationId && posDataCache.has(organizationId),
         );
-      }
+        if (silent !== true && !hasCache) setLoading(true);
+        const [
+          itemsRes,
+          customersRes,
+          accountsRes,
+          taxRes,
+          gatewaysRes,
+          orgRes,
+          branchesRes,
+          warehousesRes,
+        ] = await Promise.allSettled([
+          api.get('/items', { params: { page_size: 1000, page: 1 } }),
+          api.get('/customers', { params: { page_size: 100, page: 1 } }),
+          api.get('/accounts'),
+          api.get('/tax_rates'),
+          api.get('/payment-services/gateways'),
+          api.get('/organization/current'),
+          api.get('/branches'),
+          api.get('/warehouses'),
+        ]);
 
-      if (customersRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(customersRes.value.data);
-        const list = Array.isArray(raw?.customers)
-          ? raw.customers
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        setCustomers(list);
-        if (list.length > 0) {
-          setSelectedCustomerId((prev) => prev || list[0].id);
+        const prevCache = organizationId
+          ? posDataCache.get(organizationId)
+          : undefined;
+        let nextBranchId: number | '' = prevCache?.selectedBranchId ?? '';
+        let nextWarehouseId: number | '' = prevCache?.selectedWarehouseId ?? '';
+        let nextItems: PosItem[] = prevCache?.items ?? [];
+        let nextCustomers: PosCustomer[] = prevCache?.customers ?? [];
+        let nextCustomerId: number | '' = prevCache?.selectedCustomerId ?? '';
+        let nextAccounts: PosAccount[] = prevCache?.accounts ?? [];
+        let nextDepositAccountId: number | '' =
+          prevCache?.depositAccountId ?? '';
+        let nextTaxRates: PosTaxRate[] = prevCache?.taxRates ?? [];
+        let nextGateways: PosGateway[] = prevCache?.gateways ?? [];
+        let nextBaseCurrency = prevCache?.baseCurrency ?? 'GHS';
+        let nextOrgInfo = prevCache?.orgInfo ?? { name: 'BorngreatAccounting' };
+
+        let primaryBranch: any = null;
+        if (branchesRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(branchesRes.value.data);
+          const list = Array.isArray(raw?.branches)
+            ? raw.branches
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          primaryBranch = list.find((b: any) => b.primary) || list[0] || null;
+          if (primaryBranch?.id) {
+            nextBranchId = nextBranchId || primaryBranch.id;
+            setSelectedBranchId((prev) => prev || primaryBranch.id);
+          }
         }
-      }
 
-      if (accountsRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(accountsRes.value.data);
-        const list: PosAccount[] = Array.isArray(raw?.accounts)
-          ? raw.accounts
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        const depositCandidates = list
-          .filter((a) =>
-            ['cash', 'bank', 'other-current-asset'].includes(
-              (a.accountType || '').toLowerCase(),
-            ),
-          )
-          .sort((a, b) => {
-            const rank = (t?: string) =>
-              t === 'cash' ? 0 : t === 'bank' ? 1 : 2;
-            return (
-              rank(a.accountType?.toLowerCase()) -
-              rank(b.accountType?.toLowerCase())
-            );
-          });
-        const usable = depositCandidates.length > 0 ? depositCandidates : list;
-        setAccounts(usable);
-        if (usable.length > 0) {
-          setDepositAccountId((prev) => prev || usable[0].id);
+        if (warehousesRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(warehousesRes.value.data);
+          const list = Array.isArray(raw?.warehouses)
+            ? raw.warehouses
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          const primary = list.find((w: any) => w.primary) || list[0];
+          if (primary?.id) {
+            nextWarehouseId = nextWarehouseId || primary.id;
+            setSelectedWarehouseId((prev) => prev || primary.id);
+          }
         }
-      }
 
-      if (taxRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(taxRes.value.data);
-        const list = Array.isArray(raw?.taxRates)
-          ? raw.taxRates
-          : Array.isArray(raw?.data)
-            ? raw.data
-            : Array.isArray(raw)
-              ? raw
-              : [];
-        setTaxRates(list);
-      }
-
-      if (gatewaysRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(gatewaysRes.value.data);
-        if (Array.isArray(raw)) {
-          setGateways(raw);
+        if (itemsRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(itemsRes.value.data);
+          const list = Array.isArray(raw?.items)
+            ? raw.items
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          nextItems = list.filter(
+            (it: PosItem) => it.active !== false && it.sellable !== false,
+          );
+          setItems(nextItems);
         }
-      }
 
-      if (orgRes.status === 'fulfilled') {
-        const raw = transformToCamelCase(orgRes.value.data);
-        const meta = raw?.metadata || raw;
-        if (meta?.baseCurrency) {
-          setBaseCurrency(meta.baseCurrency);
+        if (customersRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(customersRes.value.data);
+          const list = Array.isArray(raw?.customers)
+            ? raw.customers
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          nextCustomers = list;
+          setCustomers(list);
+          if (list.length > 0) {
+            nextCustomerId = nextCustomerId || list[0].id;
+            setSelectedCustomerId((prev) => prev || list[0].id);
+          }
         }
-        const addrObj =
-          meta?.address && typeof meta.address === 'object'
-            ? meta.address
-            : null;
-        const orgAddressStr = addrObj
-          ? [
-              addrObj.address1,
-              addrObj.address2,
-              addrObj.city,
-              addrObj.stateProvince,
-              addrObj.postalCode,
-            ]
-              .filter(Boolean)
-              .join(', ')
-          : typeof meta?.address === 'string'
-            ? meta.address
+
+        if (accountsRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(accountsRes.value.data);
+          const list: PosAccount[] = Array.isArray(raw?.accounts)
+            ? raw.accounts
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          const depositCandidates = list
+            .filter((a) =>
+              ['cash', 'bank', 'other-current-asset'].includes(
+                (a.accountType || '').toLowerCase(),
+              ),
+            )
+            .sort((a, b) => {
+              const rank = (t?: string) =>
+                t === 'cash' ? 0 : t === 'bank' ? 1 : 2;
+              return (
+                rank(a.accountType?.toLowerCase()) -
+                rank(b.accountType?.toLowerCase())
+              );
+            });
+          const usable =
+            depositCandidates.length > 0 ? depositCandidates : list;
+          nextAccounts = usable;
+          setAccounts(usable);
+          if (usable.length > 0) {
+            nextDepositAccountId = nextDepositAccountId || usable[0].id;
+            setDepositAccountId((prev) => prev || usable[0].id);
+          }
+        }
+
+        if (taxRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(taxRes.value.data);
+          const list = Array.isArray(raw?.taxRates)
+            ? raw.taxRates
+            : Array.isArray(raw?.data)
+              ? raw.data
+              : Array.isArray(raw)
+                ? raw
+                : [];
+          nextTaxRates = list;
+          setTaxRates(list);
+        }
+
+        if (gatewaysRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(gatewaysRes.value.data);
+          if (Array.isArray(raw)) {
+            nextGateways = raw;
+            setGateways(raw);
+          }
+        }
+
+        if (orgRes.status === 'fulfilled') {
+          const raw = transformToCamelCase(orgRes.value.data);
+          const meta = raw?.metadata || raw;
+          if (meta?.baseCurrency) {
+            nextBaseCurrency = meta.baseCurrency;
+            setBaseCurrency(meta.baseCurrency);
+          }
+          const addrObj =
+            meta?.address && typeof meta.address === 'object'
+              ? meta.address
+              : null;
+          const orgAddressStr = addrObj
+            ? [
+                addrObj.address1,
+                addrObj.address2,
+                addrObj.city,
+                addrObj.stateProvince,
+                addrObj.postalCode,
+              ]
+                .filter(Boolean)
+                .join(', ')
+            : typeof meta?.address === 'string'
+              ? meta.address
+              : '';
+          const branchAddressStr = primaryBranch
+            ? [primaryBranch.address, primaryBranch.city, primaryBranch.country]
+                .filter(Boolean)
+                .join(', ')
             : '';
-        const branchAddressStr = primaryBranch
-          ? [primaryBranch.address, primaryBranch.city, primaryBranch.country]
-              .filter(Boolean)
-              .join(', ')
-          : '';
-        const resolvedAddress =
-          orgAddressStr ||
-          branchAddressStr ||
-          meta?.location ||
-          undefined;
-        const resolvedPhone =
-          addrObj?.phone ||
-          meta?.phone ||
-          primaryBranch?.phoneNumber ||
-          undefined;
-        if (meta?.name) {
-          setOrgInfo({
-            name: meta.name,
-            phone: resolvedPhone,
-            address: resolvedAddress,
-            logoUri: meta.logoUri || undefined,
-            taxNumber: meta.taxNumber || undefined,
+          const resolvedAddress =
+            orgAddressStr ||
+            branchAddressStr ||
+            meta?.location ||
+            undefined;
+          const resolvedPhone =
+            addrObj?.phone ||
+            meta?.phone ||
+            primaryBranch?.phoneNumber ||
+            undefined;
+          if (meta?.name) {
+            nextOrgInfo = {
+              name: meta.name,
+              phone: resolvedPhone,
+              address: resolvedAddress,
+              logoUri: meta.logoUri || undefined,
+              taxNumber: meta.taxNumber || undefined,
+            };
+            setOrgInfo(nextOrgInfo);
+          }
+        }
+
+        if (organizationId) {
+          if (posDataCache.size > 50) posDataCache.clear();
+          posDataCache.set(organizationId, {
+            items: nextItems,
+            customers: nextCustomers,
+            accounts: nextAccounts,
+            taxRates: nextTaxRates,
+            gateways: nextGateways,
+            baseCurrency: nextBaseCurrency,
+            orgInfo: nextOrgInfo,
+            selectedCustomerId: nextCustomerId,
+            depositAccountId: nextDepositAccountId,
+            selectedBranchId: nextBranchId,
+            selectedWarehouseId: nextWarehouseId,
           });
         }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [api]);
+    },
+    [api, organizationId],
+  );
 
   useEffect(() => {
-    loadPosData();
-  }, [loadPosData]);
+    loadPosData(Boolean(organizationId && posDataCache.has(organizationId)));
+  }, [loadPosData, organizationId]);
 
   useEffect(() => {
     const onFsChange = () => {

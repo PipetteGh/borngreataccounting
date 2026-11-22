@@ -35,7 +35,7 @@ async function bootstrap() {
         if (raw.length < 1024 || res.headersSent) {
           return origJson(body);
         }
-        const gz = zlib.gzipSync(raw);
+        const gz = zlib.gzipSync(raw, { level: zlib.constants.Z_BEST_SPEED });
         res.setHeader('Content-Encoding', 'gzip');
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.setHeader('Vary', 'Accept-Encoding');
